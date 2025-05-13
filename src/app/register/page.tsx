@@ -179,7 +179,6 @@ const SignUp = () => {
     e.preventDefault();
     setError(null);
 
-    // 1. Check for empty fields
     if (
       !firstName ||
       !lastName ||
@@ -192,13 +191,12 @@ const SignUp = () => {
       return;
     }
 
-    // 3. Passwords must match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    // 4. Attempt sign-up (Supabase will handle email uniqueness)
+    // Sign up the user
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -211,23 +209,42 @@ const SignUp = () => {
       },
     });
 
-    // Log to check what `data` contains
     console.log("Supabase response data:", data);
 
     if (error) {
-      console.log("Error:", error); // Log the error if it's not null
+      console.log("Error:", error);
       setError(error.message);
       return;
     }
 
-    // Check if the confirmation has been sent
+    const user = data?.user;
+
+    // If sign-up succeeded and user is returned, insert profile
+    if (user) {
+      const { error: profileError } = await supabase
+        .from("user_profiles")
+        .insert([
+          {
+            id: user.id, // This is the UUID, matching auth.users.id
+            email,
+            phone_number: phoneNumber,
+            first_name: firstName,
+            last_name: lastName,
+          },
+        ]);
+
+      if (profileError) {
+        console.error("Error inserting profile:", profileError);
+        setError("Sign-up succeeded but failed to create user profile.");
+        return;
+      }
+    }
+
     if (data?.user?.confirmation_sent_at) {
-      // If confirmation_sent_at exists, the email is already registered
       setError(
         "An account with this email already exists. Please check your inbox for the confirmation email."
       );
     } else {
-      // If confirmation_sent_at doesn't exist, this means the user is newly created
       alert(
         "Sign-up successful! Please check your email to confirm your account."
       );

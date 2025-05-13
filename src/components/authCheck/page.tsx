@@ -12,6 +12,7 @@ const AuthCheck = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkUserSession = async () => {
       const { data } = await supabase.auth.getSession();
+      console.log(data.session?.user.user_metadata.sub);
       if (!data.session) {
         router.push("/login");
       } else {
@@ -26,7 +27,6 @@ const AuthCheck = ({ children }: { children: React.ReactNode }) => {
   if (loading) {
     return <p>Loading...</p>;
   }
-
   return session ? <>{children}</> : null;
 };
 
