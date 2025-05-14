@@ -2,11 +2,15 @@
 import styled, { css } from "styled-components";
 import colors from "../../../theme";
 import automation from "../../../public/automation.png";
+
 import { useEffect, useState } from "react";
 import supabase from "../../../supabase";
+import { activateAutomation } from "../../app/utils";
 
 interface AutomationCardProps {
   uuid: string;
+  userUuid: string;
+  availableAutomationLimit: number;
 }
 
 interface AutomationInfo {
@@ -15,7 +19,6 @@ interface AutomationInfo {
 }
 
 const StyledDashboardQuery = styled.div`
-  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,6 +59,7 @@ const StyledActivateButton = styled.button<{ isActive: boolean }>`
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.2s;
   background-color: ${({ isActive }) =>
     isActive ? colors.primary : colors.text};
   color: ${colors.background};
@@ -77,7 +81,7 @@ const StyledEditButton = styled.button`
   color: ${colors.text};
 
   border: 3px solid white;
-
+  transition: 0.2s;
   &:hover {
     background-color: ${colors.secondary};
     color: ${colors.text};
@@ -87,11 +91,16 @@ const StyledEditButton = styled.button`
 
 const StyledDashsboardQueryText = styled.p`
   font-size: 30px;
+  height: 20%;
   color: ${colors.text};
   text-align: center;
 `;
 
-const AutomationCard = ({ uuid }: AutomationCardProps) => {
+const AutomationCard = ({
+  uuid,
+  userUuid,
+  availableAutomationLimit,
+}: AutomationCardProps) => {
   const [automationInfo, setAutomationInfo] = useState<AutomationInfo | null>(
     null
   );
@@ -128,9 +137,36 @@ const AutomationCard = ({ uuid }: AutomationCardProps) => {
       </StyledDashboardQueryImageContainer>
       <StyledDashsboardQueryText>{automation_name}</StyledDashsboardQueryText>
       <StyledDashboardQueryButtonsContainer>
-        <StyledActivateButton isActive={is_active}>
+        <StyledActivateButton
+          isActive={is_active}
+          onClick={async () => {
+            if (!is_active) {
+              const result = await activateAutomation(
+                uuid,
+                userUuid,
+                availableAutomationLimit
+              );
+
+              alert(result.message);
+
+              // Refresh automation info after attempting activation
+              if (result.success) {
+                const { data, error } = await supabase
+                  .from("automation")
+                  .select("is_active, automation_name")
+                  .eq("uuid", uuid)
+                  .single();
+
+                if (!error) {
+                  setAutomationInfo(data);
+                }
+              }
+            }
+          }}
+        >
           {is_active ? "Active" : "Start"}
         </StyledActivateButton>
+
         <StyledEditButton>Edit</StyledEditButton>
       </StyledDashboardQueryButtonsContainer>
     </StyledDashboardQuery>

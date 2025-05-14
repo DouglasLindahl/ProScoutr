@@ -7,6 +7,15 @@ import styled from "styled-components";
 import colors from "../../../../theme";
 import supabase from "../../../../supabase";
 import AutomationCard from "@/components/automationCard/page";
+import plus from "../../../../public/plus.png";
+
+import {
+  checkUserSession,
+  fetchUserInfo,
+  fetchPaymentPlan,
+  fetchUserAutomations,
+  enforceAutomationLimit,
+} from "../../utils";
 
 const StyledDashboard = styled.div`
   min-height: 100vh;
@@ -21,10 +30,48 @@ const StyledDashboardHeader = styled.h1`
   color: ${colors.white};
 `;
 
-const StyledDashboardQueryContainer = styled.div`
+const StyledDashboardAutomationContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 24px;
+`;
+
+const StyledAddAutomationCard = styled.button`
+  height: 100%;
+  width: 100%;
+  padding: 24px;
+  border: 5px solid white;
+  border-radius: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  background: none;
+  opacity: 25%;
+  transition: 0.2s;
+  &:hover {
+    cursor: pointer;
+    border: 5px solid ${colors.primary};
+    opacity: 100%;
+  }
+`;
+const StyledAddAutomationImage = styled.div`
+  width: 100%;
+  height: 50%;
+  background: url(${plus.src}) no-repeat center center;
+  background-size: 50% 50%;
+`;
+const StyledAddAutomationTextContainer = styled.div`
+  height: 50%;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const StyledAddAutomationText = styled.p`
+  font-size: 30px;
 `;
 
 interface Automation {
@@ -43,67 +90,129 @@ interface UserProfile {
   updated_at: string;
   automation_name: string;
   is_active: boolean;
+  payment_plan: number;
+}
+
+interface PaymentPlan {
+  id: string;
+  plan_name: string;
+  plan_description: string;
+  price: number;
+  available_automations: number;
 }
 
 const Dashboard = () => {
   const [userUuid, setUserUuid] = useState<string>("");
+  const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
+  const [activeAutomations, setActiveAutomations] = useState<number>(0);
   const [automations, setAutomations] = useState<Automation[]>([]);
   const [userInformation, setUserInformation] = useState<UserProfile | null>(
     null
   );
 
   useEffect(() => {
-    const checkUserSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data?.session?.user?.user_metadata?.sub) {
-        setUserUuid(data.session.user.user_metadata.sub);
-      }
+    const getSession = async () => {
+      const uuid = await checkUserSession();
+      if (uuid) setUserUuid(uuid);
     };
-    checkUserSession();
+    getSession();
   }, []);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const loadUser = async () => {
       if (!userUuid) return;
-
-      const { data, error } = await supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("id", userUuid)
-        .single(); // Ensure we only fetch one user profile
-
-      if (error) {
-        console.error("Error fetching user info:", error);
-        return;
+      try {
+        const data = await fetchUserInfo(userUuid);
+        setUserInformation(data);
+      } catch (e) {
+        console.error(e);
       }
-
-      setUserInformation(data);
     };
-
-    fetchUserInfo();
+    loadUser();
   }, [userUuid]);
 
   useEffect(() => {
-    const fetchAutomations = async () => {
-      if (!userUuid) return;
-
-      const { data, error } = await supabase
-        .from("automation")
-        .select("uuid, automation_name, is_active, user_uuid")
-        .eq("user_uuid", userUuid);
-
-      if (error) {
-        console.error("Error fetching automations:", error);
-        return;
+    const loadPlan = async () => {
+      if (!userInformation?.payment_plan) return;
+      try {
+        const data = await fetchPaymentPlan(userInformation.payment_plan);
+        setUserPaymentPlan(data);
+      } catch (e) {
+        console.error(e);
       }
-
-      setAutomations(data || []);
     };
+    loadPlan();
+  }, [userInformation]);
 
-    fetchAutomations();
+  useEffect(() => {
+    const loadAutomations = async () => {
+      if (!userUuid) return;
+      try {
+        const { automations, count } = await fetchUserAutomations(userUuid);
+        setAutomations(automations);
+        setActiveAutomations(count);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadAutomations();
   }, [userUuid]);
 
-  console.log(userInformation);
+  useEffect(() => {
+    const enforceLimit = async () => {
+      if (!userUuid || !userPaymentPlan || automations.length === 0) return;
+      try {
+        const updated = await enforceAutomationLimit(
+          userUuid,
+          automations,
+          userPaymentPlan.available_automations
+        );
+        setAutomations(updated);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    enforceLimit();
+  }, [automations, userPaymentPlan]);
+
+  useEffect(() => {
+    const enforceAutomationLimit = async () => {
+      if (!userUuid || !userPaymentPlan || automations.length === 0) return;
+
+      const activeCount = automations.filter((a) => a.is_active).length;
+
+      if (activeCount > userPaymentPlan.available_automations) {
+        const activeAutomationUuids = automations
+          .filter((a) => a.is_active)
+          .map((a) => a.uuid);
+
+        const { error } = await supabase
+          .from("automation")
+          .update({ is_active: false })
+          .in("uuid", activeAutomationUuids);
+
+        if (error) {
+          console.error("Failed to deactivate automations:", error);
+          return;
+        }
+
+        // Refetch automations to update UI
+        const { data, error: refetchError } = await supabase
+          .from("automation")
+          .select("uuid, automation_name, is_active, user_uuid")
+          .eq("user_uuid", userUuid);
+
+        if (refetchError) {
+          console.error("Error refetching automations:", refetchError);
+          return;
+        }
+
+        setAutomations(data || []);
+      }
+    };
+
+    enforceAutomationLimit();
+  }, [automations, userPaymentPlan]);
 
   if (!userInformation) {
     return <p>Loading user information...</p>;
@@ -113,11 +222,24 @@ const Dashboard = () => {
     <AuthCheck>
       <StyledDashboard>
         <StyledDashboardHeader>My automations</StyledDashboardHeader>
-        <StyledDashboardQueryContainer>
+        <StyledDashboardAutomationContainer>
           {automations.map((automation) => (
-            <AutomationCard key={automation.uuid} uuid={automation.uuid} />
+            <AutomationCard
+              key={automation.uuid}
+              uuid={automation.uuid}
+              userUuid={userUuid}
+              availableAutomationLimit={
+                userPaymentPlan?.available_automations || 0
+              }
+            />
           ))}
-        </StyledDashboardQueryContainer>
+          <StyledAddAutomationCard>
+            <StyledAddAutomationImage></StyledAddAutomationImage>
+            <StyledAddAutomationTextContainer>
+              <StyledAddAutomationText>New automation</StyledAddAutomationText>
+            </StyledAddAutomationTextContainer>
+          </StyledAddAutomationCard>
+        </StyledDashboardAutomationContainer>
       </StyledDashboard>
     </AuthCheck>
   );
