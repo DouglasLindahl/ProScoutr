@@ -8,6 +8,7 @@ import colors from "../../../../theme";
 import supabase from "../../../../supabase";
 import AutomationCard from "@/components/automationCard/page";
 import plus from "../../../../public/plus.png";
+import greenShapes from "../../../../public/greenShapes.svg";
 
 import {
   checkUserSession,
@@ -16,6 +17,20 @@ import {
   fetchUserAutomations,
   enforceAutomationLimit,
 } from "../../utils";
+
+const StyledBackgroundAccent = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${greenShapes.src});
+  background-repeat: repeat;
+  background-position: top left;
+  background-size: cover;
+  z-index: 1;
+  pointer-events: none;
+`;
 
 const StyledDashboard = styled.div`
   min-height: 100vh;
@@ -221,6 +236,8 @@ const Dashboard = () => {
   return (
     <AuthCheck>
       <StyledDashboard>
+        <StyledBackgroundAccent></StyledBackgroundAccent>
+        <LogoutButton></LogoutButton>
         <StyledDashboardHeader>My automations</StyledDashboardHeader>
         <StyledDashboardAutomationContainer>
           {automations.map((automation) => (

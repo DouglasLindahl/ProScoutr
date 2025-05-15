@@ -5,7 +5,7 @@ import automation from "../../../public/automation.png";
 
 import { useEffect, useState } from "react";
 import supabase from "../../../supabase";
-import { activateAutomation } from "../../app/utils";
+import { activateAutomation, deactivateAutomation } from "../../app/utils";
 
 interface AutomationCardProps {
   uuid: string;
@@ -51,7 +51,10 @@ const StyledDashboardQueryButtonsContainer = styled.div`
   gap: 12px;
 `;
 
-const StyledActivateButton = styled.button<{ isActive: boolean }>`
+const StyledActivateButton = styled.button<{
+  isActive: boolean;
+  isHovered: boolean;
+}>`
   width: 100%;
   height: 48px;
   border: none;
@@ -64,10 +67,19 @@ const StyledActivateButton = styled.button<{ isActive: boolean }>`
     isActive ? colors.primary : colors.text};
   color: ${colors.background};
 
-  &:hover {
-    background-color: ${colors.secondary};
-    color: ${colors.text};
-  }
+  ${({ isActive, isHovered }) =>
+    isActive &&
+    isHovered &&
+    css`
+      background-color: ${colors.orange};
+    `}
+
+  ${({ isActive, isHovered }) =>
+    !isActive &&
+    isHovered &&
+    css`
+      background-color: ${colors.secondary};
+    `}
 `;
 
 const StyledEditButton = styled.button`
@@ -104,6 +116,7 @@ const AutomationCard = ({
   const [automationInfo, setAutomationInfo] = useState<AutomationInfo | null>(
     null
   );
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const fetchAutomations = async () => {
@@ -139,6 +152,9 @@ const AutomationCard = ({
       <StyledDashboardQueryButtonsContainer>
         <StyledActivateButton
           isActive={is_active}
+          isHovered={isHovered}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onClick={async () => {
             if (!is_active) {
               const result = await activateAutomation(
@@ -146,10 +162,23 @@ const AutomationCard = ({
                 userUuid,
                 availableAutomationLimit
               );
+              //result.message
+              // Refresh automation info
+              if (result.success) {
+                const { data, error } = await supabase
+                  .from("automation")
+                  .select("is_active, automation_name")
+                  .eq("uuid", uuid)
+                  .single();
 
-              alert(result.message);
+                if (!error) {
+                  setAutomationInfo(data);
+                }
+              }
+            } else {
+              const result = await deactivateAutomation(uuid, userUuid);
 
-              // Refresh automation info after attempting activation
+              // Refresh automation info
               if (result.success) {
                 const { data, error } = await supabase
                   .from("automation")
@@ -164,7 +193,11 @@ const AutomationCard = ({
             }
           }}
         >
-          {is_active ? "Active" : "Start"}
+          {is_active && isHovered
+            ? "Deactivate?"
+            : is_active
+            ? "Active"
+            : "Start"}
         </StyledActivateButton>
 
         <StyledEditButton>Edit</StyledEditButton>

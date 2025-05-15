@@ -9,6 +9,7 @@ import hideIcon from "../../../public/hide.png";
 import colors from "../../../theme";
 import InputField from "@/components/inputField/page";
 import arrow from "../../../public/arrow.svg";
+import greenShapes from "../../../public/greenShapes.svg";
 
 const StyledLoginPage = styled.div`
   height: 100vh;
@@ -87,14 +88,34 @@ const StyledLoginHeader = styled.h1`
   font-size: 100px;
 `;
 
+const StyledBackgroundAccent = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${greenShapes.src});
+  background-repeat: repeat;
+  background-position: top left;
+  background-size: cover;
+  z-index: 1;
+  pointer-events: none;
+`;
+
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkUserSession = async () => {
+      if (!hasMounted) return null;
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -120,6 +141,7 @@ const Login = () => {
 
   return (
     <StyledLoginPage>
+      <StyledBackgroundAccent></StyledBackgroundAccent>
       <StyledLoginSection>
         <StyledLoginHeader>Login</StyledLoginHeader>
 

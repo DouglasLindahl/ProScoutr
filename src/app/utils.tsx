@@ -109,3 +109,26 @@ export const activateAutomation = async (
 
   return { success: true, message: "Automation activated successfully." };
 };
+
+export const deactivateAutomation = async (
+  automationUuid: string,
+  userUuid: string
+): Promise<{ success: boolean; message: string }> => {
+  if (!automationUuid || !userUuid) {
+    return {
+      success: false,
+      message: "Missing data to deactivate automation.",
+    };
+  }
+
+  const { error: updateError } = await supabase
+    .from("automation")
+    .update({ is_active: false })
+    .eq("uuid", automationUuid);
+
+  if (updateError) {
+    return { success: false, message: "Failed to deactivate automation." };
+  }
+
+  return { success: true, message: "Automation deactivated successfully." };
+};

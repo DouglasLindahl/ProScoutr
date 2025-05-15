@@ -5,10 +5,22 @@ import styled from "styled-components";
 import InputField from "@/components/inputField/page";
 import colors from "../../../theme";
 import arrow from "../../../public/arrow.svg";
-
+import greenShapes from "../../../public/greenShapes.svg";
 // Password criteria
 // Min 6 characters, min 1 number, min 1 special character, min 1 uppercase
-
+const StyledBackgroundAccent = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${greenShapes.src});
+  background-repeat: repeat;
+  background-position: top left;
+  background-size: cover;
+  z-index: 1;
+  pointer-events: none;
+`;
 const StyledRegisterPage = styled.div`
   display: flex;
   flex-direction: column;
@@ -253,6 +265,7 @@ const SignUp = () => {
 
   return (
     <StyledRegisterPage>
+      <StyledBackgroundAccent></StyledBackgroundAccent>
       <StyledRegisterContainerHeader>
         Create a <span>Free</span> Account
       </StyledRegisterContainerHeader>
