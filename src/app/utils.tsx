@@ -7,6 +7,12 @@ export interface PositionOption {
   availableToChoose: boolean;
   options?: PositionOption[]; // Recursive: children
 }
+interface Automation {
+  uuid: string;
+  automation_name: string;
+  is_active: boolean;
+  user_uuid: string;
+}
 
 // utils/footballPositions.ts
 
@@ -166,7 +172,7 @@ export const fetchUserAutomations = async (userUuid: string) => {
 
 export const enforceAutomationLimit = async (
   userUuid: string,
-  automations: any[],
+  automations: Automation[],
   availableLimit: number
 ) => {
   const activeCount = automations.filter((a) => a.is_active).length;
