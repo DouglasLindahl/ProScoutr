@@ -162,7 +162,7 @@ const Dashboard = () => {
     const loadAutomations = async () => {
       if (!userUuid) return;
       try {
-        const { automations, count } = await fetchUserAutomations(userUuid);
+        const { automations } = await fetchUserAutomations(userUuid);
         setAutomations(automations);
       } catch (e) {
         console.error(e);
