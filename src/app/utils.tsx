@@ -1,6 +1,130 @@
 "use client";
 import supabase from "../../supabase";
 
+export interface PositionOption {
+  label: string;
+  value?: string; // Optional: not present on parent nodes
+  availableToChoose: boolean;
+  options?: PositionOption[]; // Recursive: children
+}
+
+// utils/footballPositions.ts
+
+export const footballPositions: PositionOption[] = [
+  {
+    label: "Goalkeeper",
+    availableToChoose: false,
+    options: [
+      { label: "Goalkeeper (GK)", value: "GK", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Defender",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Defender (all)",
+        value: "Def",
+        availableToChoose: true,
+      },
+      { label: "Centre-Back (CB)", value: "CB", availableToChoose: true },
+      {
+        label: "Wide Defender",
+        availableToChoose: false,
+        options: [
+          { label: "Left-Back (LB)", value: "LB", availableToChoose: true },
+          { label: "Right-Back (RB)", value: "RB", availableToChoose: true },
+        ],
+      },
+      {
+        label: "Wing-Back",
+        availableToChoose: false,
+        options: [
+          {
+            label: "Left Wing-Back (LWB)",
+            value: "LWB",
+            availableToChoose: true,
+          },
+          {
+            label: "Right Wing-Back (RWB)",
+            value: "RWB",
+            availableToChoose: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Midfielder",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Midfielder (all)",
+        value: "Mid",
+        availableToChoose: true,
+      },
+      {
+        label: "Defensive Midfielder (CDM/DM)",
+        value: "CDM",
+        availableToChoose: true,
+      },
+      {
+        label: "Central Midfielder (CM)",
+        value: "CM",
+        availableToChoose: true,
+      },
+      {
+        label: "Attacking Midfielder (CAM/AM)",
+        value: "CAM",
+        availableToChoose: true,
+      },
+      {
+        label: "Wide Midfielder",
+        availableToChoose: false,
+        options: [
+          {
+            label: "Right Midfielder (RM)",
+            value: "RM",
+            availableToChoose: true,
+          },
+          {
+            label: "Left Midfielder (LM)",
+            value: "LM",
+            availableToChoose: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Winger",
+    availableToChoose: false,
+    options: [
+      { label: "Winger (all)", value: "Wing", availableToChoose: true },
+      { label: "Right Winger (RW)", value: "RW", availableToChoose: true },
+      { label: "Left Winger (LW)", value: "LW", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Forward",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Forward (all)",
+        value: "For",
+        availableToChoose: true,
+      },
+      {
+        label: "Striker / Centre Forward (ST/CF)",
+        value: "ST",
+        availableToChoose: true,
+      },
+      { label: "Second Striker (SS)", value: "SS", availableToChoose: true },
+      { label: "False Nine (F9)", value: "F9", availableToChoose: true },
+    ],
+  },
+];
+
 export const checkUserSession = async (): Promise<string | null> => {
   const { data } = await supabase.auth.getSession();
   return data?.session?.user?.user_metadata?.sub ?? null;

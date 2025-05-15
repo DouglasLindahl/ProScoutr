@@ -61,7 +61,6 @@ const StyledLoginButton = styled.button`
 `;
 
 const StyledLoginButtonImage = styled.div`
-  background: url(${arrow.src}) no-repeat center center;
   background-size: contain;
   width: 22px;
   height: 43px;
@@ -94,7 +93,6 @@ const StyledBackgroundAccent = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(${greenShapes.src});
   background-repeat: repeat;
   background-position: top left;
   background-size: cover;
@@ -115,7 +113,6 @@ const Login = () => {
 
   useEffect(() => {
     const checkUserSession = async () => {
-      if (!hasMounted) return null;
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -141,7 +138,9 @@ const Login = () => {
 
   return (
     <StyledLoginPage>
-      <StyledBackgroundAccent></StyledBackgroundAccent>
+      <StyledBackgroundAccent
+        style={{ backgroundImage: `url(${greenShapes.src})` }}
+      ></StyledBackgroundAccent>
       <StyledLoginSection>
         <StyledLoginHeader>Login</StyledLoginHeader>
 
@@ -161,7 +160,7 @@ const Login = () => {
         </StyledLoginForm>
         <StyledLoginButtonContainer>
           <StyledExtraLinksSection>
-            <a href="">Forgot Password?</a>
+            <a href="#">Forgot Password?</a>
             {error && (
               <StyledErrorTextContainer>
                 <p style={{ color: "red" }}>{error}</p>
@@ -169,7 +168,9 @@ const Login = () => {
             )}
           </StyledExtraLinksSection>
           <StyledLoginButton onClick={handleLogin}>
-            <StyledLoginButtonImage></StyledLoginButtonImage>
+            <StyledLoginButtonImage
+              style={{ backgroundImage: `url(${arrow.src})` }}
+            ></StyledLoginButtonImage>
           </StyledLoginButton>
         </StyledLoginButtonContainer>
       </StyledLoginSection>
