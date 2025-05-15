@@ -119,7 +119,7 @@ interface PaymentPlan {
 const Dashboard = () => {
   const [userUuid, setUserUuid] = useState<string>("");
   const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
-  const [activeAutomations, setActiveAutomations] = useState<number>(0);
+  //const [activeAutomations, setActiveAutomations] = useState<number>(0);
   const [automations, setAutomations] = useState<Automation[]>([]);
   const [userInformation, setUserInformation] = useState<UserProfile | null>(
     null
@@ -165,7 +165,7 @@ const Dashboard = () => {
       try {
         const { automations, count } = await fetchUserAutomations(userUuid);
         setAutomations(automations);
-        setActiveAutomations(count);
+        //setActiveAutomations(count);
       } catch (e) {
         console.error(e);
       }
