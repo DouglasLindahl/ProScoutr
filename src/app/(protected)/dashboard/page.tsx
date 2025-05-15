@@ -28,8 +28,8 @@ const StyledBackgroundAccent = styled.div`
   background-repeat: repeat;
   background-position: top left;
   background-size: cover;
-  z-index: 1;
   pointer-events: none;
+  z-index: 1;
 `;
 
 const StyledDashboard = styled.div`
