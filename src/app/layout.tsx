@@ -5,11 +5,6 @@ import { StyledComponentsRegistry } from "../lib/registry";
 
 import { Sora } from "next/font/google";
 
-const sora = Sora({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
