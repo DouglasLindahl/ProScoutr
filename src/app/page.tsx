@@ -4,6 +4,7 @@ import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
 import greenShapes from "../../public/greenShapes.svg";
 import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
+import { useRef } from "react";
 
 const StyledLandingPage = styled.section`
   background-color: ${colors.background};
@@ -369,10 +370,20 @@ const StyledFAQCtaButton = styled.button`
 `;
 
 export default function Home() {
+  const heroRef = useRef(null);
+  const whatIsRef = useRef(null);
+  const howItWorksRef = useRef(null);
+  const whyRef = useRef(null);
+  const faqRef = useRef(null);
+
+  const scrollToSection = (ref: any) => {
+    ref?.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <StyledLandingPage>
       <StyledBackgroundAccent></StyledBackgroundAccent>
-      <StyledHero>
+      <StyledHero ref={heroRef}>
         <StyledHeroHeaderSection>
           <StyledHeroSubHeader>FOOTBALL AGENTS & CLUBS:</StyledHeroSubHeader>
           <StyledHeroHeader>
@@ -393,14 +404,14 @@ export default function Home() {
             </StyledHeroTestSectionTestButton>
           </StyledHeroTestSectionTestContainer>
           <StyledNextButtonContainer>
-            <StyledNextButton>
+            <StyledNextButton onClick={() => scrollToSection(whatIsRef)}>
               <StyledNextButtonImage></StyledNextButtonImage>
             </StyledNextButton>
             <StyledNextButtonText>What is ProScoutr?</StyledNextButtonText>
           </StyledNextButtonContainer>
         </StyledHeroTestSection>
       </StyledHero>
-      <StyledWhatIsProScoutrSection>
+      <StyledWhatIsProScoutrSection ref={whatIsRef}>
         <StyledWhatIsProScoutrHeaderSection>
           <StyledWhatIsProScoutrHeader>
             What is <StyledGreenText>ProScoutr</StyledGreenText>?
@@ -432,13 +443,13 @@ export default function Home() {
         </StyledWhatIsProScoutrMainSection>
 
         <StyledNextButtonContainer>
-          <StyledNextButton>
+          <StyledNextButton onClick={() => scrollToSection(howItWorksRef)}>
             <StyledNextButtonImage></StyledNextButtonImage>
           </StyledNextButton>
           <StyledNextButtonText>How does it work?</StyledNextButtonText>
         </StyledNextButtonContainer>
       </StyledWhatIsProScoutrSection>
-      <StyledHowDoesItWorkSection>
+      <StyledHowDoesItWorkSection ref={howItWorksRef}>
         <StyledHowDoesItWorkHeader>How does it work?</StyledHowDoesItWorkHeader>
         <StyledHowDoesItWorkTextSection>
           <div>
@@ -467,13 +478,13 @@ export default function Home() {
           </div>
         </StyledHowDoesItWorkTextSection>
         <StyledNextButtonContainer>
-          <StyledNextButton>
+          <StyledNextButton onClick={() => scrollToSection(whyRef)}>
             <StyledNextButtonImage></StyledNextButtonImage>
           </StyledNextButton>
           <StyledNextButtonText>Why ProScoutr?</StyledNextButtonText>
         </StyledNextButtonContainer>
       </StyledHowDoesItWorkSection>
-      <StyledWhyProScoutrSection>
+      <StyledWhyProScoutrSection ref={whyRef}>
         <StyledWhyProScoutrHeader>
           Why <StyledGreenText>ProScoutr</StyledGreenText>?
         </StyledWhyProScoutrHeader>
@@ -500,7 +511,7 @@ export default function Home() {
           </StyledWhyProScoutrSubHeader>
         </StyledWhyProScoutrInfoSection>
         <StyledNextButtonContainer>
-          <StyledNextButton>
+          <StyledNextButton onClick={() => scrollToSection(faqRef)}>
             <StyledNextButtonImage></StyledNextButtonImage>
           </StyledNextButton>
           <StyledNextButtonText>
@@ -509,7 +520,7 @@ export default function Home() {
         </StyledNextButtonContainer>
       </StyledWhyProScoutrSection>
 
-      <StyledFAQSection>
+      <StyledFAQSection ref={faqRef}>
         <StyledFAQHeader>Frequently asked questions</StyledFAQHeader>
         <StyledFAQInfoSection>
           <StyledFAQInfoText>
