@@ -492,26 +492,28 @@ export default function Home() {
         <StyledFAQInfoSection>
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &quot;How do I know the data is reliable?&quot; 
+              ❓ &ldquo;How do I know the data is reliable?&rdquo;
             </StyledBoldText>
-            <br></br>
-             ✔️ We use trusted football data sources and real-time stats to
+            <br />
+            ✔️ We use trusted football data sources and real-time stats to
             ensure accuracy.
           </StyledFAQInfoText>
+
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &quot;Will this replace my scouting team?&quot;
+              ❓ &ldquo;Will this replace my scouting team?&rdquo;
             </StyledBoldText>
-            <br></br>
-            ✔️ No - ProScoutr enhances your scouting efforts, giving you
-            a faster way to spot talent.
+            <br />
+            ✔️ No – ProScoutr enhances your scouting efforts, giving you a
+            faster way to spot talent.
           </StyledFAQInfoText>
+
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &quot;Do I need to set up anything?&quot;
+              ❓ &ldquo;Do I need to set up anything?&rdquo;
             </StyledBoldText>
-            <br></br>
-            ✔️ Nope! Just sign up, set your preferences, and receive daily
+            <br />
+            ✔️ Nope! Just sign up, set your preferences, and receive daily
             updates.
           </StyledFAQInfoText>
         </StyledFAQInfoSection>
