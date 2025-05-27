@@ -285,6 +285,67 @@ const StyledWhatIsProScoutrViewPricingButton = styled.button`
   color: ${colors.text};
 `;
 
+const StyledWhyProScoutrSection = styled.section`
+  color: ${colors.text};
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+`;
+const StyledWhyProScoutrInfoSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+const StyledWhyProScoutrInfoText = styled.p`
+  text-align: center;
+  font-size: 30px;
+`;
+const StyledWhyProScoutrHeader = styled.h1`
+  font-size: 60px;
+`;
+const StyledWhyProScoutrSubHeader = styled.h2`
+  text-align: center;
+  font-size: 30px;
+`;
+
+const StyledFAQSection = styled.section`
+  color: ${colors.text};
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+`;
+const StyledFAQInfoSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+const StyledFAQInfoText = styled.p`
+  text-align: center;
+  font-size: 30px;
+`;
+const StyledFAQHeader = styled.h1`
+  font-size: 60px;
+`;
+const StyledFAQCtaButton = styled.button`
+  font-size: 30px;
+  padding: 24px 48px 24px 48px;
+  background-color: ${colors.secondary};
+  border: none;
+  color: ${colors.text};
+  font-weight: bold;
+  border-radius: 13px;
+`;
+
 export default function Home() {
   return (
     <StyledLandingPage>
@@ -390,6 +451,70 @@ export default function Home() {
           <StyledNextButtonText>Why ProScoutr?</StyledNextButtonText>
         </StyledNextButtonContainer>
       </StyledHowDoesItWorkSection>
+      <StyledWhyProScoutrSection>
+        <StyledWhyProScoutrHeader>
+          Why <StyledGreenText>ProScoutr</StyledGreenText>?
+        </StyledWhyProScoutrHeader>
+        <StyledWhyProScoutrInfoSection>
+          <StyledWhyProScoutrInfoText>
+            <StyledBoldText>✅ Saves You Hours </StyledBoldText> – No more
+            endless database searches.
+          </StyledWhyProScoutrInfoText>
+          <StyledWhyProScoutrInfoText>
+            <StyledBoldText>✅ AI-Powered Recommendations</StyledBoldText> – Get
+            insights tailored to your scouting needs.
+          </StyledWhyProScoutrInfoText>
+          <StyledWhyProScoutrInfoText>
+            <StyledBoldText>✅ Stay Ahead of Competitors</StyledBoldText> – Spot
+            rising stars before others do.
+          </StyledWhyProScoutrInfoText>
+          <StyledWhyProScoutrInfoText>
+            <StyledBoldText>✅ Simple & Hassle-Free</StyledBoldText> – No
+            complex dashboards—just plug & play.
+          </StyledWhyProScoutrInfoText>
+
+          <StyledWhyProScoutrSubHeader>
+            ⏱ Ready to win your time back?
+          </StyledWhyProScoutrSubHeader>
+        </StyledWhyProScoutrInfoSection>
+        <StyledNextButtonContainer>
+          <StyledNextButton>
+            <StyledNextButtonImage></StyledNextButtonImage>
+          </StyledNextButton>
+          <StyledNextButtonText>
+            Frequently asked questions
+          </StyledNextButtonText>
+        </StyledNextButtonContainer>
+      </StyledWhyProScoutrSection>
+
+      <StyledFAQSection>
+        <StyledFAQHeader>Frequently asked questions</StyledFAQHeader>
+        <StyledFAQInfoSection>
+          <StyledFAQInfoText>
+            <StyledBoldText>
+              ❓ "How do I know the data is reliable?" 
+            </StyledBoldText>
+            <br></br>
+             ✔️ We use trusted football data sources and real-time stats to
+            ensure accuracy.
+          </StyledFAQInfoText>
+          <StyledFAQInfoText>
+            <StyledBoldText>
+              ❓ "Will this replace my scouting team?"
+            </StyledBoldText>
+            <br></br>
+            ✔️ No - ProScoutr enhances your scouting efforts, giving you
+            a faster way to spot talent.
+          </StyledFAQInfoText>
+          <StyledFAQInfoText>
+            <StyledBoldText>❓ "Do I need to set up anything?"</StyledBoldText>
+            <br></br>
+            ✔️ Nope! Just sign up, set your preferences, and receive daily
+            updates.
+          </StyledFAQInfoText>
+        </StyledFAQInfoSection>
+        <StyledFAQCtaButton>Get Early Access!</StyledFAQCtaButton>
+      </StyledFAQSection>
     </StyledLandingPage>
   );
 }
