@@ -4,7 +4,7 @@ import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
 import greenShapes from "../../public/greenShapes.svg";
 import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 
 const StyledLandingPage = styled.section`
   background-color: ${colors.background};
@@ -178,7 +178,7 @@ const StyledBackgroundAccent = styled.div`
   pointer-events: none;
 `;
 
-const StyledHowDoesItWorkSection = styled.div`
+const StyledHowDoesItWorkSection = styled.section`
   color: ${colors.text};
   width: 100%;
   min-height: 100vh;
@@ -370,14 +370,16 @@ const StyledFAQCtaButton = styled.button`
 `;
 
 export default function Home() {
-  const heroRef = useRef(null);
-  const whatIsRef = useRef(null);
-  const howItWorksRef = useRef(null);
-  const whyRef = useRef(null);
-  const faqRef = useRef(null);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const whatIsRef = useRef<HTMLElement | null>(null);
+  const howItWorksRef = useRef<HTMLElement | null>(null);
+  const whyRef = useRef<HTMLElement | null>(null);
+  const faqRef = useRef<HTMLElement | null>(null);
 
-  const scrollToSection = (ref: any) => {
-    ref?.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToSection = (ref: RefObject<HTMLElement | null>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
