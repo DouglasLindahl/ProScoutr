@@ -3,66 +3,69 @@ import styled from "styled-components";
 import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
 import greenShapes from "../../public/greenShapes.svg";
+import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
 
 const StyledLandingPage = styled.section`
   background-color: ${colors.background};
+  position: relative;
+  z-index: 0;
+  isolation: isolate; /* Prevents background effects like blend modes from leaking through */
 `;
 
 const StyledHero = styled.section`
   position: relative;
-
   color: ${colors.text};
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding: 80px;
+  justify-content: space-between;
   align-items: center;
-  gap: 3.5rem;
-  padding: 2rem;
+  gap: 56px;
   z-index: 1;
 
   @media (max-width: 768px) {
-    gap: 2rem;
-    padding: 1.5rem 1rem;
+    gap: 32px;
+    padding: 24px 16px;
   }
 `;
 
 const StyledHeroHeaderSection = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 32px;
 `;
 
 const StyledHeroHeader = styled.h1`
-  font-size: 4.375rem; /* 70px */
+  font-size: 70px;
   text-align: center;
 
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 40px;
   }
 `;
 
 const StyledHeroSubHeader = styled.h2`
-  font-size: 3.75rem; /* 60px */
+  font-size: 50px;
   font-weight: 200;
   text-align: center;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 32px;
   }
 `;
 
 const StyledHeroTestSection = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 32px;
   justify-content: center;
   align-items: center;
 `;
 
 const StyledHeroTestSectionHeader = styled.h3`
-  font-size: 3.75rem; /* 60px */
+  font-size: 60px;
   font-weight: 200;
   text-align: center;
 
@@ -71,35 +74,35 @@ const StyledHeroTestSectionHeader = styled.h3`
   }
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 32px;
   }
 `;
 
 const StyledHeroTestSectionTestContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 16px;
   width: 100%;
   justify-content: center;
-  padding-bottom: 2rem;
+  padding-bottom: 32px;
 `;
 
 const StyledHeroTestSectionTestDescription = styled.section`
-  padding: 1rem;
-  font-size: 1.5rem;
+  padding: 16px;
+  font-size: 24px;
   border: 2px solid ${colors.text};
   border-radius: 13px;
   text-align: center;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 19.2px;
     width: 100%;
   }
 `;
 
 const StyledHeroTestSectionTestButton = styled.button`
-  padding: 1rem;
-  font-size: 1.5rem;
+  padding: 16px;
+  font-size: 24px;
   background-color: ${colors.secondary};
   color: ${colors.text};
   border: 2px solid ${colors.secondary};
@@ -107,12 +110,20 @@ const StyledHeroTestSectionTestButton = styled.button`
   cursor: pointer;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 19.2px;
     width: 100%;
   }
 `;
 
-const StyledHeroNextButton = styled.button`
+const StyledNextButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+`;
+
+const StyledNextButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,18 +140,18 @@ const StyledHeroNextButton = styled.button`
   }
 `;
 
-const StyledHeroNextButtonImage = styled.div`
+const StyledNextButtonImage = styled.div`
   width: 70%;
   height: 70%;
   background: url(${arrowDown.src}) no-repeat center center;
   background-size: contain;
 `;
 
-const StyledHeroNextButtonText = styled.p`
-  font-size: 2rem;
+const StyledNextButtonText = styled.p`
+  font-size: 32px;
 
   @media (max-width: 768px) {
-    font-size: 1.25rem;
+    font-size: 20px;
   }
 `;
 
@@ -158,11 +169,120 @@ const StyledBackgroundAccent = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${greenShapes.src});
+  background-color: ${colors.background}; /* Add a fallback solid background */
   background-repeat: repeat;
   background-position: top left;
   background-size: cover;
-  z-index: 1;
+  z-index: -1; /* Lower z-index so it goes beneath all other content */
   pointer-events: none;
+`;
+
+const StyledHowDoesItWorkSection = styled.div`
+  color: ${colors.text};
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+`;
+
+const StyledHowDoesItWorkHeader = styled.h1`
+  font-size: 70px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const StyledHowDoesItWorkTextSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  & div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+const StyledHowDoesItWorkTextCta = styled.a`
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const StyledHowDoesItWorkTextHeader = styled.h1`
+  font-size: 50px;
+  text-align: center;
+`;
+const StyledHowDoesItWorkText = styled.p`
+  font-size: 30px;
+  text-align: center;
+`;
+const StyledGreenText = styled.span`
+  color: ${colors.primary};
+  font-weight: bold;
+`;
+const StyledBoldText = styled.span`
+  font-weight: bold;
+`;
+
+const StyledWhatIsProScoutrSection = styled.section`
+  color: ${colors.text};
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+`;
+const StyledWhatIsProScoutrMainSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+`;
+const StyledWhatIsProScoutrInfoSection = styled.section`
+  width: 100%;
+  display: flex;
+`;
+const StyledWhatIsProScoutrInfoTextSection = styled.section`
+  width: 60%;
+`;
+const StyledWhatIsProScoutrImageSection = styled.section`
+  width: 40%;
+`;
+const StyledWhatIsProScoutrImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background: url(${ProScoutrWebsiteReportDesign.src}) no-repeat center center;
+  background-size: contain;
+`;
+const StyledWhatIsProScoutrHeaderSection = styled.section`
+  width: 100%;
+`;
+const StyledWhatIsProScoutrHeader = styled.h1`
+  font-size: 70px;
+  font-weight: bold;
+`;
+const StyledWhatIsProScoutrInfoText = styled.p`
+  font-size: 30px;
+  padding-bottom: 30px;
+`;
+const StyledWhatIsProScoutrInfoTextTwo = styled.p`
+  font-size: 30px;
+`;
+const StyledWhatIsProScoutrViewPricingButton = styled.button`
+  font-size: 20px;
+  background-color: ${colors.secondary};
+  border: none;
+  width: 20%;
+  padding: 12px;
+  border-radius: 13px;
+  font-weight: bold;
+  color: ${colors.text};
 `;
 
 export default function Home() {
@@ -189,14 +309,87 @@ export default function Home() {
               Test Automation
             </StyledHeroTestSectionTestButton>
           </StyledHeroTestSectionTestContainer>
-          <StyledHeroNextButton>
-            <StyledHeroNextButtonImage></StyledHeroNextButtonImage>
-          </StyledHeroNextButton>
-          <StyledHeroNextButtonText>
-            What is ProScoutr?
-          </StyledHeroNextButtonText>
+          <StyledNextButtonContainer>
+            <StyledNextButton>
+              <StyledNextButtonImage></StyledNextButtonImage>
+            </StyledNextButton>
+            <StyledNextButtonText>What is ProScoutr?</StyledNextButtonText>
+          </StyledNextButtonContainer>
         </StyledHeroTestSection>
       </StyledHero>
+      <StyledWhatIsProScoutrSection>
+        <StyledWhatIsProScoutrHeaderSection>
+          <StyledWhatIsProScoutrHeader>
+            What is <StyledGreenText>ProScoutr</StyledGreenText>?
+          </StyledWhatIsProScoutrHeader>
+        </StyledWhatIsProScoutrHeaderSection>
+        <StyledWhatIsProScoutrMainSection>
+          <StyledWhatIsProScoutrInfoSection>
+            <StyledWhatIsProScoutrInfoTextSection>
+              <StyledWhatIsProScoutrInfoText>
+                <StyledGreenText>ProScoutr</StyledGreenText> helps football
+                agents and teams stay ahead of the game by delivering curated
+                player suggestions straight to your inbox - based on your
+                preferences, performance data, and AI-driven insights.
+              </StyledWhatIsProScoutrInfoText>
+              <StyledWhatIsProScoutrInfoTextTwo>
+                No more manual database hunting.<br></br>
+                <StyledBoldText>
+                  Just smart, time-saving scouting.
+                </StyledBoldText>
+              </StyledWhatIsProScoutrInfoTextTwo>
+            </StyledWhatIsProScoutrInfoTextSection>
+            <StyledWhatIsProScoutrImageSection>
+              <StyledWhatIsProScoutrImage></StyledWhatIsProScoutrImage>
+            </StyledWhatIsProScoutrImageSection>
+          </StyledWhatIsProScoutrInfoSection>
+          <StyledWhatIsProScoutrViewPricingButton>
+            View Pricing
+          </StyledWhatIsProScoutrViewPricingButton>
+        </StyledWhatIsProScoutrMainSection>
+
+        <StyledNextButtonContainer>
+          <StyledNextButton>
+            <StyledNextButtonImage></StyledNextButtonImage>
+          </StyledNextButton>
+          <StyledNextButtonText>How does it work?</StyledNextButtonText>
+        </StyledNextButtonContainer>
+      </StyledWhatIsProScoutrSection>
+      <StyledHowDoesItWorkSection>
+        <StyledHowDoesItWorkHeader>How does it work?</StyledHowDoesItWorkHeader>
+        <StyledHowDoesItWorkTextSection>
+          <div>
+            <StyledHowDoesItWorkTextCta>
+              1. Create an acccount.
+            </StyledHowDoesItWorkTextCta>
+            <StyledHowDoesItWorkText>It's free.</StyledHowDoesItWorkText>
+          </div>
+          <div>
+            <StyledHowDoesItWorkTextHeader>
+              2. Tell us what you need.
+            </StyledHowDoesItWorkTextHeader>
+
+            <StyledHowDoesItWorkText>
+              Select player metrics and positions that match your player avatar.
+            </StyledHowDoesItWorkText>
+          </div>
+          <div>
+            <StyledHowDoesItWorkTextHeader>
+              <StyledGreenText>3 Done</StyledGreenText>
+            </StyledHowDoesItWorkTextHeader>
+
+            <StyledHowDoesItWorkText>
+              You’ll receive weekly curated player reports in your inbox.
+            </StyledHowDoesItWorkText>
+          </div>
+        </StyledHowDoesItWorkTextSection>
+        <StyledNextButtonContainer>
+          <StyledNextButton>
+            <StyledNextButtonImage></StyledNextButtonImage>
+          </StyledNextButton>
+          <StyledNextButtonText>Why ProScoutr?</StyledNextButtonText>
+        </StyledNextButtonContainer>
+      </StyledHowDoesItWorkSection>
     </StyledLandingPage>
   );
 }
