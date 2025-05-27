@@ -238,7 +238,13 @@ const StyledWhatIsProScoutrSection = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 60px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+    gap: 32px;
+  }
 `;
+
 const StyledWhatIsProScoutrMainSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -247,13 +253,29 @@ const StyledWhatIsProScoutrMainSection = styled.section`
 const StyledWhatIsProScoutrInfoSection = styled.section`
   width: 100%;
   display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
+
 const StyledWhatIsProScoutrInfoTextSection = styled.section`
   width: 60%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
+
 const StyledWhatIsProScoutrImageSection = styled.section`
   width: 40%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 300px;
+  }
 `;
+
 const StyledWhatIsProScoutrImage = styled.div`
   width: 100%;
   height: 100%;
@@ -423,7 +445,7 @@ export default function Home() {
             <StyledHowDoesItWorkTextCta>
               1. Create an acccount.
             </StyledHowDoesItWorkTextCta>
-            <StyledHowDoesItWorkText>It's free.</StyledHowDoesItWorkText>
+            <StyledHowDoesItWorkText>It&#39;s free.</StyledHowDoesItWorkText>
           </div>
           <div>
             <StyledHowDoesItWorkTextHeader>
@@ -469,8 +491,8 @@ export default function Home() {
             rising stars before others do.
           </StyledWhyProScoutrInfoText>
           <StyledWhyProScoutrInfoText>
-            <StyledBoldText>✅ Simple & Hassle-Free</StyledBoldText> – No
-            complex dashboards—just plug & play.
+            <StyledBoldText>✅ Simple &amp; Hassle-Free</StyledBoldText> – No
+            complex dashboards—just plug &amp; play.
           </StyledWhyProScoutrInfoText>
 
           <StyledWhyProScoutrSubHeader>
