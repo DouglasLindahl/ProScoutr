@@ -128,8 +128,8 @@ const StrengthBox = styled.div<{ $active: boolean; $passed: boolean }>`
     $passed
       ? `${colors.primary}`
       : $active
-      ? `${colors.text}`
-      : `${colors.text}`};
+      ? `${colors.neutral}`
+      : `${colors.neutral}`};
   transition: background-color 0.3s ease;
 `;
 
@@ -270,7 +270,7 @@ const SignUp = () => {
         Create a <span>Free</span> Account
       </StyledRegisterContainerHeader>
       <StyledRegisterContainerText>
-        Find the next talent for your team with our automated scouting agent.
+        {/* Find the next talent for your team with our automated scouting agent. */}
       </StyledRegisterContainerText>
       <StyledRegisterContainer>
         <StyledRegisterContainerForm>

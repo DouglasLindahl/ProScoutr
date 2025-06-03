@@ -33,7 +33,7 @@ const StyledInput = styled.input`
   &:focus + label,
   &:not(:placeholder-shown) + label,
   &:hover + label {
-    top: 4px;
+    top: 0px;
     background none;
     padding: 8px;
     font-size: 12px;

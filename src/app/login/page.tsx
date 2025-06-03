@@ -62,6 +62,11 @@ const StyledLoginButtonImage = styled.div`
   width: 22px;
   height: 43px;
   border: none;
+  background-repeat: no-repeat; // Prevents repeating
+  background-size: contain; // Ensures full image fits inside
+  background-position: center; // Centers the image
+  width: 40px; // or whatever size you need
+  height: 40px;
 `;
 const StyledLoginForm = styled.form`
   display: flex;
@@ -97,10 +102,71 @@ const StyledBackgroundAccent = styled.div`
   pointer-events: none;
 `;
 
+const StyledCreateAccountButton = styled.button`
+  position: fixed;
+  bottom: 48px;
+  border-radius: 13px;
+  background-color: ${colors.white};
+  color: ${colors.background};
+  font-size: 24px;
+  padding: 14px 24px 14px 24px;
+  border: none;
+  font-weight: bold;
+`;
+const StyledForgotPasswordSection = styled.div`
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+`;
+
+const StyledRememberPasswordSection = styled.div`
+  white-space: nowrap;
+  font-size: 16px;
+  cursor: pointer;
+
+  span {
+    padding-left: 12px;
+  }
+`;
+
+const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
+  width: 20px;
+  height: 20px;
+  border: 2px solid ${colors.text};
+  background-color: transparent;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  vertical-align: middle;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+
+  &:checked::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid ${colors.text};
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+`;
+
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberPassword, setRememberPassword] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -152,7 +218,19 @@ const Login = () => {
         </StyledLoginForm>
         <StyledLoginButtonContainer>
           <StyledExtraLinksSection>
-            <a href="#">Forgot Password?</a>
+            <StyledRememberPasswordSection
+              onClick={() => setRememberPassword(!rememberPassword)}
+            >
+              <StyledCheckbox
+                checked={rememberPassword}
+                onChange={(e) => setRememberPassword(e.target.checked)}
+              />
+              <span>Remember password</span>
+            </StyledRememberPasswordSection>
+
+            <StyledForgotPasswordSection>
+              <a href="#">Forgot Password?</a>
+            </StyledForgotPasswordSection>
             {error && (
               <StyledErrorTextContainer>
                 <p style={{ color: "red" }}>{error}</p>
@@ -166,6 +244,9 @@ const Login = () => {
           </StyledLoginButton>
         </StyledLoginButtonContainer>
       </StyledLoginSection>
+      <StyledCreateAccountButton>
+        Create a free account
+      </StyledCreateAccountButton>
     </StyledLoginPage>
   );
 };

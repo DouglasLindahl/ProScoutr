@@ -14,8 +14,6 @@ interface Automation {
   user_uuid: string;
 }
 
-// utils/footballPositions.ts
-
 export const footballPositions: PositionOption[] = [
   {
     label: "Goalkeeper",

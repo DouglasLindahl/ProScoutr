@@ -4,7 +4,9 @@ import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
 import greenShapes from "../../public/greenShapes.svg";
 import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
-import { RefObject, useRef } from "react";
+import { RefObject, useRef, useState } from "react";
+import InputField from "@/components/inputField/page";
+import { useRouter } from "next/navigation";
 
 const StyledLandingPage = styled.section`
   background-color: ${colors.background};
@@ -211,6 +213,11 @@ const StyledHowDoesItWorkTextCta = styled.a`
   font-size: 50px;
   font-weight: bold;
   text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledHowDoesItWorkTextHeader = styled.h1`
@@ -306,6 +313,9 @@ const StyledWhatIsProScoutrViewPricingButton = styled.button`
   border-radius: 13px;
   font-weight: bold;
   color: ${colors.text};
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledWhyProScoutrSection = styled.section`
@@ -367,15 +377,87 @@ const StyledFAQCtaButton = styled.button`
   color: ${colors.text};
   font-weight: bold;
   border-radius: 13px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledTestAutomationPopupWindow = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: ${colors.background};
+  z-index: 10;
+  border: 1px solid white;
+  border-radius: 13px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+`;
+const StyledTestAutomationPopupWindowHeader = styled.h1`
+  font-size: 50px;
+  text-align: center;
+  color: ${colors.text};
+`;
+const StyledTestAutomationPopupWindowForm = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 24px;
+
+  & > :nth-child(3) {
+    grid-column: 1 / span 2;
+    justify-self: center;
+  }
+`;
+
+const StyledTestAutomationPopupWindowButton = styled.div`
+  width: 100%;
+  background-color: ${colors.secondary};
+  padding: 16px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: ${colors.text};
+  border-radius: 13px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const StyledDarkBackground = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  opacity: 90%;
+  z-index: 5;
 `;
 
 export default function Home() {
+  const router = useRouter();
   const heroRef = useRef<HTMLElement | null>(null);
   const whatIsRef = useRef<HTMLElement | null>(null);
   const howItWorksRef = useRef<HTMLElement | null>(null);
   const whyRef = useRef<HTMLElement | null>(null);
   const faqRef = useRef<HTMLElement | null>(null);
+  const [testAutomationPopup, setTestAutomationPopup] = useState(false);
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
+  const sendUserToRegisterPage = () => {
+    router.push("/register");
+  };
+  const sendUserToPricingPage = () => {
+    router.push("/pricing");
+  };
   const scrollToSection = (ref: RefObject<HTMLElement | null>) => {
     if (ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth" });
@@ -384,6 +466,37 @@ export default function Home() {
 
   return (
     <StyledLandingPage>
+      {testAutomationPopup && <StyledDarkBackground></StyledDarkBackground>}
+      {testAutomationPopup && (
+        <StyledTestAutomationPopupWindow>
+          <StyledTestAutomationPopupWindowHeader>
+            Let us know who you are:
+          </StyledTestAutomationPopupWindowHeader>
+          <StyledTestAutomationPopupWindowForm>
+            <InputField
+              label="First name"
+              type="text"
+              value={userFirstName}
+              onChange={(e) => setUserFirstName(e.target.value)}
+            />
+            <InputField
+              label="Last name"
+              type="text"
+              value={userLastName}
+              onChange={(e) => setUserLastName(e.target.value)}
+            />
+            <InputField
+              label="Your e-mail address"
+              type="email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+            />
+          </StyledTestAutomationPopupWindowForm>
+          <StyledTestAutomationPopupWindowButton>
+            Get your player suggestions!
+          </StyledTestAutomationPopupWindowButton>
+        </StyledTestAutomationPopupWindow>
+      )}
       <StyledBackgroundAccent></StyledBackgroundAccent>
       <StyledHero ref={heroRef}>
         <StyledHeroHeaderSection>
@@ -401,7 +514,11 @@ export default function Home() {
             <StyledHeroTestSectionTestDescription>
               25-30 years old, 170-180cm, right-winger or striker
             </StyledHeroTestSectionTestDescription>
-            <StyledHeroTestSectionTestButton>
+            <StyledHeroTestSectionTestButton
+              onClick={() => {
+                setTestAutomationPopup(true);
+              }}
+            >
               Test Automation
             </StyledHeroTestSectionTestButton>
           </StyledHeroTestSectionTestContainer>
@@ -439,7 +556,11 @@ export default function Home() {
               <StyledWhatIsProScoutrImage></StyledWhatIsProScoutrImage>
             </StyledWhatIsProScoutrImageSection>
           </StyledWhatIsProScoutrInfoSection>
-          <StyledWhatIsProScoutrViewPricingButton>
+          <StyledWhatIsProScoutrViewPricingButton
+            onClick={() => {
+              sendUserToPricingPage();
+            }}
+          >
             View Pricing
           </StyledWhatIsProScoutrViewPricingButton>
         </StyledWhatIsProScoutrMainSection>
@@ -455,8 +576,12 @@ export default function Home() {
         <StyledHowDoesItWorkHeader>How does it work?</StyledHowDoesItWorkHeader>
         <StyledHowDoesItWorkTextSection>
           <div>
-            <StyledHowDoesItWorkTextCta>
-              1. Create an acccount.
+            <StyledHowDoesItWorkTextCta
+              onClick={() => {
+                sendUserToRegisterPage();
+              }}
+            >
+              1. Create an account.
             </StyledHowDoesItWorkTextCta>
             <StyledHowDoesItWorkText>It&#39;s free.</StyledHowDoesItWorkText>
           </div>
@@ -471,7 +596,7 @@ export default function Home() {
           </div>
           <div>
             <StyledHowDoesItWorkTextHeader>
-              <StyledGreenText>3 Done</StyledGreenText>
+              <StyledGreenText>3. Done</StyledGreenText>
             </StyledHowDoesItWorkTextHeader>
 
             <StyledHowDoesItWorkText>
@@ -552,7 +677,13 @@ export default function Home() {
             updates.
           </StyledFAQInfoText>
         </StyledFAQInfoSection>
-        <StyledFAQCtaButton>Get Early Access!</StyledFAQCtaButton>
+        <StyledFAQCtaButton
+          onClick={() => {
+            sendUserToRegisterPage();
+          }}
+        >
+          Get Early Access!
+        </StyledFAQCtaButton>
       </StyledFAQSection>
     </StyledLandingPage>
   );

@@ -36,6 +36,7 @@ const StyledDashboard = styled.div`
   min-height: 100vh;
   background-color: ${colors.background};
   padding: 40px;
+  position: relative;
 `;
 
 const StyledDashboardHeader = styled.h1`
@@ -73,12 +74,12 @@ const StyledAddAutomationCard = styled.button`
 `;
 const StyledAddAutomationImage = styled.div`
   width: 100%;
-  height: 50%;
+  aspect-ratio: 1 / 1;
   background: url(${plus.src}) no-repeat center center;
   background-size: 50% 50%;
 `;
 const StyledAddAutomationTextContainer = styled.div`
-  height: 50%;
+  aspect-ratio: 1 / 1;
   width: 100%;
   text-align: center;
   display: flex;
@@ -87,6 +88,24 @@ const StyledAddAutomationTextContainer = styled.div`
 `;
 const StyledAddAutomationText = styled.p`
   font-size: 30px;
+`;
+
+const StyledHowManyAutomationsActiveSection = styled.div`
+  top: 24px;
+  right: 24px;
+  position: fixed;
+  color: ${colors.text};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+const StyledHowManyAutomationsActiveNumber = styled.p`
+  font-size: 32px;
+  font-weight: bold;
+`;
+const StyledHowManyAutomationsActiveText = styled.p`
+  font-size: 16px;
 `;
 
 interface Automation {
@@ -234,6 +253,14 @@ const Dashboard = () => {
   return (
     <AuthCheck>
       <StyledDashboard>
+        <StyledHowManyAutomationsActiveSection>
+          <StyledHowManyAutomationsActiveNumber>
+            {automations.length}/{userPaymentPlan?.available_automations}
+          </StyledHowManyAutomationsActiveNumber>
+          <StyledHowManyAutomationsActiveText>
+            Active
+          </StyledHowManyAutomationsActiveText>
+        </StyledHowManyAutomationsActiveSection>
         <StyledBackgroundAccent></StyledBackgroundAccent>
         <LogoutButton></LogoutButton>
         <StyledDashboardHeader>My automations</StyledDashboardHeader>
