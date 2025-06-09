@@ -245,7 +245,7 @@ const Pricing = () => {
           />
           <h1>How many automations do I need?</h1>
           <p>
-            When choosing your plan, it's important to understand how
+            When choosing your plan, it&apos;s important to understand how
             automations work and how many you might need to get the most value
             from your scouting or player promotion efforts. This guide will help
             you decide which plan is right for you based on your goals, how
@@ -318,8 +318,8 @@ const Pricing = () => {
           </ul>
           <br></br>
           <p>
-            This works if you're happy to get more general reports and review a
-            wider pool of players.
+            This works if you&apos;re happy to get more general reports and
+            review a wider pool of players.
           </p>
 
           <h2>Plans & Pricing</h2>
@@ -342,7 +342,7 @@ const Pricing = () => {
           <p>
             Each automation lets you search up to 3 positions, but this broadens
             your search. If you want reports that focus on very specific types
-            of players, it's often better to:
+            of players, it&apos;s often better to:
           </p>
           <br></br>
           <ul>
@@ -364,7 +364,7 @@ const Pricing = () => {
 
           <h2>Example Use Cases</h2>
           <h3>
-            <StyledBoldText>Scenario A:</StyledBoldText> You're targeting
+            <StyledBoldText>Scenario A:</StyledBoldText> You&apos;re targeting
             full-backs and wingers. Choose Pro Plan with 4 automations:
           </h3>
           <ol>
@@ -375,19 +375,19 @@ const Pricing = () => {
           </ol>
           <br></br>
           <p>
-            <StyledBoldText>Scenario B:</StyledBoldText> You're a national scout
-            covering all positions in one region. Choose Max Plan with 10
+            <StyledBoldText>Scenario B:</StyledBoldText> You&apos;re a national
+            scout covering all positions in one region. Choose Max Plan with 10
             automations split by position and region (e.g., STs in Scandinavia,
             CBs in UK, etc.)
           </p>
 
           <h2>Still Not Sure?</h2>
           <p>
-            If you're unsure which plan is right for you, start with Basic and
-            scale up as your needs grow. You can upgrade anytime, and we'll help
-            you configure your automations for maximum efficiency. Need help
-            setting up your first automation? Just reach out - we're happy to
-            assist.
+            If you&apos;re unsure which plan is right for you, start with Basic
+            and scale up as your needs grow. You can upgrade anytime, and
+            we&apos;ll help you configure your automations for maximum
+            efficiency. Need help setting up your first automation? Just reach
+            out - we&apos;re happy to assist.
           </p>
         </StyledHowManyAutomationPopup>
       )}

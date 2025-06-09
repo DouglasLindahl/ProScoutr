@@ -58,12 +58,6 @@ const StyledDropdownButton = styled.button<{ isOpen?: boolean }>`
   }
 `;
 
-const StyledLabelOnly = styled.div`
-  padding: 12px 24px;
-  font-size: 24px;
-  opacity: 0.6;
-`;
-
 const Dropdown: React.FC<DropdownProps> = ({ options, depth = 0 }) => {
   return (
     <StyledDropdownSection $depth={depth}>
