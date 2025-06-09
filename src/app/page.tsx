@@ -4,6 +4,7 @@ import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
 import greenShapes from "../../public/greenShapes.svg";
 import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
+import exit from "../../public/exit.svg";
 import { RefObject, useRef, useState } from "react";
 import InputField from "@/components/inputField/page";
 import { useRouter } from "next/navigation";
@@ -391,17 +392,26 @@ const StyledTestAutomationPopupWindow = styled.div`
   z-index: 10;
   border: 1px solid white;
   border-radius: 13px;
-  padding: 32px;
+  padding: 64px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   justify-content: center;
   align-items: center;
+  img {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 const StyledTestAutomationPopupWindowHeader = styled.h1`
   font-size: 50px;
   text-align: center;
   color: ${colors.text};
+  width: 70%;
 `;
 const StyledTestAutomationPopupWindowForm = styled.div`
   display: grid;
@@ -466,9 +476,20 @@ export default function Home() {
 
   return (
     <StyledLandingPage>
-      {testAutomationPopup && <StyledDarkBackground></StyledDarkBackground>}
+      {testAutomationPopup && (
+        <StyledDarkBackground
+          onClick={() => setTestAutomationPopup(false)}
+        ></StyledDarkBackground>
+      )}
       {testAutomationPopup && (
         <StyledTestAutomationPopupWindow>
+          <img
+            src={exit.src}
+            alt="Exit Button"
+            onClick={() => {
+              setTestAutomationPopup(false);
+            }}
+          />
           <StyledTestAutomationPopupWindowHeader>
             Let us know who you are:
           </StyledTestAutomationPopupWindowHeader>

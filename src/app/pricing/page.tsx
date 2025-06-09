@@ -5,6 +5,7 @@ import styled, { css } from "styled-components";
 import colors from "../../../theme";
 import { useRouter } from "next/navigation";
 import questionMark from "../../../public/questionMark.svg";
+import exit from "../../../public/exit.svg";
 
 interface PaymentPlan {
   id: string;
@@ -157,11 +158,32 @@ const StyledHowManyAutomationPopup = styled.div`
   z-index: 10;
   background-color: ${colors.background};
   padding: 56px 96px;
-  overflow: scroll;
+  overflow-y: scroll;
+  border-radius: 20px;
+  border: 2px solid ${colors.text};
   color: ${colors.text};
   h1 {
     font-size: 50px;
     text-align: center;
+    padding-bottom: 24px;
+  }
+  h2 {
+    padding-top: 24px;
+  }
+  h3 {
+    padding-top: 24px;
+    font-weight: normal;
+  }
+  li {
+    margin-left: 20px;
+  }
+  img {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -176,11 +198,14 @@ const StyledDarkBackground = styled.div`
   opacity: 90%;
   z-index: 5;
 `;
+const StyledBoldText = styled.span`
+  font-weight: bold;
+`;
 
 const Pricing = () => {
   const router = useRouter();
   const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
-  const [showPopup, setShowPopup] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
   const mostPopularPlanId = "Pro";
 
   const sendUserToRegisterPage = () => {
@@ -211,28 +236,36 @@ const Pricing = () => {
       )}
       {showPopup && (
         <StyledHowManyAutomationPopup>
+          <img
+            src={exit.src}
+            alt="Exit Button"
+            onClick={() => {
+              setShowPopup(false);
+            }}
+          />
           <h1>How many automations do I need?</h1>
           <p>
-            When choosing your plan, it’s important to understand how
+            When choosing your plan, it's important to understand how
             automations work and how many you might need to get the most value
             from your scouting or player promotion efforts. This guide will help
             you decide which plan is right for you based on your goals, how
             broad or specific your searches are, and how frequently you want to
             receive player reports.
           </p>
+
           <h2>What Is an Automation?</h2>
           <p>
             An automation is a customized setup that runs in the background and
             sends you automated player reports based on your preferences.
           </p>
           <p>Each automation includes:</p>
-          <li>
-            <ul>Up to 3 preferred positions (1st, 2nd, and 3rd)</ul>
-            <ul>
+          <ul>
+            <li>Up to 3 preferred positions (1st, 2nd, and 3rd)</li>
+            <li>
               Filters like age, height, footedness, league, nationality, etc.
-            </ul>
-            <ul>A custom report frequency (maximum once every 7 days)</ul>
-          </li>
+            </li>
+            <li>A custom report frequency (maximum once every 7 days)</li>
+          </ul>
 
           <h3>Each automation works independently - meaning:</h3>
           <ul>
@@ -245,54 +278,73 @@ const Pricing = () => {
               You can focus on specific roles or tactical needs in each one
             </li>
           </ul>
+
           <h2>How Many Do You Really Need?</h2>
           <p>
             The answer depends on how broad or narrow you want your search to
             be. Here are a few things to consider. Want focused, high-relevance
             suggestions? Use 1 automation per position or role.
           </p>
+
           <h2>Example:</h2>
           <ul>
-            <li>Automation 1: Right-Backs aged 18–22 from Scandinavia</li>
             <li>
-              Automation 2: Centre-Backs aged 24–28 from League One and League
-              Two
+              <StyledBoldText>Automation 1:</StyledBoldText> Right-Backs aged
+              18-22 from Scandinavia
             </li>
-            <li>Automation 3: Strikers aged 20–25 from the National League</li>
+            <li>
+              <StyledBoldText>Automation 2:</StyledBoldText> Centre-Backs aged
+              24-28 from League One and League Two
+            </li>
+            <li>
+              <StyledBoldText>Automation 3:</StyledBoldText> Strikers aged 20-25
+              from the National League
+            </li>
           </ul>
+
           <p>
             This keeps each search narrow and ensures the players suggested
             match very specific needs. Want broader searches with fewer
             automations? Use multiple positions or wider filters in a single
             automation.
           </p>
+
           <h2>Example:</h2>
           <ul>
             <li>
-              Automation 1: Any defender (CB, LB, RB), aged 20–28, from any
+              Automation 1: Any defender (CB, LB, RB), aged 20-28, from any
               English league
             </li>
           </ul>
+          <br></br>
           <p>
             This works if you're happy to get more general reports and review a
             wider pool of players.
           </p>
+
           <h2>Plans & Pricing</h2>
+          <br></br>
           <p>
-            The Basic Plan (£10/month - 1 automation) is ideal for small
-            agencies or individual agents targeting one specific role. The Pro
-            Plan (£25/month - 5 automations) is perfect for agencies covering
-            multiple positions, clubs, or leagues. The Max Plan (£50/month - 10
-            automations) is designed for full-service scouting operations or
-            agencies working across countries or competition levels. You can
-            always upgrade later if you realize you need more automation slots.
+            The <StyledBoldText>Basic Plan</StyledBoldText> (£10/month - 1
+            automation) is ideal for small agencies or individual agents
+            targeting one specific role. The{" "}
+            <StyledBoldText>Pro Plan</StyledBoldText> (£25/month - 5
+            automations) is perfect for agencies covering multiple positions,
+            clubs, or leagues. The <StyledBoldText>Max Plan </StyledBoldText>
+            (£50/month - 10 automations) is designed for full-service scouting
+            operations or agencies working across countries or competition
+            levels. You can always upgrade later if you realize you need more
+            automation slots.
           </p>
+
           <h2>Pro Tip: Be Specific for Better Results</h2>
+          <br></br>
           <p>
             Each automation lets you search up to 3 positions, but this broadens
             your search. If you want reports that focus on very specific types
-            of players, it’s often better to:
+            of players, it's often better to:
           </p>
+          <br></br>
           <ul>
             <li>Set up separate automations for different positions</li>
             <li>
@@ -304,14 +356,16 @@ const Pricing = () => {
               tactical profile
             </li>
           </ul>
+          <br></br>
           <p>
             This gives you more control and delivers higher-quality suggestions
             in each report.
           </p>
+
           <h2>Example Use Cases</h2>
           <h3>
-            Scenario A: You're targeting full-backs and wingers. Choose Pro Plan
-            with 4 automations:
+            <StyledBoldText>Scenario A:</StyledBoldText> You're targeting
+            full-backs and wingers. Choose Pro Plan with 4 automations:
           </h3>
           <ol>
             <li>Right-Backs</li>
@@ -319,17 +373,20 @@ const Pricing = () => {
             <li>Right Wingers</li>
             <li>Left Wingers</li>
           </ol>
+          <br></br>
           <p>
-            Scenario B: You're a national scout covering all positions in one
-            region Choose Max Plan with 10 automations split by position and
-            region (e.g., STs in Scandinavia, CBs in UK, etc.)
+            <StyledBoldText>Scenario B:</StyledBoldText> You're a national scout
+            covering all positions in one region. Choose Max Plan with 10
+            automations split by position and region (e.g., STs in Scandinavia,
+            CBs in UK, etc.)
           </p>
+
           <h2>Still Not Sure?</h2>
           <p>
             If you're unsure which plan is right for you, start with Basic and
-            scale up as your needs grow. You can upgrade anytime, and we’ll help
+            scale up as your needs grow. You can upgrade anytime, and we'll help
             you configure your automations for maximum efficiency. Need help
-            setting up your first automation? Just reach out - we’re happy to
+            setting up your first automation? Just reach out - we're happy to
             assist.
           </p>
         </StyledHowManyAutomationPopup>

@@ -14,6 +14,19 @@ interface Automation {
   user_uuid: string;
 }
 
+export const genderOptions = [
+  {
+    label: "Male",
+    value: "male",
+    availableToChoose: true,
+  },
+  {
+    label: "Female",
+    value: "female",
+    availableToChoose: true,
+  },
+];
+
 export const footballPositions: PositionOption[] = [
   {
     label: "Goalkeeper",
