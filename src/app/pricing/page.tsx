@@ -111,10 +111,7 @@ const StyledPricingCardAutomationsAmount = styled.p`
 
 const Pricing = () => {
   const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
-
-  const [mostPopularPlanId, setMostPopularPlanId] = useState<string | null>(
-    "Pro"
-  );
+  const mostPopularPlanId = "Pro";
 
   useEffect(() => {
     const loadPlans = async () => {
