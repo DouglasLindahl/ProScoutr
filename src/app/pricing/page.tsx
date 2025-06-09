@@ -4,6 +4,15 @@ import { fetchPaymentPlans } from "../utils";
 import styled, { css } from "styled-components";
 import colors from "../../../theme";
 
+interface PaymentPlan {
+  id: string;
+  plan_name: string;
+  plan_description: string;
+  price: number;
+  available_automations: number;
+  is_active: boolean;
+}
+
 const StyledPricingPage = styled.div`
   width: 100vw;
   height: 100vh;
@@ -101,7 +110,8 @@ const StyledPricingCardAutomationsAmount = styled.p`
 `;
 
 const Pricing = () => {
-  const [paymentPlans, setPaymentPlans] = useState<any[]>([]);
+  const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
+
   const [mostPopularPlanId, setMostPopularPlanId] = useState<string | null>(
     "Pro"
   );
@@ -109,10 +119,10 @@ const Pricing = () => {
   useEffect(() => {
     const loadPlans = async () => {
       try {
-        const data = await fetchPaymentPlans();
+        const data: PaymentPlan[] = await fetchPaymentPlans();
         const activePlans = data
-          .filter((plan: any) => plan.is_active)
-          .sort((a: any, b: any) => a.price - b.price); // Sort by price ascending
+          .filter((plan) => plan.is_active)
+          .sort((a, b) => a.price - b.price);
         setPaymentPlans(activePlans);
       } catch (e) {
         console.error(e);

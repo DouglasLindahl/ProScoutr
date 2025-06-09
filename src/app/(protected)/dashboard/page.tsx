@@ -133,6 +133,7 @@ interface PaymentPlan {
   plan_description: string;
   price: number;
   available_automations: number;
+  is_active: boolean;
 }
 
 const Dashboard = () => {
