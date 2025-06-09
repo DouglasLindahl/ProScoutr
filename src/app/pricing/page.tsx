@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { fetchPaymentPlans } from "../utils";
 import styled, { css } from "styled-components";
 import colors from "../../../theme";
+import { useRouter } from "next/navigation";
+import questionMark from "../../../public/questionMark.svg";
 
 interface PaymentPlan {
   id: string;
@@ -24,10 +26,15 @@ const StyledPricingPage = styled.div`
   padding: 68px;
 `;
 
+const StyledGreenText = styled.span`
+  color: ${colors.primary};
+`;
+
 const StyledPricingHeader = styled.h1`
   font-size: 60px;
   text-align: center;
   color: ${colors.text};
+  padding-bottom: 24px;
 `;
 
 const StyledPricingSubHeader = styled.h2`
@@ -36,6 +43,9 @@ const StyledPricingSubHeader = styled.h2`
   font-weight: 200;
   text-decoration: underline;
   text-underline-offset: 4px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledPricingCardsSection = styled.div`
@@ -52,15 +62,20 @@ const StyledPricingCtaButton = styled.button`
   padding: 12px 24px;
   border-radius: 13px;
   color: ${colors.background};
+  &:hover {
+    cursor: pointer;
+  }
+  border: none;
 `;
 
 const StyledPricingCard = styled.div<{ mostPopular?: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 60px;
-  padding: 24px 60px;
+  padding: 30px 60px;
   border-radius: 13px;
   transition: all 0.3s ease;
   border: 2px solid white;
@@ -96,6 +111,9 @@ const StyledPricingCardPriceCurrencySign = styled.span`
 const StyledPricingCardPriceAmount = styled.span`
   font-size: 120px;
   font-weight: bold;
+  line-height: 1;
+  margin-bottom: -10px;
+  display: inline-block;
 `;
 
 const StyledPricingCardPriceRepeat = styled.span`
@@ -109,9 +127,34 @@ const StyledPricingCardAutomationsAmount = styled.p`
   font-weight: bold;
 `;
 
+const StyledSubHeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+`;
+
+const StyledMostPopularBadge = styled.div`
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${colors.primary};
+  color: ${colors.background};
+  font-size: 16px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 6px;
+`;
+
 const Pricing = () => {
+  const router = useRouter();
   const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
   const mostPopularPlanId = "Pro";
+
+  const sendUserToRegisterPage = () => {
+    router.push("/register");
+  };
 
   useEffect(() => {
     const loadPlans = async () => {
@@ -131,10 +174,16 @@ const Pricing = () => {
   return (
     <StyledPricingPage>
       <div>
-        <StyledPricingHeader>Let ProScoutr do the job.</StyledPricingHeader>
-        <StyledPricingSubHeader>
-          How many automations do I need?
-        </StyledPricingSubHeader>
+        <StyledPricingHeader>
+          Let <StyledGreenText>ProScoutr</StyledGreenText> do the job.
+        </StyledPricingHeader>
+        <StyledSubHeaderWrapper>
+          <img src={questionMark.src} alt="Help Icon" width={44} height={44} />
+
+          <StyledPricingSubHeader>
+            How many automations do I need?
+          </StyledPricingSubHeader>
+        </StyledSubHeaderWrapper>
       </div>
 
       <StyledPricingCardsSection>
@@ -143,6 +192,9 @@ const Pricing = () => {
             key={plan.id}
             mostPopular={plan.plan_name === mostPopularPlanId}
           >
+            {plan.plan_name === mostPopularPlanId && (
+              <StyledMostPopularBadge>Most Popular</StyledMostPopularBadge>
+            )}
             <StyledPricingCardHeader>
               {plan.plan_name.toUpperCase()} PLAN
             </StyledPricingCardHeader>
@@ -165,7 +217,13 @@ const Pricing = () => {
       </StyledPricingCardsSection>
 
       <StyledPricingCtaSection>
-        <StyledPricingCtaButton>Create free account</StyledPricingCtaButton>
+        <StyledPricingCtaButton
+          onClick={() => {
+            sendUserToRegisterPage();
+          }}
+        >
+          Create free account
+        </StyledPricingCtaButton>
       </StyledPricingCtaSection>
     </StyledPricingPage>
   );
