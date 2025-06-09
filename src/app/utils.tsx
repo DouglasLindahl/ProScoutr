@@ -156,6 +156,13 @@ export const fetchPaymentPlan = async (planId: number) => {
   return data;
 };
 
+export const fetchPaymentPlans = async () => {
+  const { data, error } = await supabase.from("payment_plans").select("*");
+
+  if (error) throw new Error("Error fetching payment plan");
+  return data;
+};
+
 export const fetchUserAutomations = async (userUuid: string) => {
   const { data, count, error } = await supabase
     .from("automation")
