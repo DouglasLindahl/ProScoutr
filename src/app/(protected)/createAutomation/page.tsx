@@ -16,7 +16,6 @@ import arrow from "../../../../public/arrow.svg";
 import questionMark from "../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
 import { Range } from "react-range";
-import { Mina } from "next/font/google";
 import supabase from "../../../../supabase";
 
 const StyledCreateAutomationPage = styled.div`
@@ -205,7 +204,7 @@ export default function CreateAutomation() {
 
   const createAutomation = async () => {
     if (firstPosition != "" && firstPosition != "") {
-      const { data, error } = await supabase.from("automation").insert([
+      const { error } = await supabase.from("automation").insert([
         {
           user_uuid: userUuid,
           league: "league one",
@@ -380,16 +379,15 @@ export default function CreateAutomation() {
       {positionsGuidePopupOpen && (
         <PopupWindow
           setPopupOpen={setPositionsGuidePopup}
-          header="A guide for our
-positions matching system"
+          header="A guide for our positions matching system"
         >
           <p>
-            When setting up your player automation, you'll be asked to choose a
-            1st and alternative preferred position. This gives us a broader
-            understanding of the types of players you're looking for - whether
-            you're targeting specialists in one role or open to versatile
-            options. However, it's important to understand how these position
-            selections work behind the scenes.
+            When setting up your player automation, you&apos;ll be asked to
+            choose a 1st and alternative preferred position. This gives us a
+            broader understanding of the types of players you&apos;re looking
+            for – whether you&apos;re targeting specialists in one role or open
+            to versatile options. However, it&apos;s important to understand how
+            these position selections work behind the scenes.
           </p>
           <br />
           <p>
@@ -408,27 +406,27 @@ positions matching system"
           </ul>
           <br />
           <p>
-            The system will look for players who play in any of those roles -
+            The system will look for players who play in any of those roles –
             not necessarily both. That means:
           </p>
           <br />
           <ul>
             <li>A player who is only a Centre-Back may be recommended.</li>
             <li>A player who plays both CB and LB is a strong match.</li>
-            <li>However, a player who is only a Midfielder will be excluded</li>
+            <li>A player who is only a Midfielder will be excluded.</li>
           </ul>
           <br />
           <p>
             This approach ensures you receive relevant suggestions faster by not
             filtering too narrowly. It also allows us to include versatile
-            players who cover more of your selected roles, and ensures you don’t
-            miss out on strong candidates just because they don’t match all
-            three positions exactly.
+            players who cover more of your selected roles, and ensures you
+            don&apos;t miss out on strong candidates just because they
+            don&apos;t match all three positions exactly.
           </p>
           <br />
           <p>
-            Once we've filtered players by your selected positions, our system
-            evaluates:
+            Once we&apos;ve filtered players by your selected positions, our
+            system evaluates:
           </p>
           <ul>
             <li>
@@ -464,8 +462,8 @@ positions matching system"
           <br />
           <p>
             If you have questions or want help defining your ideal player
-            profile, our team is here to support you. Just reach out - we’re
-            happy to guide you through your setup.
+            profile, our team is here to support you. Just reach out –
+            we&rsquo;re happy to guide you through your setup.
           </p>
         </PopupWindow>
       )}
