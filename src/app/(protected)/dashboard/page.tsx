@@ -142,13 +142,49 @@ const Dashboard = () => {
   const [userUuid, setUserUuid] = useState<string>("");
   const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
   const [automations, setAutomations] = useState<Automation[]>([]);
+  const [activeAutomations, setActiveAutomations] = useState<number>(0);
+  const [updateActiveAutomations, setUpdateActiveAutomations] =
+    useState<boolean>(true);
   const [userInformation, setUserInformation] = useState<UserProfile | null>(
     null
   );
+  const refreshAutomations = async () => {
+    const { automations: fetchedAutomations } = await fetchUserAutomations(
+      userUuid
+    );
+
+    setAutomations((prevAutomations) => {
+      return prevAutomations.map(
+        (prev) => fetchedAutomations.find((a) => a.uuid === prev.uuid) || prev
+      );
+    });
+  };
 
   const sendUserToCreateNewAutomation = () => {
     router.push("/createAutomation");
   };
+
+  useEffect(() => {
+    const loadAutomations = async () => {
+      if (!userUuid) return;
+      try {
+        const { automations } = await fetchUserAutomations(userUuid);
+        setAutomations(automations);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadAutomations();
+  }, [userUuid, updateActiveAutomations]);
+
+  useEffect(() => {
+    const checkUserActiveAutomationsCount = () => {
+      setActiveAutomations(
+        automations.filter((automation) => automation.is_active).length
+      );
+    };
+    checkUserActiveAutomationsCount();
+  }, [automations]);
 
   useEffect(() => {
     const getSession = async () => {
@@ -262,7 +298,7 @@ const Dashboard = () => {
       <StyledDashboard>
         <StyledHowManyAutomationsActiveSection>
           <StyledHowManyAutomationsActiveNumber>
-            {automations.length}/{userPaymentPlan?.available_automations}
+            {activeAutomations}/{userPaymentPlan?.available_automations}
           </StyledHowManyAutomationsActiveNumber>
           <StyledHowManyAutomationsActiveText>
             Active
@@ -275,11 +311,12 @@ const Dashboard = () => {
           {automations.map((automation) => (
             <AutomationCard
               key={automation.uuid}
-              uuid={automation.uuid}
+              automation={automation}
               userUuid={userUuid}
               availableAutomationLimit={
                 userPaymentPlan?.available_automations || 0
               }
+              updateAutomations={refreshAutomations}
             />
           ))}
           <StyledAddAutomationCard

@@ -1,21 +1,21 @@
 "use client";
 import styled, { css } from "styled-components";
 import colors from "../../../theme";
-import automation from "../../../public/automation.png";
+import automationImg from "../../../public/automationImg.png";
 
-import { useEffect, useState } from "react";
-import supabase from "../../../supabase";
+import { useState } from "react";
 import { activateAutomation, deactivateAutomation } from "../../app/utils";
-
-interface AutomationCardProps {
+interface Automation {
   uuid: string;
-  userUuid: string;
-  availableAutomationLimit: number;
-}
-
-interface AutomationInfo {
-  is_active: boolean;
   automation_name: string;
+  is_active: boolean;
+  user_uuid: string;
+}
+interface AutomationCardProps {
+  userUuid: string;
+  automation: Automation;
+  updateAutomations: () => void;
+  availableAutomationLimit: number;
 }
 
 const StyledDashboardQuery = styled.div`
@@ -34,7 +34,7 @@ const StyledDashboardQueryImageContainer = styled.div<{ isActive: boolean }>`
 `;
 
 const StyledDashboardQueryImage = styled.div<{ isActive: boolean }>`
-  background: url(${automation.src}) no-repeat center center;
+  background: url(${automationImg.src}) no-repeat center center;
   background-size: 70% 70%;
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -109,39 +109,14 @@ const StyledDashsboardQueryText = styled.p`
 `;
 
 const AutomationCard = ({
-  uuid,
   userUuid,
   availableAutomationLimit,
+  automation,
+  updateAutomations,
 }: AutomationCardProps) => {
-  const [automationInfo, setAutomationInfo] = useState<AutomationInfo | null>(
-    null
-  );
   const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    const fetchAutomations = async () => {
-      const { data, error } = await supabase
-        .from("automation")
-        .select("is_active, automation_name")
-        .eq("uuid", uuid)
-        .single();
-
-      if (error) {
-        console.error("Error fetching automations:", error);
-        return;
-      }
-
-      setAutomationInfo(data);
-    };
-
-    fetchAutomations();
-  }, [uuid]);
-
-  if (!automationInfo) {
-    return <p>Loading...</p>;
-  }
-
-  const { is_active, automation_name } = automationInfo;
+  const { uuid, is_active, automation_name } = automation;
 
   return (
     <StyledDashboardQuery>
@@ -156,40 +131,16 @@ const AutomationCard = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={async () => {
-            if (!is_active) {
-              const result = await activateAutomation(
-                uuid,
-                userUuid,
-                availableAutomationLimit
-              );
-              //result.message
-              // Refresh automation info
-              if (result.success) {
-                const { data, error } = await supabase
-                  .from("automation")
-                  .select("is_active, automation_name")
-                  .eq("uuid", uuid)
-                  .single();
+            const result = is_active
+              ? await deactivateAutomation(uuid, userUuid)
+              : await activateAutomation(
+                  uuid,
+                  userUuid,
+                  availableAutomationLimit
+                );
 
-                if (!error) {
-                  setAutomationInfo(data);
-                }
-              }
-            } else {
-              const result = await deactivateAutomation(uuid, userUuid);
-
-              // Refresh automation info
-              if (result.success) {
-                const { data, error } = await supabase
-                  .from("automation")
-                  .select("is_active, automation_name")
-                  .eq("uuid", uuid)
-                  .single();
-
-                if (!error) {
-                  setAutomationInfo(data);
-                }
-              }
+            if (result.success) {
+              await updateAutomations();
             }
           }}
         >
