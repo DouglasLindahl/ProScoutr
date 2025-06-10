@@ -1,6 +1,8 @@
 "use client";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import {
+  checkUserSession,
   footballPositions,
   nationalityOptions,
   playingStyleOptions,
@@ -8,13 +10,14 @@ import {
 } from "@/app/utils";
 import { genderOptions } from "@/app/utils";
 import Dropdown from "@/components/dropdown/page";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import colors from "../../../../theme";
 import arrow from "../../../../public/arrow.svg";
 import questionMark from "../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
 import { Range } from "react-range";
 import { Mina } from "next/font/google";
+import supabase from "../../../../supabase";
 
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
@@ -121,7 +124,49 @@ const StyledBoldText = styled.span`
   font-weight: bold;
 `;
 
+const StyledFinalSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 30px;
+`;
+const StyledApplyButton = styled.button`
+  padding: 8px 64px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: ${colors.text};
+  color: ${colors.background};
+  border: 4px solid ${colors.text};
+  border-radius: 13px;
+  &:hover {
+    background-color: ${colors.primary};
+    border: 4px solid ${colors.primary};
+  }
+`;
+const StyledCancelButton = styled.button`
+  padding: 8px 64px;
+  font-size: 24px;
+  background-color: ${colors.background};
+  color: ${colors.text};
+  border: 4px solid ${colors.text};
+  border-radius: 13px;
+  &:hover {
+    background-color: ${colors.red};
+    border: 4px solid ${colors.red};
+  }
+`;
+
+const StyledErrortext = styled.p`
+  font-size: 24px;
+  color: ${colors.red};
+`;
+
 export default function CreateAutomation() {
+  const router = useRouter();
+  const [userUuid, setUserUuid] = useState<string>("");
+  const [errorText, setErrorText] = useState("");
   const [positionsGuidePopupOpen, setPositionsGuidePopup] = useState(false);
   const [firstPositionDropdownOpen, setFirstPositionDropdownOpen] =
     useState(false);
@@ -150,16 +195,46 @@ export default function CreateAutomation() {
   const [minHeight, setMinHeight] = useState(170);
   const [maxHeight, setMaxHeight] = useState(180);
 
-  const checkInputs = () => {
-    console.log("gender: " + gender);
-    console.log("1st position: " + firstPosition);
-    console.log("alt. position: " + altPosition);
-    console.log("min age: " + minAge);
-    console.log("max age: " + maxAge);
-    console.log("min weight: " + minWeight);
-    console.log("max weight: " + maxWeight);
-    console.log("min height: " + minHeight);
-    console.log("max height: " + maxHeight);
+  useEffect(() => {
+    const getSession = async () => {
+      const uuid = await checkUserSession();
+      if (uuid) setUserUuid(uuid);
+    };
+    getSession();
+  }, []);
+
+  const createAutomation = async () => {
+    if (firstPosition != "" && firstPosition != "") {
+      const { data, error } = await supabase.from("automation").insert([
+        {
+          user_uuid: userUuid,
+          league: "league one",
+          nationality: nationality,
+          min_age: minAge,
+          max_age: maxAge,
+          min_height: minHeight,
+          max_height: maxHeight,
+          min_weight: minWeight,
+          max_weight: maxWeight,
+          first_position: firstPosition,
+          second_position: altPosition,
+          preferred_foot: preferredFoot,
+          automation_name: "name 1",
+        },
+      ]);
+
+      if (error) {
+        console.error("Insert error:", error.message, error.details);
+      } else {
+        returnToDashboard();
+      }
+    } else {
+      setErrorText("You must fill out all the required information");
+    }
+  };
+
+  const returnToDashboard = () => {
+    router.push("/dashboard");
   };
 
   const STEP = 1;
@@ -301,7 +376,7 @@ export default function CreateAutomation() {
 
   return (
     <StyledCreateAutomationPage>
-      <button onClick={checkInputs}>check inputs</button>
+      <button onClick={returnToDashboard}>return</button>
       {positionsGuidePopupOpen && (
         <PopupWindow
           setPopupOpen={setPositionsGuidePopup}
@@ -690,6 +765,13 @@ positions matching system"
           </div>
         )}
       </StyledDropDownMenuSection>
+      <StyledFinalSection>
+        <StyledErrortext>{errorText}</StyledErrortext>
+        <StyledCancelButton onClick={returnToDashboard}>
+          Cancel
+        </StyledCancelButton>
+        <StyledApplyButton onClick={createAutomation}>Create</StyledApplyButton>
+      </StyledFinalSection>
     </StyledCreateAutomationPage>
   );
 }
