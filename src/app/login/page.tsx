@@ -216,7 +216,7 @@ const Login = () => {
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/resetPassword`,
+      redirectTo: `proscoutr.com/resetPassword`,
     });
 
     if (error) {

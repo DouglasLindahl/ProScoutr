@@ -350,6 +350,1034 @@ export const genderOptions = [
   },
 ];
 
+export const leagueOptions = [
+  {
+    label: "England",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Premier League",
+        value: "eng_premier_league",
+        availableToChoose: true,
+      },
+      {
+        label: "English Football League",
+        availableToChoose: false,
+        options: [
+          {
+            label: "Championship",
+            value: "eng_championship",
+            availableToChoose: true,
+          },
+          {
+            label: "League One",
+            value: "eng_league_one",
+            availableToChoose: true,
+          },
+          {
+            label: "League Two",
+            value: "eng_league_two",
+            availableToChoose: true,
+          },
+        ],
+      },
+      {
+        label: "National League System",
+        availableToChoose: false,
+        options: [
+          {
+            label: "National League",
+            value: "eng_national_league",
+            availableToChoose: true,
+          },
+          {
+            label: "National League North",
+            value: "eng_national_league_north",
+            availableToChoose: true,
+          },
+          {
+            label: "National League South",
+            value: "eng_national_league_south",
+            availableToChoose: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Spain",
+    availableToChoose: false,
+    options: [
+      {
+        label: "La Liga (Primera División)",
+        value: "esp_la_liga",
+        availableToChoose: true,
+      },
+      {
+        label: "Segunda División",
+        value: "esp_segunda_division",
+        availableToChoose: true,
+      },
+      {
+        label: "Primera Federación",
+        value: "esp_primera_federacion",
+        availableToChoose: true,
+      },
+      {
+        label: "Segunda Federación",
+        value: "esp_segunda_federacion",
+        availableToChoose: true,
+      },
+      {
+        label: "Tercera Federación",
+        value: "esp_tercera_federacion",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Italy",
+    availableToChoose: false,
+    options: [
+      { label: "Serie A", value: "ita_serie_a", availableToChoose: true },
+      { label: "Serie B", value: "ita_serie_b", availableToChoose: true },
+      { label: "Serie C", value: "ita_serie_c", availableToChoose: true },
+      { label: "Serie D", value: "ita_serie_d", availableToChoose: true },
+      {
+        label: "Eccellenza",
+        value: "ita_eccellenza",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Germany",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Bundesliga",
+        value: "ger_bundesliga",
+        availableToChoose: true,
+      },
+      {
+        label: "2. Bundesliga",
+        value: "ger_2_bundesliga",
+        availableToChoose: true,
+      },
+      { label: "3. Liga", value: "ger_3_liga", availableToChoose: true },
+      {
+        label: "Regionalliga",
+        value: "ger_regionalliga",
+        availableToChoose: true,
+      },
+      { label: "Oberliga", value: "ger_oberliga", availableToChoose: true },
+    ],
+  },
+  {
+    label: "France",
+    availableToChoose: false,
+    options: [
+      { label: "Ligue 1", value: "fra_ligue_1", availableToChoose: true },
+      { label: "Ligue 2", value: "fra_ligue_2", availableToChoose: true },
+      {
+        label: "Championnat National",
+        value: "fra_national",
+        availableToChoose: true,
+      },
+      {
+        label: "National 2",
+        value: "fra_national_2",
+        availableToChoose: true,
+      },
+      {
+        label: "National 3",
+        value: "fra_national_3",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Japan",
+    availableToChoose: false,
+    options: [
+      { label: "J1 League", value: "jpn_j1_league", availableToChoose: true },
+      { label: "J2 League", value: "jpn_j2_league", availableToChoose: true },
+      { label: "J3 League", value: "jpn_j3_league", availableToChoose: true },
+      {
+        label: "Japan Football League",
+        value: "jpn_jfl",
+        availableToChoose: true,
+      },
+      {
+        label: "Regional Leagues",
+        value: "jpn_regional_leagues",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Brazil",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Brasileirão Série A",
+        value: "bra_serie_a",
+        availableToChoose: true,
+      },
+      {
+        label: "Brasileirão Série B",
+        value: "bra_serie_b",
+        availableToChoose: true,
+      },
+      {
+        label: "Brasileirão Série C",
+        value: "bra_serie_c",
+        availableToChoose: true,
+      },
+      {
+        label: "Brasileirão Série D",
+        value: "bra_serie_d",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Argentina",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Primera División",
+        value: "arg_primera_division",
+        availableToChoose: true,
+      },
+      {
+        label: "Primera Nacional",
+        value: "arg_primera_nacional",
+        availableToChoose: true,
+      },
+      {
+        label: "Primera B Metropolitana",
+        value: "arg_primera_b_metropolitana",
+        availableToChoose: true,
+      },
+      {
+        label: "Torneo Federal A",
+        value: "arg_torneo_federal_a",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Netherlands",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Eredivisie",
+        value: "ned_eredivisie",
+        availableToChoose: true,
+      },
+      {
+        label: "Eerste Divisie",
+        value: "ned_eerste_divisie",
+        availableToChoose: true,
+      },
+      {
+        label: "Tweede Divisie",
+        value: "ned_tweede_divisie",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Portugal",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Primeira Liga",
+        value: "prt_primeira_liga",
+        availableToChoose: true,
+      },
+      {
+        label: "Liga Portugal 2",
+        value: "prt_liga_portugal_2",
+        availableToChoose: true,
+      },
+      {
+        label: "Campeonato de Portugal",
+        value: "prt_campeonato_de_portugal",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Russia",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Russian Premier League",
+        value: "rus_premier_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Russian Football National League",
+        value: "rus_football_national_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Russian Professional Football League",
+        value: "rus_professional_football_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Mexico",
+    availableToChoose: false,
+    options: [
+      { label: "Liga MX", value: "mex_liga_mx", availableToChoose: true },
+      {
+        label: "Liga Expansión MX",
+        value: "mex_liga_expansion_mx",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Turkey",
+    availableToChoose: false,
+    options: [
+      { label: "Süper Lig", value: "tur_super_lig", availableToChoose: true },
+      {
+        label: "TFF First League",
+        value: "tur_tff_first_league",
+        availableToChoose: true,
+      },
+      {
+        label: "TFF Second League",
+        value: "tur_tff_second_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Australia",
+    availableToChoose: false,
+    options: [
+      {
+        label: "A-League Men",
+        value: "aus_a_league_men",
+        availableToChoose: true,
+      },
+      {
+        label: "National Premier Leagues",
+        value: "aus_national_premier_leagues",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Belgium",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Belgian First Division A",
+        value: "bel_first_division_a",
+        availableToChoose: true,
+      },
+      {
+        label: "Belgian First Division B",
+        value: "bel_first_division_b",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "United States",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Major League Soccer (MLS)",
+        value: "usa_mls",
+        availableToChoose: true,
+      },
+      {
+        label: "USL Championship",
+        value: "usa_usl_championship",
+        availableToChoose: true,
+      },
+      {
+        label: "USL League One",
+        value: "usa_usl_league_one",
+        availableToChoose: true,
+      },
+      {
+        label: "USL League Two",
+        value: "usa_usl_league_two",
+        availableToChoose: true,
+      },
+      {
+        label: "National Independent Soccer Association (NISA)",
+        value: "usa_nisa",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Canada",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Canadian Premier League",
+        value: "can_cpl",
+        availableToChoose: true,
+      },
+      {
+        label: "League1 Ontario",
+        value: "can_league1_ontario",
+        availableToChoose: true,
+      },
+      {
+        label: "Ligue1 Québec",
+        value: "can_ligue1_quebec",
+        availableToChoose: true,
+      },
+      {
+        label: "League1 British Columbia",
+        value: "can_league1_bc",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Sweden",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Allsvenskan",
+        value: "swe_allsvenskan",
+        availableToChoose: true,
+      },
+      { label: "Superettan", value: "swe_superettan", availableToChoose: true },
+      {
+        label: "Ettan Norra",
+        value: "swe_ettan_norra",
+        availableToChoose: true,
+      },
+      {
+        label: "Ettan Södra",
+        value: "swe_ettan_sodra",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Norway",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Eliteserien",
+        value: "nor_eliteserien",
+        availableToChoose: true,
+      },
+      {
+        label: "OBOS-ligaen",
+        value: "nor_obos_ligaen",
+        availableToChoose: true,
+      },
+      {
+        label: "PostNord-ligaen",
+        value: "nor_postnord_ligaen",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Denmark",
+    availableToChoose: false,
+    options: [
+      { label: "Superliga", value: "den_superliga", availableToChoose: true },
+      {
+        label: "1st Division",
+        value: "den_1st_division",
+        availableToChoose: true,
+      },
+      {
+        label: "2nd Division",
+        value: "den_2nd_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Finland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Veikkausliiga",
+        value: "fin_veikkausliiga",
+        availableToChoose: true,
+      },
+      { label: "Ykkönen", value: "fin_ykkonen", availableToChoose: true },
+      { label: "Kakkonen", value: "fin_kakkonen", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Poland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Ekstraklasa",
+        value: "pol_ekstraklasa",
+        availableToChoose: true,
+      },
+      { label: "I liga", value: "pol_i_liga", availableToChoose: true },
+      { label: "II liga", value: "pol_ii_liga", availableToChoose: true },
+      { label: "III liga", value: "pol_iii_liga", availableToChoose: true },
+    ],
+  },
+  {
+    label: "South Korea",
+    availableToChoose: false,
+    options: [
+      { label: "K League 1", value: "kor_k_league_1", availableToChoose: true },
+      { label: "K League 2", value: "kor_k_league_2", availableToChoose: true },
+      { label: "K3 League", value: "kor_k3_league", availableToChoose: true },
+      { label: "K4 League", value: "kor_k4_league", availableToChoose: true },
+    ],
+  },
+  {
+    label: "China",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Chinese Super League",
+        value: "chn_super_league",
+        availableToChoose: true,
+      },
+      {
+        label: "China League One",
+        value: "chn_league_one",
+        availableToChoose: true,
+      },
+      {
+        label: "China League Two",
+        value: "chn_league_two",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Nigeria",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Nigeria Premier Football League",
+        value: "nga_npfl",
+        availableToChoose: true,
+      },
+      {
+        label: "Nigeria National League",
+        value: "nga_nnl",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Egypt",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Egyptian Premier League",
+        value: "egy_premier_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Egyptian Second Division",
+        value: "egy_second_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Morocco",
+    availableToChoose: false,
+    options: [
+      { label: "Botola Pro", value: "mar_botola_pro", availableToChoose: true },
+      { label: "Botola 2", value: "mar_botola_2", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Ghana",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Ghana Premier League",
+        value: "gha_premier_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Ghana Division One League",
+        value: "gha_division_one",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "South Africa",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Premier Soccer League (PSL)",
+        value: "rsa_psl",
+        availableToChoose: true,
+      },
+      {
+        label: "National First Division",
+        value: "rsa_nfd",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Colombia",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Categoría Primera A",
+        value: "col_primera_a",
+        availableToChoose: true,
+      },
+      {
+        label: "Categoría Primera B",
+        value: "col_primera_b",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Chile",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Primera División",
+        value: "chl_primera_division",
+        availableToChoose: true,
+      },
+      { label: "Primera B", value: "chl_primera_b", availableToChoose: true },
+      {
+        label: "Segunda División",
+        value: "chl_segunda_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Uruguay",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Primera División",
+        value: "uru_primera_division",
+        availableToChoose: true,
+      },
+      {
+        label: "Segunda División",
+        value: "uru_segunda_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Paraguay",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Primera División",
+        value: "par_primera_division",
+        availableToChoose: true,
+      },
+      {
+        label: "División Intermedia",
+        value: "par_division_intermedia",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Peru",
+    availableToChoose: false,
+    options: [
+      { label: "Liga 1", value: "per_liga_1", availableToChoose: true },
+      { label: "Liga 2", value: "per_liga_2", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Greece",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Super League 1",
+        value: "grc_super_league_1",
+        availableToChoose: true,
+      },
+      {
+        label: "Super League 2",
+        value: "grc_super_league_2",
+        availableToChoose: true,
+      },
+      {
+        label: "Gamma Ethniki",
+        value: "grc_gamma_ethniki",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Austria",
+    availableToChoose: false,
+    options: [
+      { label: "Bundesliga", value: "aut_bundesliga", availableToChoose: true },
+      { label: "2. Liga", value: "aut_2_liga", availableToChoose: true },
+      {
+        label: "Regionalliga",
+        value: "aut_regionalliga",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Greece",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Super League 1",
+        value: "grc_super_league_1",
+        availableToChoose: true,
+      },
+      {
+        label: "Super League 2",
+        value: "grc_super_league_2",
+        availableToChoose: true,
+      },
+      {
+        label: "Gamma Ethniki",
+        value: "grc_gamma_ethniki",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Austria",
+    availableToChoose: false,
+    options: [
+      { label: "Bundesliga", value: "aut_bundesliga", availableToChoose: true },
+      { label: "2. Liga", value: "aut_2_liga", availableToChoose: true },
+      {
+        label: "Regionalliga",
+        value: "aut_regionalliga",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Switzerland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Swiss Super League",
+        value: "sui_super_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Swiss Challenge League",
+        value: "sui_challenge_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Promotion League",
+        value: "sui_promotion_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Czech Republic",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Czech First League",
+        value: "cze_first_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Czech National Football League",
+        value: "cze_national_football_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Hungary",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Nemzeti Bajnokság I",
+        value: "hun_nb_i",
+        availableToChoose: true,
+      },
+      {
+        label: "Nemzeti Bajnokság II",
+        value: "hun_nb_ii",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Ukraine",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Ukrainian Premier League",
+        value: "ukr_premier_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Ukrainian First League",
+        value: "ukr_first_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Romania",
+    availableToChoose: false,
+    options: [
+      { label: "Liga I", value: "rou_liga_i", availableToChoose: true },
+      { label: "Liga II", value: "rou_liga_ii", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Scotland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Scottish Premiership",
+        value: "sco_premiership",
+        availableToChoose: true,
+      },
+      {
+        label: "Scottish Championship",
+        value: "sco_championship",
+        availableToChoose: true,
+      },
+      {
+        label: "Scottish League One",
+        value: "sco_league_one",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Wales",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Cymru Premier",
+        value: "wal_cymru_premier",
+        availableToChoose: true,
+      },
+      {
+        label: "Cymru North",
+        value: "wal_cymru_north",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Northern Ireland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "NIFL Premiership",
+        value: "nir_premiership",
+        availableToChoose: true,
+      },
+      {
+        label: "NIFL Championship",
+        value: "nir_championship",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Republic of Ireland",
+    availableToChoose: false,
+    options: [
+      {
+        label: "League of Ireland Premier Division",
+        value: "irl_premier_division",
+        availableToChoose: true,
+      },
+      {
+        label: "League of Ireland First Division",
+        value: "irl_first_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Israel",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Ligat Ha'Al",
+        value: "isr_ligat_haal",
+        availableToChoose: true,
+      },
+      {
+        label: "Liga Leumit",
+        value: "isr_liga_leumit",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "New Zealand",
+    availableToChoose: false,
+    options: [
+      {
+        label: "New Zealand Football Championship",
+        value: "nzl_nzfc",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "India",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Indian Super League",
+        value: "ind_isl",
+        availableToChoose: true,
+      },
+      { label: "I-League", value: "ind_i_league", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Thailand",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Thai League 1",
+        value: "tha_league_1",
+        availableToChoose: true,
+      },
+      {
+        label: "Thai League 2",
+        value: "tha_league_2",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Malaysia",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Malaysia Super League",
+        value: "mas_super_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Malaysia Premier League",
+        value: "mas_premier_league",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Indonesia",
+    availableToChoose: false,
+    options: [
+      { label: "Liga 1", value: "idn_liga_1", availableToChoose: true },
+      { label: "Liga 2", value: "idn_liga_2", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Vietnam",
+    availableToChoose: false,
+    options: [
+      { label: "V.League 1", value: "vnm_vleague_1", availableToChoose: true },
+      { label: "V.League 2", value: "vnm_vleague_2", availableToChoose: true },
+    ],
+  },
+  {
+    label: "Saudi Arabia",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Saudi Professional League",
+        value: "sau_pro_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Saudi First Division League",
+        value: "sau_first_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "United Arab Emirates",
+    availableToChoose: false,
+    options: [
+      {
+        label: "UAE Pro League",
+        value: "uae_pro_league",
+        availableToChoose: true,
+      },
+      {
+        label: "UAE First Division League",
+        value: "uae_first_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Qatar",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Qatar Stars League",
+        value: "qat_stars_league",
+        availableToChoose: true,
+      },
+      {
+        label: "Qatar Second Division",
+        value: "qat_second_division",
+        availableToChoose: true,
+      },
+    ],
+  },
+  {
+    label: "Algeria",
+    availableToChoose: false,
+    options: [
+      {
+        label: "Ligue Professionnelle 1",
+        value: "dza_ligue1",
+        availableToChoose: true,
+      },
+      {
+        label: "Ligue Professionnelle 2",
+        value: "dza_ligue2",
+        availableToChoose: true,
+      },
+    ],
+  },
+];
+
 export const footballPositions: PositionOption[] = [
   {
     label: "Goalkeeper",

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {
   checkUserSession,
   footballPositions,
+  leagueOptions,
   nationalityOptions,
   playingStyleOptions,
   preferredFootOptions,
@@ -176,6 +177,7 @@ export default function CreateAutomation() {
   const [playingStyleDropdownOpen, setPlayingStyleDropdownOpen] =
     useState(false);
   const [nationalityDropdownOpen, setNationalityDropdownOpen] = useState(false);
+  const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
 
   const [firstPosition, setFirstPosition] = useState("");
   const [gender, setGender] = useState("");
@@ -183,6 +185,7 @@ export default function CreateAutomation() {
   const [preferredFoot, setPreferredFoot] = useState("");
   const [playingStyle, setPlayingStyle] = useState("");
   const [nationality, setNationality] = useState("");
+  const [league, setLeague] = useState("");
 
   const [ageRange, setAgeRange] = useState([18, 32]);
   const [weightRange, setWeightRange] = useState([72, 80]);
@@ -759,6 +762,46 @@ export default function CreateAutomation() {
               options={nationalityOptions}
               depth={0}
               setDropdownOpen={setNationalityDropdownOpen}
+            />
+          </div>
+        )}
+      </StyledDropDownMenuSection>
+      <StyledInputLabel>League</StyledInputLabel>
+      <StyledDropDownMenuSection required={false}>
+        <StyledDropDownMenuButton
+          isOpen={leagueDropdownOpen}
+          onClick={() => setLeagueDropdownOpen(!leagueDropdownOpen)}
+        >
+          {league ? league : "Select (optional)"}
+          <img
+            src={arrow.src}
+            alt=""
+            style={{
+              transform: leagueDropdownOpen
+                ? "rotate(270deg)"
+                : "rotate(90deg)",
+            }}
+          />
+        </StyledDropDownMenuButton>
+
+        {leagueDropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              width: "100%",
+              backgroundColor: colors.background,
+              borderRadius: "0 0 13px 13px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              zIndex: 20,
+            }}
+          >
+            <Dropdown
+              setOption={setLeague}
+              options={leagueOptions}
+              depth={0}
+              setDropdownOpen={setLeagueDropdownOpen}
             />
           </div>
         )}
