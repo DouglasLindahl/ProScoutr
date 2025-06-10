@@ -15,6 +15,8 @@ interface PositionOption {
 type DropdownProps = {
   options: PositionOption[];
   depth?: number;
+  setOption: React.Dispatch<React.SetStateAction<string>>;
+  setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const StyledDropdownSection = styled.div<{ $depth?: number }>`
@@ -58,20 +60,33 @@ const StyledDropdownButton = styled.button<{ isOpen?: boolean }>`
   }
 `;
 
-const Dropdown: React.FC<DropdownProps> = ({ options, depth = 0 }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  setOption,
+  setDropdownOpen,
+  options,
+  depth = 0,
+}) => {
   return (
     <StyledDropdownSection $depth={depth}>
       {options.map((option, index) => (
-        <DropdownItem option={option} key={index} depth={depth + 1} />
+        <DropdownItem
+          setOption={setOption}
+          setDropdownOpen={setDropdownOpen}
+          option={option}
+          key={index}
+          depth={depth + 1}
+        />
       ))}
     </StyledDropdownSection>
   );
 };
 
-const DropdownItem: React.FC<{ option: PositionOption; depth: number }> = ({
-  option,
-  depth,
-}) => {
+const DropdownItem: React.FC<{
+  setOption: React.Dispatch<React.SetStateAction<string>>;
+  setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  option: PositionOption;
+  depth: number;
+}> = ({ setOption, setDropdownOpen, option, depth }) => {
   const [open, setOpen] = useState(false);
 
   const hasChildren = option.options && option.options.length > 0;
@@ -94,12 +109,20 @@ const DropdownItem: React.FC<{ option: PositionOption; depth: number }> = ({
             />
           </StyledDropdownButton>
           {open && option.options && (
-            <Dropdown options={option.options} depth={depth} />
+            <Dropdown
+              setOption={setOption}
+              setDropdownOpen={setDropdownOpen}
+              options={option.options}
+              depth={depth}
+            />
           )}
         </>
       ) : option.availableToChoose ? (
         <StyledDropdownButton
-          onClick={() => alert(`Selected: ${option.label}`)}
+          onClick={() => {
+            setOption(option.label);
+            setDropdownOpen(false);
+          }}
           style={{ cursor: "pointer" }}
         >
           <p>{option.label}</p>

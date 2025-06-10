@@ -6,6 +6,8 @@ import Dropdown from "@/components/dropdown/page";
 import { useState } from "react";
 import colors from "../../../../theme";
 import arrow from "../../../../public/arrow.svg";
+import questionMark from "../../../../public/questionMark.svg";
+import PopupWindow from "@/components/popupWindow/page";
 
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
@@ -16,10 +18,15 @@ const StyledCreateAutomationPage = styled.div`
 
 const StyledCreateAutomationHeader = styled.h1`
   color: ${colors.text};
+  text-align: center;
+  font-size: 60px;
 `;
 
 const StyledInputLabel = styled.p`
   color: ${colors.text};
+  font-size: 30px;
+  font-weight: bold;
+  padding-bottom: 20px;
 `;
 
 const StyledDropDownMenuSection = styled.div`
@@ -28,7 +35,7 @@ const StyledDropDownMenuSection = styled.div`
   color: ${colors.background};
   border-radius: 13px;
   width: 30%;
-  margin-bottom: 24px;
+  margin-bottom: 80px;
   overflow: visible;
   &:hover {
     background-color: ${colors.primary};
@@ -55,54 +62,162 @@ const StyledDropDownMenuButton = styled.button<{ isOpen: boolean }>`
   }
 `;
 
+const StyledPositionsDropdownSection = styled.div`
+  position: relative;
+`;
+const StyledPositionsInfoTextSection = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  color: ${colors.text};
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 35%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  height: 100%;
+  width: 60%;
+  right: 0;
+  top: 0;
+`;
+const StyledPositionsInfoText = styled.p`
+  padding: 25px 25px 25px 150px;
+  font-size: 25px;
+`;
+const StyledPositionInfoQuestionTextSection = styled.div`
+  padding-left: 150px;
+  color: ${colors.text};
+  font-weight: 200;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 15px;
+  &:hover {
+    cursor: pointer;
+  }
+  p {
+    font-size: 25px;
+    font-weight: bold;
+  }
+`;
+
+const StyledBoldText = styled.span`
+  font-weight: bold;
+`;
+
 export default function CreateAutomation() {
+  const [positionsGuidePopupOpen, setPositionsGuidePopup] = useState(true);
   const [firstPositionDropdownOpen, setFirstPositionDropdownOpen] =
     useState(false);
   const [genderDropdownOpen, setGenderDropdownOpen] = useState(false);
+  const [altPositionDropdownOpen, setAltPositionDropdownOpen] = useState(false);
+  const [firstPosition, setFirstPosition] = useState("");
+  const [gender, setGender] = useState("");
+  const [altPosition, setAltPosition] = useState("");
 
   return (
     <StyledCreateAutomationPage>
+      {positionsGuidePopupOpen && (
+        <PopupWindow
+          setPopupOpen={setPositionsGuidePopup}
+          header="A guide for our
+positions matching system"
+        >
+          <p>
+            When setting up your player automation, you'll be asked to choose a
+            1st and alternative preferred position. This gives us a broader
+            understanding of the types of players you're looking for - whether
+            you're targeting specialists in one role or open to versatile
+            options. However, it's important to understand how these position
+            selections work behind the scenes.
+          </p>
+          <br />
+          <p>
+            Your selected positions are treated as a group of acceptable roles,
+            not as a checklist that a single player must match completely.
+          </p>
+          <br />
+          <p>For example, if you choose:</p>
+          <ul>
+            <li>
+              <StyledBoldText>1st Position:</StyledBoldText> Centre-Back (CB)
+            </li>
+            <li>
+              <StyledBoldText>Alt. Position:</StyledBoldText> Left-Back (LB)
+            </li>
+          </ul>
+          <br />
+          <p>
+            The system will look for players who play in any of those roles -
+            not necessarily both. That means:
+          </p>
+          <br />
+          <ul>
+            <li>A player who is only a Centre-Back may be recommended.</li>
+            <li>A player who plays both CB and LB is a strong match.</li>
+            <li>However, a player who is only a Midfielder will be excluded</li>
+          </ul>
+          <br />
+          <p>
+            This approach ensures you receive relevant suggestions faster by not
+            filtering too narrowly. It also allows us to include versatile
+            players who cover more of your selected roles, and ensures you don’t
+            miss out on strong candidates just because they don’t match all
+            three positions exactly.
+          </p>
+          <br />
+          <p>
+            Once we've filtered players by your selected positions, our system
+            evaluates:
+          </p>
+          <ul>
+            <li>
+              Whether the player has experience in both of the selected roles
+            </li>
+            <li>
+              Their primary and alternative positions, as tracked across recent
+              seasons
+            </li>
+            <li>
+              Positional flexibility and role fit, using match data and
+              performance indicators
+            </li>
+          </ul>
+          <br />
+          <p>
+            Players with multiple position matches (in this case, CB + LB) are
+            ranked higher, but we do not require a player to match both of them.
+          </p>
+          <h2>Tip: how to choose your 1st and Alt. position:</h2>
+          <br />
+          <ul>
+            <li>Use 1st Position for the role you need most urgently</li>
+            <li>
+              Use the alternative position to include alternatives or adjacent
+              roles (e.g., a LB can cover LWB, or a CM might cover CDM)
+            </li>
+            <li>
+              You can always adjust these selections later to refine your player
+              pool
+            </li>
+          </ul>
+          <br />
+          <p>
+            If you have questions or want help defining your ideal player
+            profile, our team is here to support you. Just reach out - we’re
+            happy to guide you through your setup.
+          </p>
+        </PopupWindow>
+      )}
       <StyledCreateAutomationHeader>
         Create automation
       </StyledCreateAutomationHeader>
-
-      <StyledInputLabel>1st position</StyledInputLabel>
-      <StyledDropDownMenuSection>
-        <StyledDropDownMenuButton
-          isOpen={firstPositionDropdownOpen}
-          onClick={() =>
-            setFirstPositionDropdownOpen(!firstPositionDropdownOpen)
-          }
-        >
-          Select (required)
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: firstPositionDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
-
-        {firstPositionDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
-          >
-            <Dropdown options={footballPositions} depth={0} />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
 
       <StyledInputLabel>Gender</StyledInputLabel>
       <StyledDropDownMenuSection>
@@ -110,7 +225,7 @@ export default function CreateAutomation() {
           isOpen={genderDropdownOpen}
           onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
         >
-          Select (required)
+          {gender ? gender : "Select (required)"}
           <img
             src={arrow.src}
             alt=""
@@ -135,10 +250,121 @@ export default function CreateAutomation() {
               zIndex: 20,
             }}
           >
-            <Dropdown options={genderOptions} depth={0} />
+            <Dropdown
+              setOption={setGender}
+              options={genderOptions}
+              depth={0}
+              setDropdownOpen={setGenderDropdownOpen}
+            />
           </div>
         )}
       </StyledDropDownMenuSection>
+      <StyledPositionsDropdownSection>
+        <StyledPositionsInfoTextSection>
+          <StyledPositionsInfoText>
+            Your selected positions are treated as a group of acceptable roles,
+            not as a checklist that a single player must match completely.
+          </StyledPositionsInfoText>
+          <StyledPositionInfoQuestionTextSection>
+            <img
+              src={questionMark.src}
+              alt="Help Icon"
+              width={44}
+              height={44}
+            />
+            <p
+              onClick={() => {
+                setPositionsGuidePopup(true);
+              }}
+            >
+              How do we match positions?
+            </p>
+          </StyledPositionInfoQuestionTextSection>
+        </StyledPositionsInfoTextSection>
+        <StyledInputLabel>1st position</StyledInputLabel>
+        <StyledDropDownMenuSection>
+          <StyledDropDownMenuButton
+            isOpen={firstPositionDropdownOpen}
+            onClick={() =>
+              setFirstPositionDropdownOpen(!firstPositionDropdownOpen)
+            }
+          >
+            {firstPosition ? firstPosition : "Select (required)"}
+            <img
+              src={arrow.src}
+              alt=""
+              style={{
+                transform: firstPositionDropdownOpen
+                  ? "rotate(270deg)"
+                  : "rotate(90deg)",
+              }}
+            />
+          </StyledDropDownMenuButton>
+
+          {firstPositionDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                backgroundColor: colors.background,
+                borderRadius: "0 0 13px 13px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              <Dropdown
+                setOption={setFirstPosition}
+                options={footballPositions}
+                depth={0}
+                setDropdownOpen={setFirstPositionDropdownOpen}
+              />
+            </div>
+          )}
+        </StyledDropDownMenuSection>
+
+        <StyledInputLabel>Alt. position</StyledInputLabel>
+        <StyledDropDownMenuSection>
+          <StyledDropDownMenuButton
+            isOpen={altPositionDropdownOpen}
+            onClick={() => setAltPositionDropdownOpen(!altPositionDropdownOpen)}
+          >
+            {altPosition ? altPosition : "Select (optional)"}
+            <img
+              src={arrow.src}
+              alt=""
+              style={{
+                transform: altPositionDropdownOpen
+                  ? "rotate(270deg)"
+                  : "rotate(90deg)",
+              }}
+            />
+          </StyledDropDownMenuButton>
+
+          {altPositionDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                backgroundColor: colors.background,
+                borderRadius: "0 0 13px 13px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              <Dropdown
+                setOption={setAltPosition}
+                options={footballPositions}
+                depth={0}
+                setDropdownOpen={setAltPositionDropdownOpen}
+              />
+            </div>
+          )}
+        </StyledDropDownMenuSection>
+      </StyledPositionsDropdownSection>
     </StyledCreateAutomationPage>
   );
 }

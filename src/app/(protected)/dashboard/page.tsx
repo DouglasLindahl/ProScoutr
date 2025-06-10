@@ -9,6 +9,7 @@ import supabase from "../../../../supabase";
 import AutomationCard from "@/components/automationCard/page";
 import plus from "../../../../public/plus.png";
 import greenShapes from "../../../../public/greenShapes.svg";
+import { useRouter } from "next/navigation";
 
 import {
   checkUserSession,
@@ -137,12 +138,17 @@ interface PaymentPlan {
 }
 
 const Dashboard = () => {
+  const router = useRouter();
   const [userUuid, setUserUuid] = useState<string>("");
   const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
   const [automations, setAutomations] = useState<Automation[]>([]);
   const [userInformation, setUserInformation] = useState<UserProfile | null>(
     null
   );
+
+  const sendUserToCreateNewAutomation = () => {
+    router.push("/createAutomation");
+  };
 
   useEffect(() => {
     const getSession = async () => {
@@ -276,7 +282,11 @@ const Dashboard = () => {
               }
             />
           ))}
-          <StyledAddAutomationCard>
+          <StyledAddAutomationCard
+            onClick={() => {
+              sendUserToCreateNewAutomation();
+            }}
+          >
             <StyledAddAutomationImage></StyledAddAutomationImage>
             <StyledAddAutomationTextContainer>
               <StyledAddAutomationText>New automation</StyledAddAutomationText>
