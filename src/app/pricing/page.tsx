@@ -5,7 +5,6 @@ import styled, { css } from "styled-components";
 import colors from "../../../theme";
 import { useRouter } from "next/navigation";
 import questionMark from "../../../public/questionMark.svg";
-import exit from "../../../public/exit.svg";
 import PopupWindow from "@/components/popupWindow/page";
 
 interface PaymentPlan {
@@ -149,56 +148,6 @@ const StyledMostPopularBadge = styled.div`
   border-radius: 6px;
 `;
 
-const StyledHowManyAutomationPopup = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
-  height: 80%;
-  z-index: 10;
-  background-color: ${colors.background};
-  padding: 56px 96px;
-  overflow-y: scroll;
-  border-radius: 20px;
-  border: 2px solid ${colors.text};
-  color: ${colors.text};
-  h1 {
-    font-size: 50px;
-    text-align: center;
-    padding-bottom: 24px;
-  }
-  h2 {
-    padding-top: 24px;
-  }
-  h3 {
-    padding-top: 24px;
-    font-weight: normal;
-  }
-  li {
-    margin-left: 20px;
-  }
-  img {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-`;
-
-const StyledDarkBackground = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: black;
-  width: 100%;
-  height: 100%;
-  opacity: 90%;
-  z-index: 5;
-`;
 const StyledBoldText = styled.span`
   font-weight: bold;
 `;
