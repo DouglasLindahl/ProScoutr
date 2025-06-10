@@ -143,8 +143,6 @@ const Dashboard = () => {
   const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
   const [automations, setAutomations] = useState<Automation[]>([]);
   const [activeAutomations, setActiveAutomations] = useState<number>(0);
-  const [updateActiveAutomations, setUpdateActiveAutomations] =
-    useState<boolean>(true);
   const [userInformation, setUserInformation] = useState<UserProfile | null>(
     null
   );
@@ -175,7 +173,7 @@ const Dashboard = () => {
       }
     };
     loadAutomations();
-  }, [userUuid, updateActiveAutomations]);
+  }, [userUuid]);
 
   useEffect(() => {
     const checkUserActiveAutomationsCount = () => {
