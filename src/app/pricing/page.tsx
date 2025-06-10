@@ -41,7 +41,7 @@ const StyledPricingHeader = styled.h1`
 const StyledPricingSubHeader = styled.h2`
   text-align: center;
   color: ${colors.text};
-  font-weight: 200;
+  font-weight: bold;
   text-decoration: underline;
   text-underline-offset: 4px;
   &:hover {
