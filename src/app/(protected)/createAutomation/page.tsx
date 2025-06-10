@@ -1,6 +1,11 @@
 "use client";
 import styled from "styled-components";
-import { footballPositions } from "@/app/utils";
+import {
+  footballPositions,
+  nationalityOptions,
+  playingStyleOptions,
+  preferredFootOptions,
+} from "@/app/utils";
 import { genderOptions } from "@/app/utils";
 import Dropdown from "@/components/dropdown/page";
 import { useState } from "react";
@@ -8,6 +13,8 @@ import colors from "../../../../theme";
 import arrow from "../../../../public/arrow.svg";
 import questionMark from "../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
+import { Range } from "react-range";
+import { Mina } from "next/font/google";
 
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
@@ -29,7 +36,7 @@ const StyledInputLabel = styled.p`
   padding-bottom: 20px;
 `;
 
-const StyledDropDownMenuSection = styled.div`
+const StyledDropDownMenuSection = styled.div<{ required: boolean }>`
   position: relative;
   background-color: ${colors.text};
   color: ${colors.background};
@@ -40,9 +47,12 @@ const StyledDropDownMenuSection = styled.div`
   &:hover {
     background-color: ${colors.primary};
   }
+  background-color: ${({ required }) => (required ? colors.text : "gray")};
 `;
 
-const StyledDropDownMenuButton = styled.button<{ isOpen: boolean }>`
+const StyledDropDownMenuButton = styled.button<{
+  isOpen: boolean;
+}>`
   padding: 12px 24px;
   font-size: 24px;
   border-radius: 13px 13px 0 0;
@@ -112,17 +122,186 @@ const StyledBoldText = styled.span`
 `;
 
 export default function CreateAutomation() {
-  const [positionsGuidePopupOpen, setPositionsGuidePopup] = useState(true);
+  const [positionsGuidePopupOpen, setPositionsGuidePopup] = useState(false);
   const [firstPositionDropdownOpen, setFirstPositionDropdownOpen] =
     useState(false);
   const [genderDropdownOpen, setGenderDropdownOpen] = useState(false);
   const [altPositionDropdownOpen, setAltPositionDropdownOpen] = useState(false);
+  const [preferredFootDropdownOpen, setPreferredFootDropdownOpen] =
+    useState(false);
+  const [playingStyleDropdownOpen, setPlayingStyleDropdownOpen] =
+    useState(false);
+  const [nationalityDropdownOpen, setNationalityDropdownOpen] = useState(false);
+
   const [firstPosition, setFirstPosition] = useState("");
   const [gender, setGender] = useState("");
   const [altPosition, setAltPosition] = useState("");
+  const [preferredFoot, setPreferredFoot] = useState("");
+  const [playingStyle, setPlayingStyle] = useState("");
+  const [nationality, setNationality] = useState("");
+
+  const [ageRange, setAgeRange] = useState([18, 32]);
+  const [weightRange, setWeightRange] = useState([72, 80]);
+  const [heightRange, setHeightRange] = useState([170, 180]);
+  const [minAge, setMinAge] = useState(18);
+  const [maxAge, setMaxAge] = useState(32);
+  const [minWeight, setMinWeight] = useState(72);
+  const [maxWeight, setMaxWeight] = useState(80);
+  const [minHeight, setMinHeight] = useState(170);
+  const [maxHeight, setMaxHeight] = useState(180);
+
+  const checkInputs = () => {
+    console.log("gender: " + gender);
+    console.log("1st position: " + firstPosition);
+    console.log("alt. position: " + altPosition);
+    console.log("min age: " + minAge);
+    console.log("max age: " + maxAge);
+    console.log("min weight: " + minWeight);
+    console.log("max weight: " + maxWeight);
+    console.log("min height: " + minHeight);
+    console.log("max height: " + maxHeight);
+  };
+
+  const STEP = 1;
+
+  const sliderConfig = {
+    age: { min: 16, max: 40 },
+    weight: { min: 50, max: 120 },
+    height: { min: 150, max: 210 },
+  };
+
+  const renderRange = (
+    label: string,
+    range: number[],
+    setRange: React.Dispatch<React.SetStateAction<number[]>>,
+    config: { min: number; max: number },
+    setMin: React.Dispatch<React.SetStateAction<number>>,
+    setMax: React.Dispatch<React.SetStateAction<number>>
+  ) => (
+    <div style={{ marginBottom: 60 }}>
+      <StyledInputLabel>{label}</StyledInputLabel>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 12,
+        }}
+      >
+        <input
+          type="number"
+          value={range[0]}
+          min={config.min}
+          max={range[1]}
+          onChange={(e) => {
+            const value = Math.max(
+              config.min,
+              Math.min(+e.target.value, range[1])
+            );
+            setRange([value, range[1]]);
+          }}
+          style={{
+            width: 70,
+            aspectRatio: "1/1",
+            borderRadius: "8px",
+            border: "none",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "24px",
+            paddingLeft: "12px",
+          }}
+        />
+        <span
+          style={{
+            backgroundColor: "white",
+            width: "50px",
+            height: "10px",
+            borderRadius: "13px",
+          }}
+        />
+        <input
+          type="number"
+          value={range[1]}
+          min={range[0]}
+          max={config.max}
+          onChange={(e) => {
+            const value = Math.max(
+              range[0],
+              Math.min(+e.target.value, config.max)
+            );
+            setRange([range[0], value]);
+          }}
+          style={{
+            width: 70,
+            aspectRatio: "1/1",
+            borderRadius: "8px",
+            border: "none",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "24px",
+            paddingLeft: "12px",
+          }}
+        />
+        <Range
+          step={STEP}
+          min={config.min}
+          max={config.max}
+          values={range}
+          onChange={(values) => {
+            setRange(values);
+            setMin(values[0]);
+            setMax(values[1]);
+          }}
+          renderTrack={({ props, children }) => (
+            <div
+              {...props}
+              style={{
+                ...props.style,
+                marginLeft: "30px",
+                height: "6px",
+                width: "100%",
+                borderRadius: "13px",
+                background: `linear-gradient(to right,
+                ${colors.text} 0%,
+                ${colors.text} ${
+                  ((range[0] - config.min) / (config.max - config.min)) * 100
+                }%,
+                ${colors.secondary} ${
+                  ((range[0] - config.min) / (config.max - config.min)) * 100
+                }%,
+                ${colors.secondary} ${
+                  ((range[1] - config.min) / (config.max - config.min)) * 100
+                }%,
+                ${colors.text} ${
+                  ((range[1] - config.min) / (config.max - config.min)) * 100
+                }%,
+                ${colors.text} 100%)`,
+              }}
+            >
+              {children}
+            </div>
+          )}
+          renderThumb={({ props }) => (
+            <div
+              {...props}
+              style={{
+                ...props.style,
+                height: "20px",
+                width: "20px",
+                borderRadius: "50%",
+                backgroundColor: colors.secondary,
+                cursor: "pointer",
+              }}
+            />
+          )}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <StyledCreateAutomationPage>
+      <button onClick={checkInputs}>check inputs</button>
       {positionsGuidePopupOpen && (
         <PopupWindow
           setPopupOpen={setPositionsGuidePopup}
@@ -220,7 +399,7 @@ positions matching system"
       </StyledCreateAutomationHeader>
 
       <StyledInputLabel>Gender</StyledInputLabel>
-      <StyledDropDownMenuSection>
+      <StyledDropDownMenuSection required={true}>
         <StyledDropDownMenuButton
           isOpen={genderDropdownOpen}
           onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
@@ -282,7 +461,7 @@ positions matching system"
           </StyledPositionInfoQuestionTextSection>
         </StyledPositionsInfoTextSection>
         <StyledInputLabel>1st position</StyledInputLabel>
-        <StyledDropDownMenuSection>
+        <StyledDropDownMenuSection required={true}>
           <StyledDropDownMenuButton
             isOpen={firstPositionDropdownOpen}
             onClick={() =>
@@ -325,7 +504,7 @@ positions matching system"
         </StyledDropDownMenuSection>
 
         <StyledInputLabel>Alt. position</StyledInputLabel>
-        <StyledDropDownMenuSection>
+        <StyledDropDownMenuSection required={false}>
           <StyledDropDownMenuButton
             isOpen={altPositionDropdownOpen}
             onClick={() => setAltPositionDropdownOpen(!altPositionDropdownOpen)}
@@ -365,6 +544,152 @@ positions matching system"
           )}
         </StyledDropDownMenuSection>
       </StyledPositionsDropdownSection>
+      {renderRange(
+        "Age",
+        ageRange,
+        setAgeRange,
+        sliderConfig.age,
+        setMinAge,
+        setMaxAge
+      )}
+      {renderRange(
+        "Weight (kg)",
+        weightRange,
+        setWeightRange,
+        sliderConfig.weight,
+        setMinWeight,
+        setMaxWeight
+      )}
+      {renderRange(
+        "Height (cm)",
+        heightRange,
+        setHeightRange,
+        sliderConfig.height,
+        setMinHeight,
+        setMaxHeight
+      )}
+      <StyledInputLabel>Preferred foot</StyledInputLabel>
+      <StyledDropDownMenuSection required={false}>
+        <StyledDropDownMenuButton
+          isOpen={preferredFootDropdownOpen}
+          onClick={() =>
+            setPreferredFootDropdownOpen(!preferredFootDropdownOpen)
+          }
+        >
+          {preferredFoot ? preferredFoot : "Select (optional)"}
+          <img
+            src={arrow.src}
+            alt=""
+            style={{
+              transform: preferredFootDropdownOpen
+                ? "rotate(270deg)"
+                : "rotate(90deg)",
+            }}
+          />
+        </StyledDropDownMenuButton>
+
+        {preferredFootDropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              width: "100%",
+              backgroundColor: colors.background,
+              borderRadius: "0 0 13px 13px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              zIndex: 20,
+            }}
+          >
+            <Dropdown
+              setOption={setPreferredFoot}
+              options={preferredFootOptions}
+              depth={0}
+              setDropdownOpen={setPreferredFootDropdownOpen}
+            />
+          </div>
+        )}
+      </StyledDropDownMenuSection>
+      <StyledInputLabel>Playing style</StyledInputLabel>
+      <StyledDropDownMenuSection required={false}>
+        <StyledDropDownMenuButton
+          isOpen={playingStyleDropdownOpen}
+          onClick={() => setPlayingStyleDropdownOpen(!playingStyleDropdownOpen)}
+        >
+          {playingStyle ? playingStyle : "Select (optional)"}
+          <img
+            src={arrow.src}
+            alt=""
+            style={{
+              transform: playingStyleDropdownOpen
+                ? "rotate(270deg)"
+                : "rotate(90deg)",
+            }}
+          />
+        </StyledDropDownMenuButton>
+
+        {playingStyleDropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              width: "100%",
+              backgroundColor: colors.background,
+              borderRadius: "0 0 13px 13px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              zIndex: 20,
+            }}
+          >
+            <Dropdown
+              setOption={setPlayingStyle}
+              options={playingStyleOptions}
+              depth={0}
+              setDropdownOpen={setPlayingStyleDropdownOpen}
+            />
+          </div>
+        )}
+      </StyledDropDownMenuSection>
+      <StyledInputLabel>Nationality</StyledInputLabel>
+      <StyledDropDownMenuSection required={false}>
+        <StyledDropDownMenuButton
+          isOpen={nationalityDropdownOpen}
+          onClick={() => setNationalityDropdownOpen(!nationalityDropdownOpen)}
+        >
+          {nationality ? nationality : "Select (optional)"}
+          <img
+            src={arrow.src}
+            alt=""
+            style={{
+              transform: nationalityDropdownOpen
+                ? "rotate(270deg)"
+                : "rotate(90deg)",
+            }}
+          />
+        </StyledDropDownMenuButton>
+
+        {nationalityDropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              width: "100%",
+              backgroundColor: colors.background,
+              borderRadius: "0 0 13px 13px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              zIndex: 20,
+            }}
+          >
+            <Dropdown
+              setOption={setNationality}
+              options={nationalityOptions}
+              depth={0}
+              setDropdownOpen={setNationalityDropdownOpen}
+            />
+          </div>
+        )}
+      </StyledDropDownMenuSection>
     </StyledCreateAutomationPage>
   );
 }

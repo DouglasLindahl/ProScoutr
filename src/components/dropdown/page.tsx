@@ -41,7 +41,9 @@ const StyledDropdownSection = styled.div<{ $depth?: number }>`
   `}
 `;
 
-const StyledDropdownButton = styled.button<{ isOpen?: boolean }>`
+const StyledDropdownButton = styled.button<{
+  isOpen?: boolean;
+}>`
   width: 100%;
   border: none;
   padding: 12px 24px;
