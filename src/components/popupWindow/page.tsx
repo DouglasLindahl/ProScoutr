@@ -3,7 +3,7 @@ import colors from "../../../theme";
 import exit from "../../../public/exit.svg";
 import { ReactNode } from "react";
 
-const StyledPopupWindow = styled.div`
+const StyledPopupWrapper = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
@@ -12,20 +12,26 @@ const StyledPopupWindow = styled.div`
   height: 80%;
   z-index: 10;
   background-color: ${colors.background};
-  padding: 56px 96px;
-  overflow-y: auto;
+
   border-radius: 20px;
   border: 2px solid ${colors.text};
   color: ${colors.text};
+`;
 
-  img.exit-icon {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
+const StyledExitIcon = styled.img`
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 11;
+`;
+
+const StyledPopupContent = styled.div`
+  overflow-y: auto;
+  height: 100%;
+  padding: 48px;
   h1 {
     font-size: 36px;
     text-align: center;
@@ -53,7 +59,6 @@ const StyledDarkBackground = styled.div`
   opacity: 90%;
   z-index: 5;
 `;
-
 type PopupWindowProps = {
   setPopupOpen: (open: boolean) => void;
   children: ReactNode;
@@ -68,16 +73,17 @@ export default function PopupWindow({
   return (
     <>
       <StyledDarkBackground onClick={() => setPopupOpen(false)} />
-      <StyledPopupWindow>
-        <img
-          className="exit-icon"
+      <StyledPopupWrapper>
+        <StyledExitIcon
           src={exit.src}
           alt="Exit Button"
           onClick={() => setPopupOpen(false)}
         />
-        {header && <h1>{header}</h1>}
-        {children}
-      </StyledPopupWindow>
+        <StyledPopupContent>
+          {header && <h1>{header}</h1>}
+          {children}
+        </StyledPopupContent>
+      </StyledPopupWrapper>
     </>
   );
 }

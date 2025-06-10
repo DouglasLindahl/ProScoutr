@@ -6,6 +6,7 @@ import colors from "../../../theme";
 import { useRouter } from "next/navigation";
 import questionMark from "../../../public/questionMark.svg";
 import exit from "../../../public/exit.svg";
+import PopupWindow from "@/components/popupWindow/page";
 
 interface PaymentPlan {
   id: string;
@@ -230,20 +231,10 @@ const Pricing = () => {
   return (
     <StyledPricingPage>
       {showPopup && (
-        <StyledDarkBackground
-          onClick={() => setShowPopup(false)}
-        ></StyledDarkBackground>
-      )}
-      {showPopup && (
-        <StyledHowManyAutomationPopup>
-          <img
-            src={exit.src}
-            alt="Exit Button"
-            onClick={() => {
-              setShowPopup(false);
-            }}
-          />
-          <h1>How many automations do I need?</h1>
+        <PopupWindow
+          setPopupOpen={setShowPopup}
+          header="How many automations do I need?"
+        >
           <p>
             When choosing your plan, it&apos;s important to understand how
             automations work and how many you might need to get the most value
@@ -252,7 +243,6 @@ const Pricing = () => {
             broad or specific your searches are, and how frequently you want to
             receive player reports.
           </p>
-
           <h2>What Is an Automation?</h2>
           <p>
             An automation is a customized setup that runs in the background and
@@ -266,7 +256,6 @@ const Pricing = () => {
             </li>
             <li>A custom report frequency (maximum once every 7 days)</li>
           </ul>
-
           <h3>Each automation works independently - meaning:</h3>
           <ul>
             <li>You can have different criteria per automation</li>
@@ -278,14 +267,12 @@ const Pricing = () => {
               You can focus on specific roles or tactical needs in each one
             </li>
           </ul>
-
           <h2>How Many Do You Really Need?</h2>
           <p>
             The answer depends on how broad or narrow you want your search to
             be. Here are a few things to consider. Want focused, high-relevance
             suggestions? Use 1 automation per position or role.
           </p>
-
           <h2>Example:</h2>
           <ul>
             <li>
@@ -301,14 +288,12 @@ const Pricing = () => {
               from the National League
             </li>
           </ul>
-
           <p>
             This keeps each search narrow and ensures the players suggested
             match very specific needs. Want broader searches with fewer
             automations? Use multiple positions or wider filters in a single
             automation.
           </p>
-
           <h2>Example:</h2>
           <ul>
             <li>
@@ -321,7 +306,6 @@ const Pricing = () => {
             This works if you&apos;re happy to get more general reports and
             review a wider pool of players.
           </p>
-
           <h2>Plans & Pricing</h2>
           <br></br>
           <p>
@@ -336,7 +320,6 @@ const Pricing = () => {
             levels. You can always upgrade later if you realize you need more
             automation slots.
           </p>
-
           <h2>Pro Tip: Be Specific for Better Results</h2>
           <br></br>
           <p>
@@ -361,7 +344,6 @@ const Pricing = () => {
             This gives you more control and delivers higher-quality suggestions
             in each report.
           </p>
-
           <h2>Example Use Cases</h2>
           <h3>
             <StyledBoldText>Scenario A:</StyledBoldText> You&apos;re targeting
@@ -380,7 +362,6 @@ const Pricing = () => {
             automations split by position and region (e.g., STs in Scandinavia,
             CBs in UK, etc.)
           </p>
-
           <h2>Still Not Sure?</h2>
           <p>
             If you&apos;re unsure which plan is right for you, start with Basic
@@ -389,7 +370,7 @@ const Pricing = () => {
             efficiency. Need help setting up your first automation? Just reach
             out - we&apos;re happy to assist.
           </p>
-        </StyledHowManyAutomationPopup>
+        </PopupWindow>
       )}
       <div>
         <StyledPricingHeader>

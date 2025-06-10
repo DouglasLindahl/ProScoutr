@@ -112,6 +112,9 @@ const StyledCreateAccountButton = styled.button`
   padding: 14px 24px 14px 24px;
   border: none;
   font-weight: bold;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const StyledForgotPasswordSection = styled.div`
   text-decoration: underline;
@@ -165,33 +168,67 @@ const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberPassword, setRememberPassword] = useState(false);
+  const [keepMeLoggedIn, setKeepMeLoggedIn] = useState(false);
 
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>("");
 
   useEffect(() => {
+    const keepLogin = localStorage.getItem("keepMeLoggedIn") === "true";
+    setKeepMeLoggedIn(keepLogin);
+
     const checkUserSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (session) {
+      if (session && keepLogin) {
         router.push("/dashboard");
       }
     };
+
     checkUserSession();
   }, [router]);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (keepMeLoggedIn) {
+      localStorage.setItem("keepMeLoggedIn", "true");
+    } else {
+      localStorage.removeItem("keepMeLoggedIn");
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
     if (error) {
       setError(error.message);
     } else {
       router.push("/dashboard");
     }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Please enter your email address to reset password.");
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/resetPassword`,
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setError(null);
+      alert("Password reset email sent. Check your inbox.");
+    }
+  };
+
+  const sendUserToRegisterPage = () => {
+    router.push("/register");
   };
 
   return (
@@ -215,36 +252,51 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </StyledLoginForm>
-        <StyledLoginButtonContainer>
-          <StyledExtraLinksSection>
-            <StyledRememberPasswordSection
-              onClick={() => setRememberPassword(!rememberPassword)}
-            >
-              <StyledCheckbox
-                checked={rememberPassword}
-                onChange={(e) => setRememberPassword(e.target.checked)}
-              />
-              <span>Remember password</span>
-            </StyledRememberPasswordSection>
+          <StyledLoginButtonContainer>
+            <StyledExtraLinksSection>
+              <StyledRememberPasswordSection
+                onClick={() => setKeepMeLoggedIn(!keepMeLoggedIn)}
+              >
+                <StyledCheckbox
+                  checked={keepMeLoggedIn}
+                  onChange={(e) => setKeepMeLoggedIn(e.target.checked)}
+                />
+                <span>Keep me logged in</span>
+              </StyledRememberPasswordSection>
 
-            <StyledForgotPasswordSection>
-              <a href="#">Forgot Password?</a>
-            </StyledForgotPasswordSection>
-            {error && (
-              <StyledErrorTextContainer>
-                <p style={{ color: "red" }}>{error}</p>
-              </StyledErrorTextContainer>
-            )}
-          </StyledExtraLinksSection>
-          <StyledLoginButton onClick={handleLogin}>
-            <StyledLoginButtonImage
-              style={{ backgroundImage: `url(${arrow.src})` }}
-            ></StyledLoginButtonImage>
-          </StyledLoginButton>
-        </StyledLoginButtonContainer>
+              <StyledForgotPasswordSection>
+                <StyledForgotPasswordSection>
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      fontSize: "16px",
+                      color: "inherit",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Forgot Password?
+                  </button>
+                </StyledForgotPasswordSection>
+              </StyledForgotPasswordSection>
+            </StyledExtraLinksSection>
+            <StyledLoginButton onClick={handleLogin}>
+              <StyledLoginButtonImage
+                style={{ backgroundImage: `url(${arrow.src})` }}
+              ></StyledLoginButtonImage>
+            </StyledLoginButton>
+          </StyledLoginButtonContainer>
+        </StyledLoginForm>
+        {error && (
+          <StyledErrorTextContainer>
+            <p style={{ color: "red" }}>{error}</p>
+          </StyledErrorTextContainer>
+        )}
       </StyledLoginSection>
-      <StyledCreateAccountButton>
+      <StyledCreateAccountButton onClick={sendUserToRegisterPage}>
         Create a free account
       </StyledCreateAccountButton>
     </StyledLoginPage>
