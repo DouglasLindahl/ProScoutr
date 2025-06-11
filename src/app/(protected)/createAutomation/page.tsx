@@ -129,8 +129,9 @@ const StyledFinalSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: end;
-  align-items: center;
+  align-items: start;
   gap: 30px;
+  height: 50vh;
 `;
 const StyledApplyButton = styled.button`
   padding: 8px 64px;
@@ -196,6 +197,20 @@ export default function CreateAutomation() {
   const [maxWeight, setMaxWeight] = useState(80);
   const [minHeight, setMinHeight] = useState(170);
   const [maxHeight, setMaxHeight] = useState(180);
+
+  const openDropdownMenu = (
+    open: boolean,
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setFirstPositionDropdownOpen(false);
+    setGenderDropdownOpen(false);
+    setAltPositionDropdownOpen(false);
+    setPreferredFootDropdownOpen(false);
+    setPlayingStyleDropdownOpen(false);
+    setNationalityDropdownOpen(false);
+    setLeagueDropdownOpen(false);
+    setOpen(!open);
+  };
 
   useEffect(() => {
     const getSession = async () => {
@@ -478,7 +493,9 @@ export default function CreateAutomation() {
       <StyledDropDownMenuSection required={true}>
         <StyledDropDownMenuButton
           isOpen={genderDropdownOpen}
-          onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
+          onClick={() => {
+            openDropdownMenu(genderDropdownOpen, setGenderDropdownOpen);
+          }}
         >
           {gender ? gender : "Select (required)"}
           <img
@@ -541,7 +558,10 @@ export default function CreateAutomation() {
           <StyledDropDownMenuButton
             isOpen={firstPositionDropdownOpen}
             onClick={() =>
-              setFirstPositionDropdownOpen(!firstPositionDropdownOpen)
+              openDropdownMenu(
+                firstPositionDropdownOpen,
+                setFirstPositionDropdownOpen
+              )
             }
           >
             {firstPosition ? firstPosition : "Select (required)"}
@@ -583,7 +603,12 @@ export default function CreateAutomation() {
         <StyledDropDownMenuSection required={false}>
           <StyledDropDownMenuButton
             isOpen={altPositionDropdownOpen}
-            onClick={() => setAltPositionDropdownOpen(!altPositionDropdownOpen)}
+            onClick={() =>
+              openDropdownMenu(
+                altPositionDropdownOpen,
+                setAltPositionDropdownOpen
+              )
+            }
           >
             {altPosition ? altPosition : "Select (optional)"}
             <img
@@ -649,7 +674,10 @@ export default function CreateAutomation() {
         <StyledDropDownMenuButton
           isOpen={preferredFootDropdownOpen}
           onClick={() =>
-            setPreferredFootDropdownOpen(!preferredFootDropdownOpen)
+            openDropdownMenu(
+              preferredFootDropdownOpen,
+              setPreferredFootDropdownOpen
+            )
           }
         >
           {preferredFoot ? preferredFoot : "Select (optional)"}
@@ -690,7 +718,12 @@ export default function CreateAutomation() {
       <StyledDropDownMenuSection required={false}>
         <StyledDropDownMenuButton
           isOpen={playingStyleDropdownOpen}
-          onClick={() => setPlayingStyleDropdownOpen(!playingStyleDropdownOpen)}
+          onClick={() =>
+            openDropdownMenu(
+              playingStyleDropdownOpen,
+              setPlayingStyleDropdownOpen
+            )
+          }
         >
           {playingStyle ? playingStyle : "Select (optional)"}
           <img
@@ -730,7 +763,12 @@ export default function CreateAutomation() {
       <StyledDropDownMenuSection required={false}>
         <StyledDropDownMenuButton
           isOpen={nationalityDropdownOpen}
-          onClick={() => setNationalityDropdownOpen(!nationalityDropdownOpen)}
+          onClick={() =>
+            openDropdownMenu(
+              nationalityDropdownOpen,
+              setNationalityDropdownOpen
+            )
+          }
         >
           {nationality ? nationality : "Select (optional)"}
           <img
@@ -770,7 +808,9 @@ export default function CreateAutomation() {
       <StyledDropDownMenuSection required={false}>
         <StyledDropDownMenuButton
           isOpen={leagueDropdownOpen}
-          onClick={() => setLeagueDropdownOpen(!leagueDropdownOpen)}
+          onClick={() =>
+            openDropdownMenu(leagueDropdownOpen, setLeagueDropdownOpen)
+          }
         >
           {league ? league : "Select (optional)"}
           <img

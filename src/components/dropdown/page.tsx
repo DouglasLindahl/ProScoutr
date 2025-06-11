@@ -27,6 +27,8 @@ const StyledDropdownSection = styled.div<{ $depth?: number }>`
     top: 100%;
     left: 0;
     width: 100%;
+    max-height: 300px;  
+        overflow-y: auto;  
     background-color: ${colors.text};
     color: ${colors.background};
     border-radius: 0 0 13px 13px;
