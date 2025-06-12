@@ -2,7 +2,9 @@
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import {
+  automationsHardLimit,
   checkUserSession,
+  fetchUserAutomationsCount,
   footballPositions,
   leagueOptions,
   nationalityOptions,
@@ -169,10 +171,11 @@ type tParams = Promise<{ slug: string }>;
 
 export default function Slug({ params }: { params: tParams }) {
   const { slug }: { slug: string } = use(params);
-  console.log(slug);
   const router = useRouter();
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
   const [readyToShowPage, setReadyToShowPage] = useState<boolean>(true);
+  const [userExceedsAutomationLimit, setUserExceedsAutomationLimit] =
+    useState<boolean>(true);
 
   const [userUuid, setUserUuid] = useState<string>("");
   const [errorText, setErrorText] = useState("");
@@ -267,6 +270,19 @@ export default function Slug({ params }: { params: tParams }) {
   }, []);
 
   useEffect(() => {
+    const fetchAutomationsCount = async () => {
+      if (userUuid) {
+        const result = await fetchUserAutomationsCount(userUuid);
+        if (result < automationsHardLimit) {
+          setUserExceedsAutomationLimit(false);
+        }
+      }
+    };
+
+    fetchAutomationsCount();
+  }, [userUuid]);
+
+  useEffect(() => {
     const setCurrentSlug = () => {
       if (slug == "create") {
         setIsCreateMode(true);
@@ -281,6 +297,8 @@ export default function Slug({ params }: { params: tParams }) {
 
   const createAutomation = async () => {
     if (firstPosition != "" && gender != "") {
+      const nameToInsert =
+        automationName.trim() === "" ? "Automation" : automationName;
       const { error } = await supabase.from("automation").insert([
         {
           user_uuid: userUuid,
@@ -295,7 +313,7 @@ export default function Slug({ params }: { params: tParams }) {
           first_position: firstPosition,
           second_position: altPosition,
           preferred_foot: preferredFoot,
-          automation_name: automationName,
+          automation_name: nameToInsert,
           gender: gender,
           playing_style: playingStyle,
         },
@@ -313,6 +331,8 @@ export default function Slug({ params }: { params: tParams }) {
 
   const editAutomation = async () => {
     if (firstPosition != "" && gender != "") {
+      const nameToInsert =
+        automationName.trim() === "" ? "Automation" : automationName;
       const { error } = await supabase
         .from("automation")
         .update({
@@ -327,7 +347,7 @@ export default function Slug({ params }: { params: tParams }) {
           first_position: firstPosition,
           second_position: altPosition,
           preferred_foot: preferredFoot,
-          automation_name: automationName,
+          automation_name: nameToInsert,
           gender: gender,
           playing_style: playingStyle,
         })
@@ -341,6 +361,19 @@ export default function Slug({ params }: { params: tParams }) {
     } else {
       setErrorText("You must fill out all the required information");
     }
+  };
+
+  const deleteAutomation = async (automationUuid: string) => {
+    const { error } = await supabase
+      .from("automation")
+      .delete()
+      .eq("uuid", automationUuid);
+
+    if (error) {
+      console.error("Error deleting automation:", error);
+      return { success: false, error };
+    }
+    router.push("/dashboard");
   };
 
   const returnToDashboard = () => {
@@ -487,10 +520,27 @@ export default function Slug({ params }: { params: tParams }) {
   if (!readyToShowPage) {
     return <>Loading</>;
   }
+  if (userExceedsAutomationLimit && isCreateMode) {
+    return (
+      <>
+        You have too many automations. Consider editing one of your current
+        automations instead
+      </>
+    );
+  }
   return (
     <AuthCheck>
       <StyledCreateAutomationPage>
         <button onClick={returnToDashboard}>return</button>
+        {!isCreateMode && (
+          <button
+            onClick={() => {
+              deleteAutomation(slug);
+            }}
+          >
+            Delete
+          </button>
+        )}
         {positionsGuidePopupOpen && (
           <PopupWindow
             setPopupOpen={setPositionsGuidePopup}

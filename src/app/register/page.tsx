@@ -6,6 +6,7 @@ import InputField from "@/components/inputField/page";
 import colors from "../../../theme";
 import arrow from "../../../public/arrow.svg";
 import greenShapes from "../../../public/greenShapes.svg";
+import { useRouter } from "next/navigation";
 // Password criteria
 // Min 6 characters, min 1 number, min 1 special character, min 1 uppercase
 const StyledBackgroundAccent = styled.div`
@@ -140,8 +141,24 @@ const StyledErrorContainer = styled.ul`
 const StyledErrorText = styled.p`
   color: ${colors.red};
 `;
+const StyledCreateAccountButton = styled.button`
+  position: fixed;
+  bottom: 48px;
+  border-radius: 13px;
+  background-color: ${colors.white};
+  color: ${colors.background};
+  font-size: 24px;
+  padding: 14px 24px 14px 24px;
+  border: none;
+  font-weight: bold;
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.secondary};
+  }
+`;
 
 const SignUp = () => {
+  const router = useRouter();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -341,6 +358,13 @@ const SignUp = () => {
           </StyledRegisterButton>
         </StyledRegisterButtonContainer>
       </StyledRegisterContainer>
+      <StyledCreateAccountButton
+        onClick={() => {
+          router.push("login");
+        }}
+      >
+        Login to your account
+      </StyledCreateAccountButton>
     </StyledRegisterPage>
   );
 };

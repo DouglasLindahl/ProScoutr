@@ -17,6 +17,7 @@ import {
   fetchPaymentPlan,
   fetchUserAutomations,
   enforceAutomationLimit,
+  automationsHardLimit,
 } from "../../utils";
 import AdminPage from "@/components/adminPage/page";
 
@@ -315,7 +316,6 @@ const Dashboard = () => {
   const goToUserPage = () => {
     setAdminActive(false);
   };
-
   if (!userInformation) {
     return <p>Loading user information...</p>;
   }
@@ -362,18 +362,21 @@ const Dashboard = () => {
                 updateAutomations={refreshAutomations}
               />
             ))}
-            <StyledAddAutomationCard
-              onClick={() => {
-                sendUserToCreateNewAutomation();
-              }}
-            >
-              <StyledAddAutomationImage></StyledAddAutomationImage>
-              <StyledAddAutomationTextContainer>
-                <StyledAddAutomationText>
-                  New automation
-                </StyledAddAutomationText>
-              </StyledAddAutomationTextContainer>
-            </StyledAddAutomationCard>
+            {automations.length < automationsHardLimit && (
+              <StyledAddAutomationCard
+                onClick={() => {
+                  sendUserToCreateNewAutomation();
+                }}
+              >
+                <StyledAddAutomationImage></StyledAddAutomationImage>
+
+                <StyledAddAutomationTextContainer>
+                  <StyledAddAutomationText>
+                    New automation
+                  </StyledAddAutomationText>
+                </StyledAddAutomationTextContainer>
+              </StyledAddAutomationCard>
+            )}
           </StyledDashboardAutomationContainer>
         </StyledDashboard>
       </AuthCheck>

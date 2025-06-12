@@ -290,6 +290,7 @@ const StyledWhatIsProScoutrImage = styled.div`
   height: 100%;
   background: url(${ProScoutrWebsiteReportDesign.src}) no-repeat center center;
   background-size: contain;
+  z-index: 0;
 `;
 const StyledWhatIsProScoutrHeaderSection = styled.section`
   width: 100%;
@@ -450,6 +451,21 @@ const StyledDarkBackground = styled.div`
   z-index: 5;
 `;
 
+const StyledLoginButton = styled.button`
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  padding: 6px 12px;
+  font-size: 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  z-index: 5;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export default function Home() {
   const router = useRouter();
   const heroRef = useRef<HTMLElement | null>(null);
@@ -476,6 +492,13 @@ export default function Home() {
 
   return (
     <StyledLandingPage>
+      <StyledLoginButton
+        onClick={() => {
+          router.push("/login");
+        }}
+      >
+        Login
+      </StyledLoginButton>
       {testAutomationPopup && (
         <StyledDarkBackground
           onClick={() => setTestAutomationPopup(false)}

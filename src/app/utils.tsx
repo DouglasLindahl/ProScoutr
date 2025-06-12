@@ -1493,6 +1493,8 @@ export const footballPositions: PositionOption[] = [
   },
 ];
 
+export const automationsHardLimit = 25;
+
 export const checkUserSession = async (): Promise<string | null> => {
   const { data } = await supabase.auth.getSession();
   return data?.session?.user?.user_metadata?.sub ?? null;
@@ -1537,6 +1539,17 @@ export const fetchUserAutomations = async (userUuid: string) => {
 
   if (error) throw new Error("Error fetching automations");
   return { automations: data || [], count: count || 0 };
+};
+
+export const fetchUserAutomationsCount = async (userUuid: string) => {
+  const { count, error } = await supabase
+    .from("automation")
+    .select("*", { count: "exact", head: true })
+    .eq("user_uuid", userUuid);
+
+  if (error) throw new Error("Error fetching automation count");
+
+  return count || 0;
 };
 
 export const enforceAutomationLimit = async (

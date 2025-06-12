@@ -117,6 +117,7 @@ const StyledCreateAccountButton = styled.button`
   font-weight: bold;
   &:hover {
     cursor: pointer;
+    background-color: ${colors.secondary};
   }
 `;
 const StyledForgotPasswordSection = styled.div`

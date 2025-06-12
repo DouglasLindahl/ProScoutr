@@ -64,6 +64,18 @@ const StyledDropdownButton = styled.button<{
   }
 `;
 
+const StyledDeselectButton = styled.button`
+  width: 100%;
+  border: none;
+  padding: 12px 24px;
+  font-size: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+`;
+
 const Dropdown: React.FC<DropdownProps> = ({
   setOption,
   setDropdownOpen,
@@ -72,6 +84,14 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <StyledDropdownSection $depth={depth}>
+      <StyledDeselectButton
+        onClick={() => {
+          setOption("");
+          setDropdownOpen(false);
+        }}
+      >
+        -
+      </StyledDeselectButton>
       {options.map((option, index) => (
         <DropdownItem
           setOption={setOption}

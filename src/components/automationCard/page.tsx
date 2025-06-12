@@ -106,6 +106,8 @@ const StyledDashsboardQueryText = styled.p`
   height: 20%;
   color: ${colors.text};
   text-align: center;
+  overflow: hidden;
+  width: 100%;
 `;
 
 const AutomationCard = ({
