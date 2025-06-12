@@ -111,7 +111,7 @@ const StyledHowManyAutomationsActiveText = styled.p`
 `;
 
 const StyledGoToAdminPageButton = styled.button`
-  position: absolute;
+  position: fixed;
   bottom: 30px;
   right: 30px;
   font-size: 32px;
@@ -322,12 +322,12 @@ const Dashboard = () => {
 
   if (adminActive === true) {
     return (
-      <>
+      <div style={{ position: "relative" }}>
         <AdminPage></AdminPage>
         <StyledGoToAdminPageButton onClick={goToUserPage}>
           User
         </StyledGoToAdminPageButton>
-      </>
+      </div>
     );
   }
   if (adminActive === false) {
