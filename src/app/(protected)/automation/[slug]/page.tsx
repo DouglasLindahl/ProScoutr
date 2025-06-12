@@ -21,6 +21,12 @@ import supabase from "../../../../../supabase";
 import InputField from "@/components/inputField/page";
 import AuthCheck from "@/components/authCheck/page";
 
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
   width: 100vw;
@@ -166,7 +172,7 @@ const StyledErrortext = styled.p`
   color: ${colors.red};
 `;
 
-export default function SlugPage({ params }: { params: { slug: string } }) {
+export default function SlugPage({ params }: PageProps) {
   const router = useRouter();
   const slug = params.slug;
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
