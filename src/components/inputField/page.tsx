@@ -103,8 +103,52 @@ const InputField: React.FC<InputFieldProps> = ({
       <StyledInput
         type={isPassword && showPassword ? "text" : type}
         value={value}
-        onChange={onChange}
+        onChange={(e) => {
+          const val = e.target.value;
+          let filteredValue = val;
+
+          switch (type) {
+            case "tel":
+              filteredValue = val.replace(/[^\d+()-\s]/g, ""); // Allow digits, +, (), -, space
+              break;
+            case "number":
+              filteredValue = val.replace(/[^\d.-]/g, ""); // Digits, dot, negative
+              break;
+            case "text":
+              filteredValue = val.slice(0, 50); // Enforce max text length
+              break;
+            case "email":
+              filteredValue = val.slice(0, 100);
+              break;
+            case "password":
+              filteredValue = val.slice(0, 64);
+              break;
+            case "url":
+              filteredValue = val.slice(0, 100);
+              break;
+          }
+
+          onChange({ ...e, target: { ...e.target, value: filteredValue } });
+        }}
         placeholder=" "
+        inputMode={
+          type === "tel"
+            ? "tel"
+            : type === "email"
+            ? "email"
+            : type === "number"
+            ? "numeric"
+            : type === "url"
+            ? "url"
+            : "text"
+        }
+        pattern={
+          type === "tel"
+            ? "[0-9()+\\-\\s]*"
+            : type === "email"
+            ? "[^@\\s]+@[^@\\s]+\\.[^@\\s]+"
+            : undefined
+        }
         maxLength={
           type === "email"
             ? 100
@@ -112,9 +156,12 @@ const InputField: React.FC<InputFieldProps> = ({
             ? 15
             : type === "password"
             ? 64
+            : type === "url"
+            ? 100
             : 50
         }
       />
+
       <FloatingLabel>{label}</FloatingLabel>
 
       {isPassword && (

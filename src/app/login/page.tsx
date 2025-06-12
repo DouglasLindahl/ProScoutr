@@ -38,6 +38,9 @@ const StyledLoginButtonContainer = styled.section`
 
 const StyledErrorTextContainer = styled.div`
   width: 100%;
+  p {
+    font-size: 20px;
+  }
 `;
 
 const StyledLoginButton = styled.button`
