@@ -170,7 +170,7 @@ const StyledErrortext = styled.p`
   color: ${colors.red};
 `;
 
-export default function SlugPage({ params }: Props) {
+export default async function SlugPage({ params }: Props) {
   const slug = params.slug;
   const router = useRouter();
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
