@@ -105,6 +105,15 @@ const InputField: React.FC<InputFieldProps> = ({
         value={value}
         onChange={onChange}
         placeholder=" "
+        maxLength={
+          type === "email"
+            ? 100
+            : type === "tel"
+            ? 15
+            : type === "password"
+            ? 64
+            : 50
+        }
       />
       <FloatingLabel>{label}</FloatingLabel>
 

@@ -48,6 +48,7 @@ const StyledAdminPage = styled.div`
   min-height: 100vh;
   background-color: ${colors.background};
   color: ${colors.text};
+
   h2 {
     padding-bottom: 24px;
     padding-top: 12px;
@@ -124,6 +125,12 @@ const CopyButton = styled.button`
   &:hover {
     background-color: darken(${colors.primary}, 10%);
   }
+`;
+
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 `;
 
 export default function AdminPage() {
@@ -294,8 +301,7 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
           Inactive
         </TabButton>
       </Tabs>
-
-      {renderAutomationCards(getFilteredAutomations())}
+      <CardGrid>{renderAutomationCards(getFilteredAutomations())}</CardGrid>
     </StyledAdminPage>
   );
 }
