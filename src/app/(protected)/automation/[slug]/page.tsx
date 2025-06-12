@@ -168,7 +168,7 @@ const StyledErrortext = styled.p`
 
 export default function SlugPage({ params }: { params: { slug: string } }) {
   const router = useRouter();
-  const [slug, setSlug] = useState<string>("");
+  const slug = params.slug;
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
   const [readyToShowPage, setReadyToShowPage] = useState<boolean>(false);
 
@@ -271,7 +271,6 @@ export default function SlugPage({ params }: { params: { slug: string } }) {
         setIsCreateMode(true);
         setReadyToShowPage(true);
       } else {
-        setSlug(params.slug);
         setIsCreateMode(false);
         setAutomationInfo(params.slug);
       }
