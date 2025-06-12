@@ -18,6 +18,8 @@ import questionMark from "../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
 import { Range } from "react-range";
 import supabase from "../../../../supabase";
+import InputField from "@/components/inputField/page";
+import AuthCheck from "@/components/authCheck/page";
 
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
@@ -187,6 +189,7 @@ export default function CreateAutomation() {
   const [playingStyle, setPlayingStyle] = useState("");
   const [nationality, setNationality] = useState("");
   const [league, setLeague] = useState("");
+  const [automationName, setAutomationName] = useState("Automation");
 
   const [ageRange, setAgeRange] = useState([18, 32]);
   const [weightRange, setWeightRange] = useState([72, 80]);
@@ -221,11 +224,11 @@ export default function CreateAutomation() {
   }, []);
 
   const createAutomation = async () => {
-    if (firstPosition != "" && firstPosition != "") {
+    if (firstPosition != "" && gender != "") {
       const { error } = await supabase.from("automation").insert([
         {
           user_uuid: userUuid,
-          league: "league one",
+          league: league,
           nationality: nationality,
           min_age: minAge,
           max_age: maxAge,
@@ -236,7 +239,7 @@ export default function CreateAutomation() {
           first_position: firstPosition,
           second_position: altPosition,
           preferred_foot: preferredFoot,
-          automation_name: "name 1",
+          automation_name: automationName,
         },
       ]);
 
@@ -392,191 +395,134 @@ export default function CreateAutomation() {
   );
 
   return (
-    <StyledCreateAutomationPage>
-      <button onClick={returnToDashboard}>return</button>
-      {positionsGuidePopupOpen && (
-        <PopupWindow
-          setPopupOpen={setPositionsGuidePopup}
-          header="A guide for our positions matching system"
-        >
-          <p>
-            When setting up your player automation, you&apos;ll be asked to
-            choose a 1st and alternative preferred position. This gives us a
-            broader understanding of the types of players you&apos;re looking
-            for – whether you&apos;re targeting specialists in one role or open
-            to versatile options. However, it&apos;s important to understand how
-            these position selections work behind the scenes.
-          </p>
-          <br />
-          <p>
-            Your selected positions are treated as a group of acceptable roles,
-            not as a checklist that a single player must match completely.
-          </p>
-          <br />
-          <p>For example, if you choose:</p>
-          <ul>
-            <li>
-              <StyledBoldText>1st Position:</StyledBoldText> Centre-Back (CB)
-            </li>
-            <li>
-              <StyledBoldText>Alt. Position:</StyledBoldText> Left-Back (LB)
-            </li>
-          </ul>
-          <br />
-          <p>
-            The system will look for players who play in any of those roles –
-            not necessarily both. That means:
-          </p>
-          <br />
-          <ul>
-            <li>A player who is only a Centre-Back may be recommended.</li>
-            <li>A player who plays both CB and LB is a strong match.</li>
-            <li>A player who is only a Midfielder will be excluded.</li>
-          </ul>
-          <br />
-          <p>
-            This approach ensures you receive relevant suggestions faster by not
-            filtering too narrowly. It also allows us to include versatile
-            players who cover more of your selected roles, and ensures you
-            don&apos;t miss out on strong candidates just because they
-            don&apos;t match all three positions exactly.
-          </p>
-          <br />
-          <p>
-            Once we&apos;ve filtered players by your selected positions, our
-            system evaluates:
-          </p>
-          <ul>
-            <li>
-              Whether the player has experience in both of the selected roles
-            </li>
-            <li>
-              Their primary and alternative positions, as tracked across recent
-              seasons
-            </li>
-            <li>
-              Positional flexibility and role fit, using match data and
-              performance indicators
-            </li>
-          </ul>
-          <br />
-          <p>
-            Players with multiple position matches (in this case, CB + LB) are
-            ranked higher, but we do not require a player to match both of them.
-          </p>
-          <h2>Tip: how to choose your 1st and Alt. position:</h2>
-          <br />
-          <ul>
-            <li>Use 1st Position for the role you need most urgently</li>
-            <li>
-              Use the alternative position to include alternatives or adjacent
-              roles (e.g., a LB can cover LWB, or a CM might cover CDM)
-            </li>
-            <li>
-              You can always adjust these selections later to refine your player
-              pool
-            </li>
-          </ul>
-          <br />
-          <p>
-            If you have questions or want help defining your ideal player
-            profile, our team is here to support you. Just reach out –
-            we&rsquo;re happy to guide you through your setup.
-          </p>
-        </PopupWindow>
-      )}
-      <StyledCreateAutomationHeader>
-        Create automation
-      </StyledCreateAutomationHeader>
-
-      <StyledInputLabel>Gender</StyledInputLabel>
-      <StyledDropDownMenuSection required={true}>
-        <StyledDropDownMenuButton
-          isOpen={genderDropdownOpen}
-          onClick={() => {
-            openDropdownMenu(genderDropdownOpen, setGenderDropdownOpen);
-          }}
-        >
-          {gender ? gender : "Select (required)"}
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: genderDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
-
-        {genderDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
+    <AuthCheck>
+      <StyledCreateAutomationPage>
+        <button onClick={returnToDashboard}>return</button>
+        {positionsGuidePopupOpen && (
+          <PopupWindow
+            setPopupOpen={setPositionsGuidePopup}
+            header="A guide for our positions matching system"
           >
-            <Dropdown
-              setOption={setGender}
-              options={genderOptions}
-              depth={0}
-              setDropdownOpen={setGenderDropdownOpen}
-            />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
-      <StyledPositionsDropdownSection>
-        <StyledPositionsInfoTextSection>
-          <StyledPositionsInfoText>
-            Your selected positions are treated as a group of acceptable roles,
-            not as a checklist that a single player must match completely.
-          </StyledPositionsInfoText>
-          <StyledPositionInfoQuestionTextSection>
-            <img
-              src={questionMark.src}
-              alt="Help Icon"
-              width={44}
-              height={44}
-            />
-            <p
-              onClick={() => {
-                setPositionsGuidePopup(true);
-              }}
-            >
-              How do we match positions?
+            <p>
+              When setting up your player automation, you&apos;ll be asked to
+              choose a 1st and alternative preferred position. This gives us a
+              broader understanding of the types of players you&apos;re looking
+              for – whether you&apos;re targeting specialists in one role or
+              open to versatile options. However, it&apos;s important to
+              understand how these position selections work behind the scenes.
             </p>
-          </StyledPositionInfoQuestionTextSection>
-        </StyledPositionsInfoTextSection>
-        <StyledInputLabel>1st position</StyledInputLabel>
+            <br />
+            <p>
+              Your selected positions are treated as a group of acceptable
+              roles, not as a checklist that a single player must match
+              completely.
+            </p>
+            <br />
+            <p>For example, if you choose:</p>
+            <ul>
+              <li>
+                <StyledBoldText>1st Position:</StyledBoldText> Centre-Back (CB)
+              </li>
+              <li>
+                <StyledBoldText>Alt. Position:</StyledBoldText> Left-Back (LB)
+              </li>
+            </ul>
+            <br />
+            <p>
+              The system will look for players who play in any of those roles –
+              not necessarily both. That means:
+            </p>
+            <br />
+            <ul>
+              <li>A player who is only a Centre-Back may be recommended.</li>
+              <li>A player who plays both CB and LB is a strong match.</li>
+              <li>A player who is only a Midfielder will be excluded.</li>
+            </ul>
+            <br />
+            <p>
+              This approach ensures you receive relevant suggestions faster by
+              not filtering too narrowly. It also allows us to include versatile
+              players who cover more of your selected roles, and ensures you
+              don&apos;t miss out on strong candidates just because they
+              don&apos;t match all three positions exactly.
+            </p>
+            <br />
+            <p>
+              Once we&apos;ve filtered players by your selected positions, our
+              system evaluates:
+            </p>
+            <ul>
+              <li>
+                Whether the player has experience in both of the selected roles
+              </li>
+              <li>
+                Their primary and alternative positions, as tracked across
+                recent seasons
+              </li>
+              <li>
+                Positional flexibility and role fit, using match data and
+                performance indicators
+              </li>
+            </ul>
+            <br />
+            <p>
+              Players with multiple position matches (in this case, CB + LB) are
+              ranked higher, but we do not require a player to match both of
+              them.
+            </p>
+            <h2>Tip: how to choose your 1st and Alt. position:</h2>
+            <br />
+            <ul>
+              <li>Use 1st Position for the role you need most urgently</li>
+              <li>
+                Use the alternative position to include alternatives or adjacent
+                roles (e.g., a LB can cover LWB, or a CM might cover CDM)
+              </li>
+              <li>
+                You can always adjust these selections later to refine your
+                player pool
+              </li>
+            </ul>
+            <br />
+            <p>
+              If you have questions or want help defining your ideal player
+              profile, our team is here to support you. Just reach out –
+              we&rsquo;re happy to guide you through your setup.
+            </p>
+          </PopupWindow>
+        )}
+        <StyledCreateAutomationHeader>
+          Create automation
+        </StyledCreateAutomationHeader>
+
+        <InputField
+          label={"Automation name"}
+          type="text"
+          value={automationName}
+          onChange={(e) => setAutomationName(e.target.value)}
+        ></InputField>
+
+        <StyledInputLabel>Gender</StyledInputLabel>
         <StyledDropDownMenuSection required={true}>
           <StyledDropDownMenuButton
-            isOpen={firstPositionDropdownOpen}
-            onClick={() =>
-              openDropdownMenu(
-                firstPositionDropdownOpen,
-                setFirstPositionDropdownOpen
-              )
-            }
+            isOpen={genderDropdownOpen}
+            onClick={() => {
+              openDropdownMenu(genderDropdownOpen, setGenderDropdownOpen);
+            }}
           >
-            {firstPosition ? firstPosition : "Select (required)"}
+            {gender ? gender : "Select (required)"}
             <img
               src={arrow.src}
               alt=""
               style={{
-                transform: firstPositionDropdownOpen
+                transform: genderDropdownOpen
                   ? "rotate(270deg)"
                   : "rotate(90deg)",
               }}
             />
           </StyledDropDownMenuButton>
 
-          {firstPositionDropdownOpen && (
+          {genderDropdownOpen && (
             <div
               style={{
                 position: "absolute",
@@ -590,39 +536,177 @@ export default function CreateAutomation() {
               }}
             >
               <Dropdown
-                setOption={setFirstPosition}
-                options={footballPositions}
+                setOption={setGender}
+                options={genderOptions}
                 depth={0}
-                setDropdownOpen={setFirstPositionDropdownOpen}
+                setDropdownOpen={setGenderDropdownOpen}
               />
             </div>
           )}
         </StyledDropDownMenuSection>
+        <StyledPositionsDropdownSection>
+          <StyledPositionsInfoTextSection>
+            <StyledPositionsInfoText>
+              Your selected positions are treated as a group of acceptable
+              roles, not as a checklist that a single player must match
+              completely.
+            </StyledPositionsInfoText>
+            <StyledPositionInfoQuestionTextSection>
+              <img
+                src={questionMark.src}
+                alt="Help Icon"
+                width={44}
+                height={44}
+              />
+              <p
+                onClick={() => {
+                  setPositionsGuidePopup(true);
+                }}
+              >
+                How do we match positions?
+              </p>
+            </StyledPositionInfoQuestionTextSection>
+          </StyledPositionsInfoTextSection>
+          <StyledInputLabel>1st position</StyledInputLabel>
+          <StyledDropDownMenuSection required={true}>
+            <StyledDropDownMenuButton
+              isOpen={firstPositionDropdownOpen}
+              onClick={() =>
+                openDropdownMenu(
+                  firstPositionDropdownOpen,
+                  setFirstPositionDropdownOpen
+                )
+              }
+            >
+              {firstPosition ? firstPosition : "Select (required)"}
+              <img
+                src={arrow.src}
+                alt=""
+                style={{
+                  transform: firstPositionDropdownOpen
+                    ? "rotate(270deg)"
+                    : "rotate(90deg)",
+                }}
+              />
+            </StyledDropDownMenuButton>
 
-        <StyledInputLabel>Alt. position</StyledInputLabel>
+            {firstPositionDropdownOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  width: "100%",
+                  backgroundColor: colors.background,
+                  borderRadius: "0 0 13px 13px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  zIndex: 20,
+                }}
+              >
+                <Dropdown
+                  setOption={setFirstPosition}
+                  options={footballPositions}
+                  depth={0}
+                  setDropdownOpen={setFirstPositionDropdownOpen}
+                />
+              </div>
+            )}
+          </StyledDropDownMenuSection>
+
+          <StyledInputLabel>Alt. position</StyledInputLabel>
+          <StyledDropDownMenuSection required={false}>
+            <StyledDropDownMenuButton
+              isOpen={altPositionDropdownOpen}
+              onClick={() =>
+                openDropdownMenu(
+                  altPositionDropdownOpen,
+                  setAltPositionDropdownOpen
+                )
+              }
+            >
+              {altPosition ? altPosition : "Select (optional)"}
+              <img
+                src={arrow.src}
+                alt=""
+                style={{
+                  transform: altPositionDropdownOpen
+                    ? "rotate(270deg)"
+                    : "rotate(90deg)",
+                }}
+              />
+            </StyledDropDownMenuButton>
+
+            {altPositionDropdownOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  width: "100%",
+                  backgroundColor: colors.background,
+                  borderRadius: "0 0 13px 13px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  zIndex: 20,
+                }}
+              >
+                <Dropdown
+                  setOption={setAltPosition}
+                  options={footballPositions}
+                  depth={0}
+                  setDropdownOpen={setAltPositionDropdownOpen}
+                />
+              </div>
+            )}
+          </StyledDropDownMenuSection>
+        </StyledPositionsDropdownSection>
+        {renderRange(
+          "Age",
+          ageRange,
+          setAgeRange,
+          sliderConfig.age,
+          setMinAge,
+          setMaxAge
+        )}
+        {renderRange(
+          "Weight (kg)",
+          weightRange,
+          setWeightRange,
+          sliderConfig.weight,
+          setMinWeight,
+          setMaxWeight
+        )}
+        {renderRange(
+          "Height (cm)",
+          heightRange,
+          setHeightRange,
+          sliderConfig.height,
+          setMinHeight,
+          setMaxHeight
+        )}
+        <StyledInputLabel>Preferred foot</StyledInputLabel>
         <StyledDropDownMenuSection required={false}>
           <StyledDropDownMenuButton
-            isOpen={altPositionDropdownOpen}
+            isOpen={preferredFootDropdownOpen}
             onClick={() =>
               openDropdownMenu(
-                altPositionDropdownOpen,
-                setAltPositionDropdownOpen
+                preferredFootDropdownOpen,
+                setPreferredFootDropdownOpen
               )
             }
           >
-            {altPosition ? altPosition : "Select (optional)"}
+            {preferredFoot ? preferredFoot : "Select (optional)"}
             <img
               src={arrow.src}
               alt=""
               style={{
-                transform: altPositionDropdownOpen
+                transform: preferredFootDropdownOpen
                   ? "rotate(270deg)"
                   : "rotate(90deg)",
               }}
             />
           </StyledDropDownMenuButton>
 
-          {altPositionDropdownOpen && (
+          {preferredFootDropdownOpen && (
             <div
               style={{
                 position: "absolute",
@@ -636,223 +720,156 @@ export default function CreateAutomation() {
               }}
             >
               <Dropdown
-                setOption={setAltPosition}
-                options={footballPositions}
+                setOption={setPreferredFoot}
+                options={preferredFootOptions}
                 depth={0}
-                setDropdownOpen={setAltPositionDropdownOpen}
+                setDropdownOpen={setPreferredFootDropdownOpen}
               />
             </div>
           )}
         </StyledDropDownMenuSection>
-      </StyledPositionsDropdownSection>
-      {renderRange(
-        "Age",
-        ageRange,
-        setAgeRange,
-        sliderConfig.age,
-        setMinAge,
-        setMaxAge
-      )}
-      {renderRange(
-        "Weight (kg)",
-        weightRange,
-        setWeightRange,
-        sliderConfig.weight,
-        setMinWeight,
-        setMaxWeight
-      )}
-      {renderRange(
-        "Height (cm)",
-        heightRange,
-        setHeightRange,
-        sliderConfig.height,
-        setMinHeight,
-        setMaxHeight
-      )}
-      <StyledInputLabel>Preferred foot</StyledInputLabel>
-      <StyledDropDownMenuSection required={false}>
-        <StyledDropDownMenuButton
-          isOpen={preferredFootDropdownOpen}
-          onClick={() =>
-            openDropdownMenu(
-              preferredFootDropdownOpen,
-              setPreferredFootDropdownOpen
-            )
-          }
-        >
-          {preferredFoot ? preferredFoot : "Select (optional)"}
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: preferredFootDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
-
-        {preferredFootDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
+        <StyledInputLabel>Playing style</StyledInputLabel>
+        <StyledDropDownMenuSection required={false}>
+          <StyledDropDownMenuButton
+            isOpen={playingStyleDropdownOpen}
+            onClick={() =>
+              openDropdownMenu(
+                playingStyleDropdownOpen,
+                setPlayingStyleDropdownOpen
+              )
+            }
           >
-            <Dropdown
-              setOption={setPreferredFoot}
-              options={preferredFootOptions}
-              depth={0}
-              setDropdownOpen={setPreferredFootDropdownOpen}
+            {playingStyle ? playingStyle : "Select (optional)"}
+            <img
+              src={arrow.src}
+              alt=""
+              style={{
+                transform: playingStyleDropdownOpen
+                  ? "rotate(270deg)"
+                  : "rotate(90deg)",
+              }}
             />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
-      <StyledInputLabel>Playing style</StyledInputLabel>
-      <StyledDropDownMenuSection required={false}>
-        <StyledDropDownMenuButton
-          isOpen={playingStyleDropdownOpen}
-          onClick={() =>
-            openDropdownMenu(
-              playingStyleDropdownOpen,
-              setPlayingStyleDropdownOpen
-            )
-          }
-        >
-          {playingStyle ? playingStyle : "Select (optional)"}
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: playingStyleDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
+          </StyledDropDownMenuButton>
 
-        {playingStyleDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
+          {playingStyleDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                backgroundColor: colors.background,
+                borderRadius: "0 0 13px 13px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              <Dropdown
+                setOption={setPlayingStyle}
+                options={playingStyleOptions}
+                depth={0}
+                setDropdownOpen={setPlayingStyleDropdownOpen}
+              />
+            </div>
+          )}
+        </StyledDropDownMenuSection>
+        <StyledInputLabel>Nationality</StyledInputLabel>
+        <StyledDropDownMenuSection required={false}>
+          <StyledDropDownMenuButton
+            isOpen={nationalityDropdownOpen}
+            onClick={() =>
+              openDropdownMenu(
+                nationalityDropdownOpen,
+                setNationalityDropdownOpen
+              )
+            }
           >
-            <Dropdown
-              setOption={setPlayingStyle}
-              options={playingStyleOptions}
-              depth={0}
-              setDropdownOpen={setPlayingStyleDropdownOpen}
+            {nationality ? nationality : "Select (optional)"}
+            <img
+              src={arrow.src}
+              alt=""
+              style={{
+                transform: nationalityDropdownOpen
+                  ? "rotate(270deg)"
+                  : "rotate(90deg)",
+              }}
             />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
-      <StyledInputLabel>Nationality</StyledInputLabel>
-      <StyledDropDownMenuSection required={false}>
-        <StyledDropDownMenuButton
-          isOpen={nationalityDropdownOpen}
-          onClick={() =>
-            openDropdownMenu(
-              nationalityDropdownOpen,
-              setNationalityDropdownOpen
-            )
-          }
-        >
-          {nationality ? nationality : "Select (optional)"}
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: nationalityDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
+          </StyledDropDownMenuButton>
 
-        {nationalityDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
+          {nationalityDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                backgroundColor: colors.background,
+                borderRadius: "0 0 13px 13px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              <Dropdown
+                setOption={setNationality}
+                options={nationalityOptions}
+                depth={0}
+                setDropdownOpen={setNationalityDropdownOpen}
+              />
+            </div>
+          )}
+        </StyledDropDownMenuSection>
+        <StyledInputLabel>League</StyledInputLabel>
+        <StyledDropDownMenuSection required={false}>
+          <StyledDropDownMenuButton
+            isOpen={leagueDropdownOpen}
+            onClick={() =>
+              openDropdownMenu(leagueDropdownOpen, setLeagueDropdownOpen)
+            }
           >
-            <Dropdown
-              setOption={setNationality}
-              options={nationalityOptions}
-              depth={0}
-              setDropdownOpen={setNationalityDropdownOpen}
+            {league ? league : "Select (optional)"}
+            <img
+              src={arrow.src}
+              alt=""
+              style={{
+                transform: leagueDropdownOpen
+                  ? "rotate(270deg)"
+                  : "rotate(90deg)",
+              }}
             />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
-      <StyledInputLabel>League</StyledInputLabel>
-      <StyledDropDownMenuSection required={false}>
-        <StyledDropDownMenuButton
-          isOpen={leagueDropdownOpen}
-          onClick={() =>
-            openDropdownMenu(leagueDropdownOpen, setLeagueDropdownOpen)
-          }
-        >
-          {league ? league : "Select (optional)"}
-          <img
-            src={arrow.src}
-            alt=""
-            style={{
-              transform: leagueDropdownOpen
-                ? "rotate(270deg)"
-                : "rotate(90deg)",
-            }}
-          />
-        </StyledDropDownMenuButton>
+          </StyledDropDownMenuButton>
 
-        {leagueDropdownOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              width: "100%",
-              backgroundColor: colors.background,
-              borderRadius: "0 0 13px 13px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              zIndex: 20,
-            }}
-          >
-            <Dropdown
-              setOption={setLeague}
-              options={leagueOptions}
-              depth={0}
-              setDropdownOpen={setLeagueDropdownOpen}
-            />
-          </div>
-        )}
-      </StyledDropDownMenuSection>
-      <StyledFinalSection>
-        <StyledErrortext>{errorText}</StyledErrortext>
-        <StyledCancelButton onClick={returnToDashboard}>
-          Cancel
-        </StyledCancelButton>
-        <StyledApplyButton onClick={createAutomation}>Create</StyledApplyButton>
-      </StyledFinalSection>
-    </StyledCreateAutomationPage>
+          {leagueDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                backgroundColor: colors.background,
+                borderRadius: "0 0 13px 13px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              <Dropdown
+                setOption={setLeague}
+                options={leagueOptions}
+                depth={0}
+                setDropdownOpen={setLeagueDropdownOpen}
+              />
+            </div>
+          )}
+        </StyledDropDownMenuSection>
+        <StyledFinalSection>
+          <StyledErrortext>{errorText}</StyledErrortext>
+          <StyledCancelButton onClick={returnToDashboard}>
+            Cancel
+          </StyledCancelButton>
+          <StyledApplyButton onClick={createAutomation}>
+            Create
+          </StyledApplyButton>
+        </StyledFinalSection>
+      </StyledCreateAutomationPage>
+    </AuthCheck>
   );
 }

@@ -18,6 +18,7 @@ import {
   fetchUserAutomations,
   enforceAutomationLimit,
 } from "../../utils";
+import AdminPage from "@/components/adminPage/page";
 
 const StyledBackgroundAccent = styled.div`
   position: fixed;
@@ -109,6 +110,20 @@ const StyledHowManyAutomationsActiveText = styled.p`
   font-size: 16px;
 `;
 
+const StyledGoToAdminPageButton = styled.button`
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  font-size: 32px;
+  padding: 6px 64px;
+  font-weight: bold;
+  border-radius: 13px;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 interface Automation {
   uuid: string;
   automation_name: string;
@@ -126,6 +141,7 @@ interface UserProfile {
   automation_name: string;
   is_active: boolean;
   payment_plan: number;
+  role: string;
 }
 
 interface PaymentPlan {
@@ -139,6 +155,7 @@ interface PaymentPlan {
 
 const Dashboard = () => {
   const router = useRouter();
+  const [adminActive, setAdminActive] = useState<boolean>(false);
   const [userUuid, setUserUuid] = useState<string>("");
   const [userPaymentPlan, setUserPaymentPlan] = useState<PaymentPlan>();
   const [automations, setAutomations] = useState<Automation[]>([]);
@@ -187,7 +204,11 @@ const Dashboard = () => {
   useEffect(() => {
     const getSession = async () => {
       const uuid = await checkUserSession();
-      if (uuid) setUserUuid(uuid);
+      if (uuid) {
+        setUserUuid(uuid);
+      } else {
+        console.log("no user");
+      }
     };
     getSession();
   }, []);
@@ -197,6 +218,7 @@ const Dashboard = () => {
       if (!userUuid) return;
       try {
         const data = await fetchUserInfo(userUuid);
+
         setUserInformation(data);
       } catch (e) {
         console.error(e);
@@ -287,50 +309,76 @@ const Dashboard = () => {
     enforceAutomationLimit();
   }, [automations, userPaymentPlan]);
 
+  const goToAdminPage = () => {
+    setAdminActive(true);
+  };
+  const goToUserPage = () => {
+    setAdminActive(false);
+  };
+
   if (!userInformation) {
     return <p>Loading user information...</p>;
   }
 
-  return (
-    <AuthCheck>
-      <StyledDashboard>
-        <StyledHowManyAutomationsActiveSection>
-          <StyledHowManyAutomationsActiveNumber>
-            {activeAutomations}/{userPaymentPlan?.available_automations}
-          </StyledHowManyAutomationsActiveNumber>
-          <StyledHowManyAutomationsActiveText>
-            Active
-          </StyledHowManyAutomationsActiveText>
-        </StyledHowManyAutomationsActiveSection>
-        <StyledBackgroundAccent></StyledBackgroundAccent>
-        <LogoutButton></LogoutButton>
-        <StyledDashboardHeader>My automations</StyledDashboardHeader>
-        <StyledDashboardAutomationContainer>
-          {automations.map((automation) => (
-            <AutomationCard
-              key={automation.uuid}
-              automation={automation}
-              userUuid={userUuid}
-              availableAutomationLimit={
-                userPaymentPlan?.available_automations || 0
-              }
-              updateAutomations={refreshAutomations}
-            />
-          ))}
-          <StyledAddAutomationCard
-            onClick={() => {
-              sendUserToCreateNewAutomation();
-            }}
-          >
-            <StyledAddAutomationImage></StyledAddAutomationImage>
-            <StyledAddAutomationTextContainer>
-              <StyledAddAutomationText>New automation</StyledAddAutomationText>
-            </StyledAddAutomationTextContainer>
-          </StyledAddAutomationCard>
-        </StyledDashboardAutomationContainer>
-      </StyledDashboard>
-    </AuthCheck>
-  );
+  if (adminActive === true) {
+    return (
+      <>
+        <AdminPage></AdminPage>
+        <StyledGoToAdminPageButton onClick={goToUserPage}>
+          User
+        </StyledGoToAdminPageButton>
+      </>
+    );
+  }
+  if (adminActive === false) {
+    return (
+      <AuthCheck>
+        <StyledDashboard>
+          {userInformation.role === "admin" && (
+            <StyledGoToAdminPageButton onClick={goToAdminPage}>
+              Admin
+            </StyledGoToAdminPageButton>
+          )}
+          <StyledHowManyAutomationsActiveSection>
+            <StyledHowManyAutomationsActiveNumber>
+              {activeAutomations}/{userPaymentPlan?.available_automations}
+            </StyledHowManyAutomationsActiveNumber>
+            <StyledHowManyAutomationsActiveText>
+              Active
+            </StyledHowManyAutomationsActiveText>
+          </StyledHowManyAutomationsActiveSection>
+          <StyledBackgroundAccent></StyledBackgroundAccent>
+          <LogoutButton></LogoutButton>
+          <StyledDashboardHeader>My automations</StyledDashboardHeader>
+          <StyledDashboardAutomationContainer>
+            {automations.map((automation) => (
+              <AutomationCard
+                key={automation.uuid}
+                automation={automation}
+                userUuid={userUuid}
+                availableAutomationLimit={
+                  userPaymentPlan?.available_automations || 0
+                }
+                updateAutomations={refreshAutomations}
+              />
+            ))}
+            <StyledAddAutomationCard
+              onClick={() => {
+                sendUserToCreateNewAutomation();
+              }}
+            >
+              <StyledAddAutomationImage></StyledAddAutomationImage>
+              <StyledAddAutomationTextContainer>
+                <StyledAddAutomationText>
+                  New automation
+                </StyledAddAutomationText>
+              </StyledAddAutomationTextContainer>
+            </StyledAddAutomationCard>
+          </StyledDashboardAutomationContainer>
+        </StyledDashboard>
+      </AuthCheck>
+    );
+  }
 };
 
 export default Dashboard;
