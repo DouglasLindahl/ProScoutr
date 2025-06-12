@@ -304,7 +304,7 @@ const SignUp = () => {
           />
           <InputField
             label="Phone Number"
-            type="number"
+            type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
