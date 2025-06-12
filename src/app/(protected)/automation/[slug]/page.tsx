@@ -173,7 +173,7 @@ const StyledErrortext = styled.p`
   color: ${colors.red};
 `;
 
-export default function Slug({ params }: PageProps) {
+export default function Slug({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const router = useRouter();
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
