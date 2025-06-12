@@ -12,12 +12,12 @@ import {
 import { genderOptions } from "@/app/utils";
 import Dropdown from "@/components/dropdown/page";
 import { useEffect, useState } from "react";
-import colors from "../../../../theme";
-import arrow from "../../../../public/arrow.svg";
-import questionMark from "../../../../public/questionMark.svg";
+import colors from "../../../../../theme";
+import arrow from "../../../../../public/arrow.svg";
+import questionMark from "../../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
 import { Range } from "react-range";
-import supabase from "../../../../supabase";
+import supabase from "../../../../../supabase";
 import InputField from "@/components/inputField/page";
 import AuthCheck from "@/components/authCheck/page";
 
@@ -166,8 +166,12 @@ const StyledErrortext = styled.p`
   color: ${colors.red};
 `;
 
-export default function CreateAutomation() {
+export default function Slug(id: any) {
   const router = useRouter();
+  const [slug, setSlug] = useState<string>("");
+  const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
+  const [readyToShowPage, setReadyToShowPage] = useState<boolean>(false);
+
   const [userUuid, setUserUuid] = useState<string>("");
   const [errorText, setErrorText] = useState("");
   const [positionsGuidePopupOpen, setPositionsGuidePopup] = useState(false);
@@ -215,6 +219,44 @@ export default function CreateAutomation() {
     setOpen(!open);
   };
 
+  const setAutomationInfo = async (id: Text) => {
+    try {
+      const { data, error } = await supabase
+        .from("automation")
+        .select("*")
+        .eq("uuid", id)
+        .single(); // optional: use `.single()` if you expect only one match
+
+      if (error) {
+        console.error("Error fetching automation info:", error.message);
+        return;
+      }
+
+      console.log("Automation Info:", data);
+      setAutomationName(data.automation_name);
+      setGender(data.gender);
+      setFirstPosition(data.first_position);
+      setAltPosition(data.second_position);
+      setMinAge(data.min_age);
+      setMaxAge(data.max_age);
+      setMinWeight(data.min_weight);
+      setMaxWeight(data.max_weight);
+      setMinHeight(data.min_height);
+      setMaxHeight(data.max_height);
+      setPreferredFoot(data.preferred_foot);
+      setPlayingStyle(data.playing_style);
+      setNationality(data.nationality);
+      setLeague(data.league);
+      setAgeRange([data.min_age, data.max_age]);
+      setWeightRange([data.min_weight, data.max_weight]);
+      setHeightRange([data.min_height, data.max_height]);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+
+    setReadyToShowPage(true);
+  };
+
   useEffect(() => {
     const getSession = async () => {
       const uuid = await checkUserSession();
@@ -222,6 +264,20 @@ export default function CreateAutomation() {
     };
     getSession();
   }, []);
+
+  useEffect(() => {
+    const setCurrentSlug = () => {
+      if (slug == "create") {
+        setIsCreateMode(true);
+        setReadyToShowPage(true);
+      } else {
+        setSlug(id.params.slug);
+        setIsCreateMode(false);
+        setAutomationInfo(id.params.slug);
+      }
+    };
+    setCurrentSlug();
+  }, [slug]);
 
   const createAutomation = async () => {
     if (firstPosition != "" && gender != "") {
@@ -240,11 +296,45 @@ export default function CreateAutomation() {
           second_position: altPosition,
           preferred_foot: preferredFoot,
           automation_name: automationName,
+          gender: gender,
+          playing_style: playingStyle,
         },
       ]);
 
       if (error) {
         console.error("Insert error:", error.message, error.details);
+      } else {
+        returnToDashboard();
+      }
+    } else {
+      setErrorText("You must fill out all the required information");
+    }
+  };
+
+  const editAutomation = async () => {
+    if (firstPosition != "" && gender != "") {
+      const { error } = await supabase
+        .from("automation")
+        .update({
+          league: league,
+          nationality: nationality,
+          min_age: minAge,
+          max_age: maxAge,
+          min_height: minHeight,
+          max_height: maxHeight,
+          min_weight: minWeight,
+          max_weight: maxWeight,
+          first_position: firstPosition,
+          second_position: altPosition,
+          preferred_foot: preferredFoot,
+          automation_name: automationName,
+          gender: gender,
+          playing_style: playingStyle,
+        })
+        .eq("uuid", slug);
+
+      if (error) {
+        console.error("Update error:", error.message, error.details);
       } else {
         returnToDashboard();
       }
@@ -260,7 +350,7 @@ export default function CreateAutomation() {
   const STEP = 1;
 
   const sliderConfig = {
-    age: { min: 16, max: 40 },
+    age: { min: 18, max: 40 },
     weight: { min: 50, max: 120 },
     height: { min: 150, max: 210 },
   };
@@ -394,6 +484,9 @@ export default function CreateAutomation() {
     </div>
   );
 
+  if (!readyToShowPage) {
+    return <>Loading</>;
+  }
   return (
     <AuthCheck>
       <StyledCreateAutomationPage>
@@ -492,7 +585,7 @@ export default function CreateAutomation() {
           </PopupWindow>
         )}
         <StyledCreateAutomationHeader>
-          Create automation
+          {isCreateMode ? "Create automation" : "Edit automation"}
         </StyledCreateAutomationHeader>
 
         <InputField
@@ -865,9 +958,15 @@ export default function CreateAutomation() {
           <StyledCancelButton onClick={returnToDashboard}>
             Cancel
           </StyledCancelButton>
-          <StyledApplyButton onClick={createAutomation}>
-            Create
-          </StyledApplyButton>
+          {isCreateMode ? (
+            <StyledApplyButton onClick={createAutomation}>
+              Create
+            </StyledApplyButton>
+          ) : (
+            <StyledApplyButton onClick={editAutomation}>
+              Update
+            </StyledApplyButton>
+          )}
         </StyledFinalSection>
       </StyledCreateAutomationPage>
     </AuthCheck>

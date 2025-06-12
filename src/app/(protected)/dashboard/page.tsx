@@ -176,7 +176,7 @@ const Dashboard = () => {
   };
 
   const sendUserToCreateNewAutomation = () => {
-    router.push("/createAutomation");
+    router.push("/automation/create");
   };
 
   useEffect(() => {

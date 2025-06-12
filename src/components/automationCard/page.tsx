@@ -2,7 +2,7 @@
 import styled, { css } from "styled-components";
 import colors from "../../../theme";
 import automationImg from "../../../public/automationImg.png";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { activateAutomation, deactivateAutomation } from "../../app/utils";
 interface Automation {
@@ -114,6 +114,7 @@ const AutomationCard = ({
   automation,
   updateAutomations,
 }: AutomationCardProps) => {
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
   const { uuid, is_active, automation_name } = automation;
@@ -151,7 +152,13 @@ const AutomationCard = ({
             : "Start"}
         </StyledActivateButton>
 
-        <StyledEditButton>Edit</StyledEditButton>
+        <StyledEditButton
+          onClick={() => {
+            router.push(`automation/${uuid}`);
+          }}
+        >
+          Edit
+        </StyledEditButton>
       </StyledDashboardQueryButtonsContainer>
     </StyledDashboardQuery>
   );
