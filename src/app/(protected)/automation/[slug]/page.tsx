@@ -11,7 +11,7 @@ import {
 } from "@/app/utils";
 import { genderOptions } from "@/app/utils";
 import Dropdown from "@/components/dropdown/page";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import colors from "../../../../../theme";
 import arrow from "../../../../../public/arrow.svg";
 import questionMark from "../../../../../public/questionMark.svg";
@@ -165,12 +165,14 @@ const StyledErrortext = styled.p`
   font-size: 24px;
   color: ${colors.red};
 `;
+type tParams = Promise<{ slug: string }>;
 
-export default function Slug({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default function Slug({ params }: { params: tParams }) {
+  const { slug }: { slug: string } = use(params);
+  console.log(slug);
   const router = useRouter();
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
-  const [readyToShowPage, setReadyToShowPage] = useState<boolean>(false);
+  const [readyToShowPage, setReadyToShowPage] = useState<boolean>(true);
 
   const [userUuid, setUserUuid] = useState<string>("");
   const [errorText, setErrorText] = useState("");
@@ -232,7 +234,6 @@ export default function Slug({ params }: { params: { slug: string } }) {
         return;
       }
 
-      console.log("Automation Info:", data);
       setAutomationName(data.automation_name);
       setGender(data.gender);
       setFirstPosition(data.first_position);
@@ -272,7 +273,7 @@ export default function Slug({ params }: { params: { slug: string } }) {
         setReadyToShowPage(true);
       } else {
         setIsCreateMode(false);
-        setAutomationInfo(params.slug);
+        setAutomationInfo(slug);
       }
     };
     setCurrentSlug();
