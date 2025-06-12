@@ -166,7 +166,7 @@ const StyledErrortext = styled.p`
   color: ${colors.red};
 `;
 
-export default function Slug(id: any) {
+export default function SlugPage({ params }: { params: { slug: string } }) {
   const router = useRouter();
   const [slug, setSlug] = useState<string>("");
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
@@ -219,7 +219,7 @@ export default function Slug(id: any) {
     setOpen(!open);
   };
 
-  const setAutomationInfo = async (id: Text) => {
+  const setAutomationInfo = async (id: string) => {
     try {
       const { data, error } = await supabase
         .from("automation")
@@ -271,9 +271,9 @@ export default function Slug(id: any) {
         setIsCreateMode(true);
         setReadyToShowPage(true);
       } else {
-        setSlug(id.params.slug);
+        setSlug(params.slug);
         setIsCreateMode(false);
-        setAutomationInfo(id.params.slug);
+        setAutomationInfo(params.slug);
       }
     };
     setCurrentSlug();

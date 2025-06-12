@@ -242,6 +242,7 @@ const SignUp = () => {
             phone_number: phoneNumber,
             first_name: firstName,
             last_name: lastName,
+            payment_plan: "bc5f4c96-3cd3-4c95-b598-b8e0074c5834",
           },
         ]);
 
