@@ -158,10 +158,6 @@ const PaymentPlans = () => {
   const [showPopup, setShowPopup] = useState(false);
   const mostPopularPlanId = "Pro";
 
-  const sendUserToRegisterPage = () => {
-    router.push("/register");
-  };
-
   useEffect(() => {
     const loadPlans = async () => {
       try {
