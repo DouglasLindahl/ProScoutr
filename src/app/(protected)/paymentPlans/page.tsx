@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { fetchPaymentPlans } from "../../utils";
 import styled, { css } from "styled-components";
 import colors from "../../../../theme";
-import { useRouter } from "next/navigation";
 import questionMark from "../../../../public/questionMark.svg";
 import PopupWindow from "@/components/popupWindow/page";
 
@@ -56,18 +55,6 @@ const StyledPricingCardsSection = styled.div`
 `;
 
 const StyledPricingCtaSection = styled.div``;
-
-const StyledPricingCtaButton = styled.button`
-  font-size: 30px;
-  font-weight: bold;
-  padding: 12px 24px;
-  border-radius: 13px;
-  color: ${colors.background};
-  &:hover {
-    cursor: pointer;
-  }
-  border: none;
-`;
 
 const StyledPricingCard = styled.div<{ mostPopular?: boolean }>`
   position: relative;
@@ -153,7 +140,6 @@ const StyledBoldText = styled.span`
 `;
 
 const PaymentPlans = () => {
-  const router = useRouter();
   const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const mostPopularPlanId = "Pro";
