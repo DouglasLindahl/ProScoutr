@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import arrow from "../../../public/arrow.svg";
 import colors from "../../../theme";
@@ -17,6 +17,7 @@ type DropdownProps = {
   depth?: number;
   setOption: React.Dispatch<React.SetStateAction<string>>;
   setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  showDeselect?: boolean;
 };
 
 const StyledDropdownSection = styled.div<{ $depth?: number }>`
@@ -81,17 +82,39 @@ const Dropdown: React.FC<DropdownProps> = ({
   setDropdownOpen,
   options,
   depth = 0,
+  showDeselect = true,
 }) => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [setDropdownOpen]);
+
   return (
-    <StyledDropdownSection $depth={depth}>
-      <StyledDeselectButton
-        onClick={() => {
-          setOption("");
-          setDropdownOpen(false);
-        }}
-      >
-        -
-      </StyledDeselectButton>
+    <StyledDropdownSection $depth={depth} ref={dropdownRef}>
+      {depth === 0 && showDeselect && (
+        <StyledDeselectButton
+          onClick={() => {
+            setOption("");
+            setDropdownOpen(false);
+          }}
+        >
+          <p>– Deselect –</p>
+        </StyledDeselectButton>
+      )}
       {options.map((option, index) => (
         <DropdownItem
           setOption={setOption}

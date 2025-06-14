@@ -97,7 +97,7 @@ const StyledHeroTestSectionTestDescription = styled.section`
   border: 2px solid ${colors.text};
   border-radius: 13px;
   text-align: center;
-
+  user-select: none;
   @media (max-width: 768px) {
     font-size: 19.2px;
     width: 100%;

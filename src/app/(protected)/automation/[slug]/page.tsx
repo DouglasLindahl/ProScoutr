@@ -22,6 +22,7 @@ import { Range } from "react-range";
 import supabase from "../../../../../supabase";
 import InputField from "@/components/inputField/page";
 import AuthCheck from "@/components/authCheck/page";
+import LoadingScreen from "@/components/loadingScreen/page";
 
 const StyledCreateAutomationPage = styled.div`
   background-color: ${colors.background};
@@ -172,10 +173,13 @@ type tParams = Promise<{ slug: string }>;
 export default function Slug({ params }: { params: tParams }) {
   const { slug }: { slug: string } = use(params);
   const router = useRouter();
+  const [userEditAutomationUserUuid, setUserEditAutomationUserUuid] =
+    useState<string>();
   const [isCreateMode, setIsCreateMode] = useState<boolean>(true);
+  const [isAllowedToRender, setIsAllowedToRender] = useState<boolean>(false);
   const [readyToShowPage, setReadyToShowPage] = useState<boolean>(true);
   const [userExceedsAutomationLimit, setUserExceedsAutomationLimit] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   const [userUuid, setUserUuid] = useState<string>("");
   const [errorText, setErrorText] = useState("");
@@ -230,13 +234,13 @@ export default function Slug({ params }: { params: tParams }) {
         .from("automation")
         .select("*")
         .eq("uuid", id)
-        .single(); // optional: use `.single()` if you expect only one match
+        .single();
 
       if (error) {
         console.error("Error fetching automation info:", error.message);
         return;
       }
-
+      setUserEditAutomationUserUuid(data.user_uuid);
       setAutomationName(data.automation_name);
       setGender(data.gender);
       setFirstPosition(data.first_position);
@@ -283,17 +287,29 @@ export default function Slug({ params }: { params: tParams }) {
   }, [userUuid]);
 
   useEffect(() => {
+    if (!isCreateMode && userUuid && userEditAutomationUserUuid) {
+      if (userEditAutomationUserUuid !== userUuid) {
+        router.push("/dashboard"); // OR: set a "notAuthorized" state instead if you don't want to redirect
+      } else {
+        setIsAllowedToRender(true);
+      }
+    }
+  }, [userUuid, userEditAutomationUserUuid, isCreateMode]);
+
+  useEffect(() => {
     const setCurrentSlug = () => {
       if (slug == "create") {
         setIsCreateMode(true);
         setReadyToShowPage(true);
       } else {
-        setIsCreateMode(false);
-        setAutomationInfo(slug);
+        if (userUuid) {
+          setIsCreateMode(false);
+          setAutomationInfo(slug);
+        }
       }
     };
     setCurrentSlug();
-  }, [slug]);
+  }, [slug, userUuid, userEditAutomationUserUuid]);
 
   const createAutomation = async () => {
     if (firstPosition != "" && gender != "") {
@@ -517,10 +533,10 @@ export default function Slug({ params }: { params: tParams }) {
     </div>
   );
 
-  if (!readyToShowPage) {
-    return <>Loading</>;
+  if (!readyToShowPage || (!isCreateMode && !isAllowedToRender)) {
+    return <LoadingScreen />;
   }
-  if (userExceedsAutomationLimit && isCreateMode) {
+  if (userExceedsAutomationLimit && isCreateMode && readyToShowPage) {
     return (
       <>
         You have too many automations. Consider editing one of your current
@@ -528,6 +544,7 @@ export default function Slug({ params }: { params: tParams }) {
       </>
     );
   }
+
   return (
     <AuthCheck>
       <StyledCreateAutomationPage>

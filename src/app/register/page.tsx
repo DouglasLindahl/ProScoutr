@@ -174,7 +174,7 @@ const SignUp = () => {
   const getPasswordStrength = (pwd: string): boolean[] => {
     const criteriaChecks = [
       /[A-Z]/.test(pwd), // 1. Uppercase letter
-      pwd.length >= 6, // 2. Minimum 6 characters
+      pwd.length >= 8, // 2. Minimum 8 characters
       /\d/.test(pwd), // 3. At least one number
       /[^A-Za-z0-9]/.test(pwd), // 4. At least one special character
     ];
@@ -196,7 +196,7 @@ const SignUp = () => {
   const validatePassword = (pwd: string): string[] => {
     const errors = [];
 
-    if (pwd.length < 6) errors.push("At least 6 characters");
+    if (pwd.length < 8) errors.push("At least 8 characters");
     if (!/[A-Z]/.test(pwd)) errors.push("At least one uppercase letter");
     if (!/\d/.test(pwd)) errors.push("At least one number");
     if (!/[^A-Za-z0-9]/.test(pwd))
@@ -261,7 +261,8 @@ const SignUp = () => {
             last_name: lastName,
             payment_plan: "bc5f4c96-3cd3-4c95-b598-b8e0074c5834",
           },
-        ]);
+        ])
+        .select();
 
       if (profileError) {
         console.error("Error inserting profile:", profileError);

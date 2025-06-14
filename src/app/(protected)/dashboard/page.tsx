@@ -20,6 +20,7 @@ import {
   automationsHardLimit,
 } from "../../utils";
 import AdminPage from "@/components/adminPage/page";
+import LoadingScreen from "@/components/loadingScreen/page";
 
 const StyledBackgroundAccent = styled.div`
   position: fixed;
@@ -71,7 +72,7 @@ const StyledAddAutomationCard = styled.button`
   transition: 0.2s;
   &:hover {
     cursor: pointer;
-    border: 5px solid ${colors.primary};
+    border: 5px solid ${colors.text};
     opacity: 100%;
   }
 `;
@@ -317,7 +318,7 @@ const Dashboard = () => {
     setAdminActive(false);
   };
   if (!userInformation) {
-    return <p>Loading user information...</p>;
+    return <LoadingScreen></LoadingScreen>;
   }
 
   if (adminActive === true) {
