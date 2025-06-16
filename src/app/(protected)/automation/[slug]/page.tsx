@@ -62,6 +62,7 @@ const StyledDropDownMenuButton = styled.button<{
   isOpen: boolean;
 }>`
   padding: 12px 24px;
+  text-align: left;
   font-size: 24px;
   border-radius: 13px 13px 0 0;
   width: 100%;
@@ -655,12 +656,16 @@ export default function Slug({ params }: { params: tParams }) {
           {isCreateMode ? "Create automation" : "Edit automation"}
         </StyledCreateAutomationHeader>
 
-        <InputField
-          label={"Automation name"}
-          type="text"
-          value={automationName}
-          onChange={(e) => setAutomationName(e.target.value)}
-        ></InputField>
+        <div
+          style={{ width: "30%", paddingBottom: "40px", paddingTop: "40px" }}
+        >
+          <InputField
+            label={"Automation name"}
+            type="text"
+            value={automationName}
+            onChange={(e) => setAutomationName(e.target.value)}
+          ></InputField>
+        </div>
 
         <StyledInputLabel>Gender</StyledInputLabel>
         <StyledDropDownMenuSection required={true}>
@@ -970,6 +975,7 @@ export default function Slug({ params }: { params: tParams }) {
               }}
             >
               <Dropdown
+                searchable={true}
                 setOption={setNationality}
                 options={nationalityOptions}
                 depth={0}
@@ -1012,6 +1018,7 @@ export default function Slug({ params }: { params: tParams }) {
               }}
             >
               <Dropdown
+                searchable
                 setOption={setLeague}
                 options={leagueOptions}
                 depth={0}

@@ -1,9 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import styled from "styled-components";
 import arrow from "../../../public/arrow.svg";
 import colors from "../../../theme";
+
+const getBackgroundColorByDepth = (depth?: number) => {
+  switch (depth) {
+    case 0:
+      return colors.text;
+    case 1:
+      return "#d3d3d3";
+    case 2:
+      return "#d3d3d3";
+    default:
+      return "#d3d3d3";
+  }
+};
 
 interface PositionOption {
   label: string;
@@ -18,36 +31,30 @@ type DropdownProps = {
   setOption: React.Dispatch<React.SetStateAction<string>>;
   setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showDeselect?: boolean;
+  searchable?: boolean;
+  searchTerm?: string; // add this optional prop for nested dropdowns
+  rootDropdownRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const StyledDropdownSection = styled.div<{ $depth?: number }>`
-  ${({ $depth }) =>
-    $depth === 0
-      ? `
-    position: absolute;
-    top: 100%;
-    left: 0;
+  ${({ $depth }) => `
+    position: ${$depth === 0 ? "absolute" : "relative"};
+    top: ${$depth === 0 ? "100%" : "auto"};
+    left: ${$depth === 0 ? "0" : "auto"};
     width: 100%;
-    max-height: 300px;  
-        overflow-y: auto;  
-    background-color: ${colors.text};
+    max-height: ${$depth === 0 ? "300px" : "auto"};
+    overflow-y: ${$depth === 0 ? "auto" : "visible"};
+    background-color: ${getBackgroundColorByDepth($depth)};
     color: ${colors.background};
-    border-radius: 0 0 13px 13px;
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  `
-      : `
-    position: relative;
-    background-color: ${colors.text};
-    color: ${colors.background};
-    // no absolute positioning!
+    border-radius: ${$depth === 0 ? "0 0 13px 13px" : "0"};
+    z-index: ${$depth === 0 ? 10 : "auto"};
+    box-shadow: ${$depth === 0 ? "0 4px 10px rgba(0, 0, 0, 0.15)" : "none"};
   `}
 `;
 
-const StyledDropdownButton = styled.button<{
-  isOpen?: boolean;
-}>`
+const StyledDropdownButton = styled.button<{ isOpen?: boolean }>`
   width: 100%;
+
   border: none;
   padding: 12px 24px;
   font-size: 24px;
@@ -57,7 +64,7 @@ const StyledDropdownButton = styled.button<{
   background: ${({ isOpen }) => (isOpen ? colors.secondary : "transparent")};
   color: ${({ isOpen }) => (isOpen ? colors.background : "inherit")};
   cursor: pointer;
-
+  text-align: left;
   img {
     height: 20px;
     width: 20px;
@@ -73,8 +80,23 @@ const StyledDeselectButton = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   cursor: pointer;
+`;
+
+const StyledSearchInput = styled.input`
+  width: 100%;
+
+  padding: 24px 24px;
+  font-size: 18px;
+  border: none;
+  background: #d3d3d3;
+  color: ${colors.background};
+  outline: none;
+
+  &::placeholder {
+    color: ${colors.background};
+    opacity: 0.5;
+  }
 `;
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -83,10 +105,22 @@ const Dropdown: React.FC<DropdownProps> = ({
   options,
   depth = 0,
   showDeselect = true,
+  searchable = false,
+  searchTerm = "",
+  rootDropdownRef,
 }) => {
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  // single ref for root dropdown and all nested
+  const [search, setSearch] = useState("");
+  const internalDropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef =
+    depth === 0
+      ? (rootDropdownRef ?? internalDropdownRef)
+      : internalDropdownRef;
+  // For root, override searchTerm with local search state
+  const effectiveSearchTerm = depth === 0 ? search : searchTerm;
 
   useEffect(() => {
+    if (depth !== 0) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -103,8 +137,51 @@ const Dropdown: React.FC<DropdownProps> = ({
     };
   }, [setDropdownOpen]);
 
+  const filterOptions = (
+    opts: PositionOption[],
+    term: string
+  ): PositionOption[] => {
+    if (!term) return opts;
+    const lowerTerm = term.toLowerCase();
+
+    return opts
+      .map((opt) => {
+        let filteredChildren: PositionOption[] | undefined;
+        if (opt.options) {
+          filteredChildren = filterOptions(opt.options, term);
+        }
+
+        const matchesLabel = opt.label.toLowerCase().includes(lowerTerm);
+
+        if (matchesLabel || (filteredChildren && filteredChildren.length > 0)) {
+          return {
+            ...opt,
+            options: filteredChildren,
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean) as PositionOption[];
+  };
+
+  const filteredOptions = useMemo(
+    () => filterOptions(options, effectiveSearchTerm),
+    [options, effectiveSearchTerm]
+  );
+
   return (
     <StyledDropdownSection $depth={depth} ref={dropdownRef}>
+      {depth === 0 && searchable && (
+        <StyledSearchInput
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          autoFocus
+          onClick={(e) => e.stopPropagation()} // prevent closing dropdown when clicking on input
+        />
+      )}
       {depth === 0 && showDeselect && (
         <StyledDeselectButton
           onClick={() => {
@@ -115,13 +192,19 @@ const Dropdown: React.FC<DropdownProps> = ({
           <p>– Deselect –</p>
         </StyledDeselectButton>
       )}
-      {options.map((option, index) => (
+      {filteredOptions.length === 0 && (
+        <p style={{ padding: "12px 24px" }}>No results found</p>
+      )}
+
+      {filteredOptions.map((option, index) => (
         <DropdownItem
           setOption={setOption}
           setDropdownOpen={setDropdownOpen}
           option={option}
           key={index}
           depth={depth + 1}
+          searchTerm={effectiveSearchTerm}
+          rootDropdownRef={dropdownRef}
         />
       ))}
     </StyledDropdownSection>
@@ -133,52 +216,69 @@ const DropdownItem: React.FC<{
   setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   option: PositionOption;
   depth: number;
-}> = ({ setOption, setDropdownOpen, option, depth }) => {
+  searchTerm: string;
+  rootDropdownRef: React.RefObject<HTMLDivElement | null>;
+}> = ({
+  setOption,
+  setDropdownOpen,
+  option,
+  depth,
+  searchTerm,
+  rootDropdownRef,
+}) => {
   const [open, setOpen] = useState(false);
 
   const hasChildren = option.options && option.options.length > 0;
 
-  return (
-    <div style={{ position: "relative" }}>
-      {hasChildren ? (
-        <>
-          <StyledDropdownButton onClick={() => setOpen(!open)}>
-            <p>{option.label}</p>
-            <img
-              src={arrow.src}
-              alt=""
-              style={{
-                height: "20px",
-                width: "20px",
-                transform: open ? "rotate(270deg)" : "rotate(90deg)",
-                transition: "transform 0.3s ease",
-              }}
-            />
-          </StyledDropdownButton>
-          {open && option.options && (
-            <Dropdown
-              setOption={setOption}
-              setDropdownOpen={setDropdownOpen}
-              options={option.options}
-              depth={depth}
-            />
-          )}
-        </>
-      ) : option.availableToChoose ? (
-        <StyledDropdownButton
-          onClick={() => {
-            setOption(option.label);
-            setDropdownOpen(false);
-          }}
-          style={{ cursor: "pointer" }}
-        >
+  // Check if label matches search term (case-insensitive)
+  const matchesSearch =
+    searchTerm.length > 0 &&
+    option.label.toLowerCase().includes(searchTerm.toLowerCase());
+
+  if (hasChildren) {
+    return (
+      <div style={{ position: "relative" }}>
+        <StyledDropdownButton onClick={() => setOpen(!open)} isOpen={open}>
           <p>{option.label}</p>
+          <img
+            src={arrow.src}
+            alt=""
+            style={{
+              height: "20px",
+              width: "20px",
+              transform: open ? "rotate(270deg)" : "rotate(90deg)",
+              transition: "transform 0.3s ease",
+            }}
+          />
         </StyledDropdownButton>
-      ) : (
-        <span>{option.label}</span>
-      )}
-    </div>
-  );
+        {open && option.options && (
+          <Dropdown
+            setOption={setOption}
+            setDropdownOpen={setDropdownOpen}
+            options={option.options}
+            depth={depth}
+            searchable={false}
+            searchTerm={searchTerm}
+            rootDropdownRef={rootDropdownRef}
+          />
+        )}
+      </div>
+    );
+  } else if (option.availableToChoose || matchesSearch) {
+    return (
+      <StyledDropdownButton
+        onClick={() => {
+          setOption(option.label);
+          setDropdownOpen(false);
+        }}
+        style={{ cursor: "pointer" }}
+      >
+        <p>{option.label}</p>
+      </StyledDropdownButton>
+    );
+  } else {
+    return <span>{option.label}</span>;
+  }
 };
 
 export default Dropdown;
