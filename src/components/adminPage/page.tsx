@@ -301,12 +301,31 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
     navigator.clipboard.writeText(text).then(() => {});
   };
 
-  const sendEmailToUser = async (automation: Automation) => {
+  const headerHtml = `
+  <div style="padding: 20px; background-color: #f2f2f2; text-align: center;">
+    <h2 style="margin: 0; font-family: sans-serif;">Scouting Report from ProScoutr</h2>
+  </div>
+`;
+
+  const footerHtml = `
+  <div style="padding: 20px; background-color: #f9f9f9; text-align: center; font-size: 12px; color: #666;">
+    <p>Thanks for using <strong>ProScoutr</strong>!</p>
+<p>For more insights or support, visit <a href="https://proscoutr.com" target="_blank" rel="noopener noreferrer">proscoutr.com</a></p>
+
+  </div>
+`;
+  const sendEmailToUser = async (
+    automation: Automation,
+    header: string,
+    footer: string
+  ) => {
     const user = automation.user_profiles;
     const email = user?.email;
     const uuid = automation.uuid;
     const subject = emailState[uuid]?.subject || "Your Weekly Report";
-    const html = emailState[uuid]?.body || "<p>No content provided.</p>";
+    const rawBody = emailState[uuid]?.body || "<p>No content provided.</p>";
+
+    const html = `${header}${rawBody}${footer}`;
 
     if (!email) return;
 
@@ -501,6 +520,17 @@ ${JSON.stringify(
 
         {emailEditorVisible && selectedAutomation && (
           <RightPanel>
+            <a
+              style={{
+                textDecoration: "underline",
+                textUnderlineOffset: "4px",
+                color: colors.primary,
+              }}
+              target="_blank"
+              href="https://chatgpt.com/g/g-PzvCAJdRZ-footystats-soccer-football-stats-gpt/c/684f6e02-3f50-8000-aad8-e1fb4eba5c82"
+            >
+              Link to GPT
+            </a>
             <StyledExitIcon
               src={exit.src}
               alt="Exit Button"
@@ -550,6 +580,7 @@ ${JSON.stringify(
 
             <div style={{ marginTop: "16px" }}>
               <h4>Email Preview</h4>
+
               <div
                 style={{
                   border: "1px solid #ccc",
@@ -561,8 +592,10 @@ ${JSON.stringify(
                 }}
                 dangerouslySetInnerHTML={{
                   __html:
-                    emailState[selectedAutomation.uuid]?.body ||
-                    "<p>(No content)</p>",
+                    headerHtml +
+                    (emailState[selectedAutomation.uuid]?.body ||
+                      "<p>(No content)</p>") +
+                    footerHtml,
                 }}
               />
             </div>
@@ -572,7 +605,7 @@ ${JSON.stringify(
             </p>
             <SendButton
               onClick={() => {
-                sendEmailToUser(selectedAutomation);
+                sendEmailToUser(selectedAutomation, headerHtml, footerHtml);
               }}
             >
               Send email
