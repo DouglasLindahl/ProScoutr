@@ -3,6 +3,7 @@ import supabase from "../../../supabase";
 import styled from "styled-components";
 import colors from "../../../theme";
 import exit from "../../../public/exit.svg";
+import { footerHtml, headerHtml } from "@/app/utils";
 
 interface UserProfile {
   id: string;
@@ -301,19 +302,6 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
     navigator.clipboard.writeText(text).then(() => {});
   };
 
-  const headerHtml = `
-  <div style="padding: 20px; background-color: #f2f2f2; text-align: center;">
-    <h2 style="margin: 0; font-family: sans-serif;">Scouting Report from ProScoutr</h2>
-  </div>
-`;
-
-  const footerHtml = `
-  <div style="padding: 20px; background-color: #f9f9f9; text-align: center; font-size: 12px; color: #666;">
-    <p>Thanks for using <strong>ProScoutr</strong>!</p>
-<p>For more insights or support, visit <a href="https://proscoutr.com" target="_blank" rel="noopener noreferrer">proscoutr.com</a></p>
-
-  </div>
-`;
   const sendEmailToUser = async (
     automation: Automation,
     header: string,
@@ -355,11 +343,37 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
     const prompt = `
 You are a football scouting assistant working for a recruitment team that serves multiple football agents. Each agent provides specific scouting preferences in JSON format. Based on this input, your task is to identify and recommend 4 players that meet their requirements as closely as possible.
 
-Each recommended player should be outputted with: full name, age, nationality, current team, 1st position, alternate position, height, weight, preferred foot, playing style, league, VISA eligibility, and also “notes” where you can insert potential mismatches between the suggested player and the agent’s original criteria. Smaller mismatches are okay as long as you think the player seems like a good match. In the HTML structure, “notes” should be formatted as smaller text below all the other data of the player. VISA Eligibility should be based on nationality and likely eligibility for work permits in common leagues, e.g., EU/UK.
+OUTPUT: Each recommended player should include:
+Full Name, Age, Nationality, Current Team, League, 1st Position, Alternate Position, Height, Weight, Preferred Foot, Playing Style, VISA Eligibility
+A “notes” section (as smaller text) briefly explaining any mismatches with the original criteria, especially regarding age, position, or playing style.
 
-After the players have been identified, the suggestions should be sent to the agent via e-mail. Please ONLY provide me with HTML code (a 2x2 grid) that will be inserted into the e-mail. This grid should only consist of the player data - no text around it.
+CRITERIA MATCHING: Use only players currently active and playing in the specified league. Age, height, and weight must fall within the defined min/max ranges unless otherwise explained in notes. Preferred foot should match when possible; if a strong fit uses a different foot, include them and flag this in “notes”. Player positions listed in the JSON (e.g., “Goalkeeper” and “Defender (all)”) are treated as a pool of acceptable roles, not a checklist. A player may match either position. For example, if the agent selects “Goalkeeper” and “Defender (all)”, the player can play in either role - not both. VISA Eligibility should be based on nationality and likely eligibility for work permits in common leagues, e.g., EU/UK. If “playing_style” is not specified, suggest players with a commonly effective style for their position.
 
-Here is the agent's JSON input:
+MISMATCHES: Minor mismatches between the suggested player and the agent’s original criteria are okay, as long as you think the player seems like a good match. 
+
+FORMATTING: After the players have been identified, the suggestions should be sent to the agent via e-mail. Return output in clean HTML only with the styling specified below. This HTML code should be ready for embedding in a client-facing email. Format “notes” as smaller text below all the other data of the player.
+
+STYLE GUIDELINES (INLINE CSS ONLY):
+Container layout: grid with 2 columns, 20px gap, 10px padding
+Each player card:
+Border: 2px solid #16e592
+Border radius: 5px
+Background color: #f9f9f9
+Padding: 15px
+Player name (h2):
+Text color: #000
+Top margin: 0
+Data rows (e.g., Age, Nationality, etc.):
+Margin-bottom: 5px
+Notes section:
+Font size: 0.85em
+Text color: #555
+Top margin: 10px
+Font family: Arial, sans-serif
+
+Prioritise using only player data available from footystats.org. If you reference any other websites or databases, note this as small text below the grid.
+
+Below is the agent's JSON input:
 
 ${JSON.stringify(
   {

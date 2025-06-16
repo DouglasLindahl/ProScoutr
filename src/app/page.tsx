@@ -8,6 +8,12 @@ import exit from "../../public/exit.svg";
 import { RefObject, useRef, useState } from "react";
 import InputField from "@/components/inputField/page";
 import { useRouter } from "next/navigation";
+import {
+  footerHtml,
+  freePlayerSuggestionsHtml,
+  headerHtml,
+  isValidEmail,
+} from "./utils";
 
 const StyledLandingPage = styled.section`
   background-color: ${colors.background};
@@ -162,8 +168,10 @@ const StyledNextButtonText = styled.p`
 const StyledName = styled.span`
   color: ${colors.primary};
   font-weight: bold;
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.25),
-    0 0 1px rgba(255, 255, 255, 0.25), 0 0 20px rgba(255, 255, 255, 0.25);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 20px rgba(255, 255, 255, 0.25);
 `;
 
 const StyledBackgroundAccent = styled.div`
@@ -466,6 +474,10 @@ const StyledLoginButton = styled.button`
   }
 `;
 
+const StyledErrorText = styled.p`
+  color: ${colors.red};
+`;
+
 export default function Home() {
   const router = useRouter();
   const heroRef = useRef<HTMLElement | null>(null);
@@ -477,6 +489,64 @@ export default function Home() {
   const [userFirstName, setUserFirstName] = useState("");
   const [userLastName, setUserLastName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [sendStatus, setSendStatus] = useState<string | null>(null);
+
+  const copyInfoToHubspot = async () => {
+    if (!userFirstName || !userLastName || !isValidEmail(userEmail)) return;
+
+    try {
+      await fetch("/api/hubspot-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: userFirstName,
+          lastName: userLastName,
+          email: userEmail,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to copy to HubSpot (silent):", err);
+      // Optional: send error to Sentry, LogRocket, etc.
+    }
+  };
+
+  const sendFreePlayerSuggestions = async () => {
+    if (!userFirstName || !userLastName) {
+      setSendStatus("Please enter your full name.");
+      return;
+    }
+
+    if (!userEmail || !isValidEmail(userEmail)) {
+      setSendStatus("Please enter a valid email address.");
+      return;
+    }
+
+    const subject = "Your free player suggestions";
+    const html = `${headerHtml}${freePlayerSuggestionsHtml}${footerHtml}`;
+
+    setSendStatus("Sending...");
+
+    copyInfoToHubspot();
+    try {
+      const res = await fetch("/api/send-custom", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: userEmail, subject, html }),
+      });
+
+      const data = await res.json();
+      console.log("EMAIL SEND RESPONSE:", data);
+
+      if (res.ok) {
+        setSendStatus("Sent");
+      } else {
+        setSendStatus(` ${data.error}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setSendStatus("Failed to send");
+    }
+  };
 
   const sendUserToRegisterPage = () => {
     router.push("/register");
@@ -536,9 +606,14 @@ export default function Home() {
               onChange={(e) => setUserEmail(e.target.value)}
             />
           </StyledTestAutomationPopupWindowForm>
-          <StyledTestAutomationPopupWindowButton>
+          <StyledTestAutomationPopupWindowButton
+            onClick={() => {
+              sendFreePlayerSuggestions();
+            }}
+          >
             Get your player suggestions!
           </StyledTestAutomationPopupWindowButton>
+          {sendStatus && <StyledErrorText>{sendStatus}</StyledErrorText>}
         </StyledTestAutomationPopupWindow>
       )}
       <StyledBackgroundAccent></StyledBackgroundAccent>
@@ -731,4 +806,7 @@ export default function Home() {
       </StyledFAQSection>
     </StyledLandingPage>
   );
+}
+function setSendStatus(arg0: (prev: any) => any) {
+  throw new Error("Function not implemented.");
 }

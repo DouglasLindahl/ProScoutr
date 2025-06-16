@@ -13,6 +13,96 @@ interface Automation {
   is_active: boolean;
   user_uuid: string;
 }
+export const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+export const freePlayerSuggestionsHtml = `<table style="width:100%; border-collapse:collapse;">
+  <tr>
+    <!-- Player 1 -->
+    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
+      <strong>Full Name:</strong> Cristian Portugués Manzanera (Portu)<br>
+      <strong>Age:</strong> 32<br>
+      <strong>Nationality:</strong> Spain<br>
+      <strong>Current Team:</strong> Girona FC<br>
+      <strong>1st Position:</strong> Right Winger (RW)<br>
+      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
+      <strong>Height:</strong> 169 cm<br>
+      <strong>Weight:</strong> 65 kg<br>
+      <strong>Preferred Foot:</strong> Right<br>
+      <strong>Playing Style:</strong> Direct dribbler, high intensity presser<br>
+      <strong>League:</strong> La Liga<br>
+      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
+      <small><em>Notes: Slight mismatch on height (1 cm below minimum), age slightly over preferred max (32). Still a strong match in role and performance level.</em></small>
+    </td>
+
+    <!-- Player 2 -->
+    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
+      <strong>Full Name:</strong> Jonathan Bamba<br>
+      <strong>Age:</strong> 28<br>
+      <strong>Nationality:</strong> France<br>
+      <strong>Current Team:</strong> Celta Vigo<br>
+      <strong>1st Position:</strong> Right Winger (RW)<br>
+      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
+      <strong>Height:</strong> 175 cm<br>
+      <strong>Weight:</strong> 72 kg<br>
+      <strong>Preferred Foot:</strong> Right<br>
+      <strong>Playing Style:</strong> Pacy inverted winger, cuts inside<br>
+      <strong>League:</strong> La Liga<br>
+      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
+      <small><em>Notes: Matches all key criteria. Good combination of pace, experience, and European eligibility.</em></small>
+    </td>
+  </tr>
+  <tr>
+    <!-- Player 3 -->
+    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
+      <strong>Full Name:</strong> Ricardo Horta<br>
+      <strong>Age:</strong> 29<br>
+      <strong>Nationality:</strong> Portugal<br>
+      <strong>Current Team:</strong> SC Braga<br>
+      <strong>1st Position:</strong> Right Winger (RW)<br>
+      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
+      <strong>Height:</strong> 173 cm<br>
+      <strong>Weight:</strong> 66 kg<br>
+      <strong>Preferred Foot:</strong> Right<br>
+      <strong>Playing Style:</strong> Technical creator, quick link-up play<br>
+      <strong>League:</strong> Liga Portugal<br>
+      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
+      <small><em>Notes: Excellent match across all requested parameters. High goal involvement and creativity.</em></small>
+    </td>
+
+    <!-- Player 4 -->
+    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
+      <strong>Full Name:</strong> Jony Rodríguez<br>
+      <strong>Age:</strong> 30<br>
+      <strong>Nationality:</strong> Spain<br>
+      <strong>Current Team:</strong> Sporting Gijón<br>
+      <strong>1st Position:</strong> Right Winger (RW)<br>
+      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
+      <strong>Height:</strong> 179 cm<br>
+      <strong>Weight:</strong> 71 kg<br>
+      <strong>Preferred Foot:</strong> Left<br>
+      <strong>Playing Style:</strong> Wide dribbler, early crosser<br>
+      <strong>League:</strong> Segunda División (Spain)<br>
+      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
+      <small><em>Notes: Left-footed (no preference specified). Plays in second division but still a relevant profile.</em></small>
+    </td>
+  </tr>
+</table>
+`;
+export const headerHtml = `
+  <div style="padding: 20px; background-color: #f2f2f2; text-align: center;">
+    <h2 style="margin: 0; font-family: sans-serif;">Scouting Report from ProScoutr</h2>
+  </div>
+`;
+
+export const footerHtml = `
+  <div style="padding: 20px; background-color: #f9f9f9; text-align: center; font-size: 12px; color: #666;">
+    <p>Thanks for using <strong>ProScoutr</strong>!</p>
+<p>For more insights or support, visit <a href="https://proscoutr.com" target="_blank" rel="noopener noreferrer">proscoutr.com</a></p>
+
+  </div>
+`;
+
 export const nationalityOptions = [
   { label: "Afghanistan", value: "Afghanistan", availableToChoose: true },
   { label: "Albania", value: "Albania", availableToChoose: true },
