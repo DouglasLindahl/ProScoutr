@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../../supabase";
 import styled from "styled-components";
 import colors from "../../../theme";
+import exit from "../../../public/exit.svg";
 
 interface UserProfile {
   id: string;
@@ -118,7 +119,7 @@ const CopyButton = styled.button`
   border: none;
   cursor: pointer;
   background-color: ${colors.primary};
-  color: white;
+  color: ${colors.background};
   font-weight: 600;
   transition: background-color 0.2s;
 
@@ -127,10 +128,82 @@ const CopyButton = styled.button`
   }
 `;
 
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+const CardGrid = styled.div<{ emailEditorVisible: boolean }>`
+  display: ${({ emailEditorVisible }) =>
+    emailEditorVisible ? "flex" : "grid"};
+  flex-direction: ${({ emailEditorVisible }) =>
+    emailEditorVisible ? "column" : "initial"};
+  grid-template-columns: ${({ emailEditorVisible }) =>
+    emailEditorVisible ? "none" : "repeat(auto-fill, minmax(300px, 1fr))"};
   gap: 20px;
+  width: ${({ emailEditorVisible }) => (emailEditorVisible ? "45%" : "100%")};
+`;
+
+const PageWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const LeftPanel = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`;
+
+const RightPanel = styled.div`
+  height: 100vh;
+  width: 50vw;
+  overflow-y: scroll;
+  top: 0;
+  right: 0;
+  position: fixed;
+  flex: 1;
+  background: #1e1e2f;
+  color: white;
+  padding: 20px;
+  border-radius: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  input {
+    padding: 6px;
+  }
+`;
+
+const HtmlInput = styled.textarea`
+  width: 100%;
+  min-height: 500px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 14px;
+  background: #121224;
+  color: white;
+  border: none;
+  resize: vertical;
+`;
+
+const SendButton = styled.button`
+  padding: 10px 18px;
+  background-color: ${colors.primary};
+  border: none;
+  border-radius: 10px;
+  color: ${colors.background};
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken(${colors.primary}, 10%);
+  }
+`;
+const StyledExitIcon = styled.img`
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 11;
 `;
 
 export default function AdminPage() {
@@ -138,6 +211,48 @@ export default function AdminPage() {
   const [selectedTab, setSelectedTab] = useState<"all" | "active" | "inactive">(
     "all"
   );
+  const [emailState, setEmailState] = useState<
+    Record<string, { subject: string; body: string }>
+  >({});
+  const [sendStatus, setSendStatus] = useState<Record<string, string>>({});
+
+  const [sendEmailToUserEmail, setSendEmailToUserEmail] = useState<string>("");
+
+  const [emailEditorVisible, setEmailEditorVisible] = useState(false);
+  const [selectedAutomation, setSelectedAutomation] =
+    useState<Automation | null>(null);
+
+  const openSendEmailPage = (automation: Automation) => {
+    if (emailEditorVisible && selectedAutomation == automation) {
+      setEmailEditorVisible(false);
+      return;
+    }
+    if (
+      !automation.user_profiles?.email ||
+      !automation.user_profiles?.email.includes("@")
+    ) {
+      console.log("failed");
+      return;
+    }
+
+    setSelectedAutomation(automation);
+    setSendEmailToUserEmail(automation.user_profiles?.email || "asd");
+    setEmailEditorVisible(true);
+  };
+
+  const updateEmailField = (
+    uuid: string,
+    field: "subject" | "body",
+    value: string
+  ) => {
+    setEmailState((prev) => ({
+      ...prev,
+      [uuid]: {
+        ...prev[uuid],
+        [field]: value,
+      },
+    }));
+  };
 
   useEffect(() => {
     const fetchAllAutomations = async () => {
@@ -184,6 +299,75 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
     `.trim();
 
     navigator.clipboard.writeText(text).then(() => {});
+  };
+
+  const sendEmailToUser = async (automation: Automation) => {
+    const user = automation.user_profiles;
+    const email = user?.email;
+    const uuid = automation.uuid;
+    const subject = emailState[uuid]?.subject || "Your Weekly Report";
+    const html = emailState[uuid]?.body || "<p>No content provided.</p>";
+
+    if (!email) return;
+
+    setSendStatus((prev) => ({ ...prev, [uuid]: "Sending..." }));
+
+    try {
+      const res = await fetch("/api/send-custom", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: email, subject, html }),
+      });
+
+      const data = await res.json();
+      console.log("EMAIL SEND RESPONSE:", data);
+      if (res.ok) {
+        setSendStatus((prev) => ({ ...prev, [uuid]: "✅ Sent" }));
+      } else {
+        setSendStatus((prev) => ({ ...prev, [uuid]: `❌ ${data.error}` }));
+      }
+    } catch (err) {
+      setSendStatus((prev) => ({ ...prev, [uuid]: "❌ Failed to send" }));
+    }
+  };
+
+  const copyPromptToClipboard = (automation: Automation) => {
+    const prompt = `
+You are a football scouting assistant working for a recruitment team that serves multiple football agents. Each agent provides specific scouting preferences in JSON format. Based on this input, your task is to identify and recommend 4 players that meet their requirements as closely as possible.
+
+Each recommended player should be outputted with: full name, age, nationality, current team, 1st position, alternate position, height, weight, preferred foot, playing style, league, VISA eligibility, and also “notes” where you can insert potential mismatches between the suggested player and the agent’s original criteria. Smaller mismatches are okay as long as you think the player seems like a good match. In the HTML structure, “notes” should be formatted as smaller text below all the other data of the player. VISA Eligibility should be based on nationality and likely eligibility for work permits in common leagues, e.g., EU/UK.
+
+After the players have been identified, the suggestions should be sent to the agent via e-mail. Please ONLY provide me with HTML code (a 2x2 grid) that will be inserted into the e-mail. This grid should only consist of the player data - no text around it.
+
+Here is the agent's JSON input:
+
+${JSON.stringify(
+  {
+    league: automation.league,
+    nationality: automation.nationality,
+    min_age: automation.min_age,
+    max_age: automation.max_age,
+    min_height: automation.min_height,
+    max_height: automation.max_height,
+    min_weight: automation.min_weight,
+    max_weight: automation.max_weight,
+    first_position: automation.first_position,
+    second_position: automation.second_position,
+    preferred_foot: automation.preferred_foot,
+    gender: automation.gender,
+    playing_style: automation.playing_style,
+  },
+  null,
+  2
+)}
+`;
+
+    navigator.clipboard
+      .writeText(prompt)
+
+      .catch((err) => {
+        console.error("Failed to copy prompt", err);
+      });
   };
 
   const copyJsonToClipboard = (automation: Automation) => {
@@ -272,6 +456,12 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
             <CopyButton onClick={() => copyJsonToClipboard(automation)}>
               Copy JSON
             </CopyButton>
+            <CopyButton onClick={() => copyPromptToClipboard(automation)}>
+              Copy Propmpt
+            </CopyButton>
+            <CopyButton onClick={() => openSendEmailPage(automation)}>
+              Email editor
+            </CopyButton>
           </ButtonsRow>
         </AutomationCardInfo>
       </AutomationCard>
@@ -301,7 +491,94 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
           Inactive
         </TabButton>
       </Tabs>
-      <CardGrid>{renderAutomationCards(getFilteredAutomations())}</CardGrid>
+      <PageWrapper>
+        <LeftPanel>
+          <CardGrid emailEditorVisible={emailEditorVisible}>
+            {renderAutomationCards(getFilteredAutomations())}
+          </CardGrid>
+        </LeftPanel>
+
+        {emailEditorVisible && selectedAutomation && (
+          <RightPanel>
+            <StyledExitIcon
+              src={exit.src}
+              alt="Exit Button"
+              onClick={() => setEmailEditorVisible(false)}
+            />
+            <h3>
+              Sending Email to{" "}
+              {selectedAutomation?.user_profiles?.first_name +
+                " " +
+                selectedAutomation?.user_profiles?.last_name}
+            </h3>
+            <div>
+              <input
+                type="text"
+                value={sendEmailToUserEmail}
+                onChange={(e) => {
+                  setSendEmailToUserEmail(e.target.value);
+                }}
+              />
+            </div>
+            <input
+              style={{ width: "100%", padding: "8px", marginTop: "12px" }}
+              placeholder="Email Subject"
+              value={
+                emailState[selectedAutomation.uuid]?.subject ||
+                "ProScoutr - Your weekly report of players"
+              }
+              onChange={(e) =>
+                updateEmailField(
+                  selectedAutomation.uuid,
+                  "subject",
+                  e.target.value
+                )
+              }
+            />
+            <HtmlInput
+              placeholder="Enter HTML content here"
+              value={emailState[selectedAutomation.uuid]?.body || ""}
+              onChange={(e) =>
+                updateEmailField(
+                  selectedAutomation.uuid,
+                  "body",
+                  e.target.value
+                )
+              }
+            />
+
+            <div style={{ marginTop: "16px" }}>
+              <h4>Email Preview</h4>
+              <div
+                style={{
+                  border: "1px solid #ccc",
+                  padding: "12px",
+                  borderRadius: "8px",
+                  backgroundColor: "#fff",
+                  marginTop: "8px",
+                  color: "black",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html:
+                    emailState[selectedAutomation.uuid]?.body ||
+                    "<p>(No content)</p>",
+                }}
+              />
+            </div>
+
+            <p style={{ marginTop: "8px", fontSize: "14px", color: "gray" }}>
+              {sendStatus[selectedAutomation.uuid] || ""}
+            </p>
+            <SendButton
+              onClick={() => {
+                sendEmailToUser(selectedAutomation);
+              }}
+            >
+              Send email
+            </SendButton>
+          </RightPanel>
+        )}
+      </PageWrapper>
     </StyledAdminPage>
   );
 }
