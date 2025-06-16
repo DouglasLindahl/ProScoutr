@@ -327,6 +327,7 @@ Weight Range (kg): ${automation.min_weight} - ${automation.max_weight}
         setSendStatus((prev) => ({ ...prev, [uuid]: `❌ ${data.error}` }));
       }
     } catch (err) {
+      console.log(err);
       setSendStatus((prev) => ({ ...prev, [uuid]: "❌ Failed to send" }));
     }
   };
