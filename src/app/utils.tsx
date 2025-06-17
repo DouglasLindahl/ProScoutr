@@ -90,9 +90,19 @@ export const freePlayerSuggestionsHtml = `<table style="width:100%; border-colla
 </table>
 `;
 export const headerHtml = `
-  <div style="padding: 20px; background-color: #f2f2f2; text-align: center;">
-    <h2 style="margin: 0; font-family: sans-serif;">Scouting Report from ProScoutr</h2>
-  </div>
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet" />
+    <style>
+      body, div, h2 {
+        font-family: 'Sora', sans-serif !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="padding: 20px; background-color: #f2f2f2; text-align: center;">
+      <h2 style="margin: 0;">Scouting Report from ProScoutr</h2>
+    </div>
+  </body>
 `;
 
 export const footerHtml = `

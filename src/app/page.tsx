@@ -45,6 +45,7 @@ const StyledHeroHeaderSection = styled.section`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding-top: 64px;
 `;
 
 const StyledHeroHeader = styled.h1`
