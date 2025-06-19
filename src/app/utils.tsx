@@ -16,78 +16,81 @@ interface Automation {
 export const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
-export const freePlayerSuggestionsHtml = `<table style="width:100%; border-collapse:collapse;">
-  <tr>
-    <!-- Player 1 -->
-    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
-      <strong>Full Name:</strong> Cristian Portugués Manzanera (Portu)<br>
-      <strong>Age:</strong> 32<br>
-      <strong>Nationality:</strong> Spain<br>
-      <strong>Current Team:</strong> Girona FC<br>
-      <strong>1st Position:</strong> Right Winger (RW)<br>
-      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
-      <strong>Height:</strong> 169 cm<br>
-      <strong>Weight:</strong> 65 kg<br>
-      <strong>Preferred Foot:</strong> Right<br>
-      <strong>Playing Style:</strong> Direct dribbler, high intensity presser<br>
-      <strong>League:</strong> La Liga<br>
-      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
-      <small><em>Notes: Slight mismatch on height (1 cm below minimum), age slightly over preferred max (32). Still a strong match in role and performance level.</em></small>
-    </td>
+export const freePlayerSuggestionsHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 10px; font-family: Arial, sans-serif;">
 
-    <!-- Player 2 -->
-    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
-      <strong>Full Name:</strong> Jonathan Bamba<br>
-      <strong>Age:</strong> 28<br>
-      <strong>Nationality:</strong> France<br>
-      <strong>Current Team:</strong> Celta Vigo<br>
-      <strong>1st Position:</strong> Right Winger (RW)<br>
-      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
-      <strong>Height:</strong> 175 cm<br>
-      <strong>Weight:</strong> 72 kg<br>
-      <strong>Preferred Foot:</strong> Right<br>
-      <strong>Playing Style:</strong> Pacy inverted winger, cuts inside<br>
-      <strong>League:</strong> La Liga<br>
-      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
-      <small><em>Notes: Matches all key criteria. Good combination of pace, experience, and European eligibility.</em></small>
-    </td>
-  </tr>
-  <tr>
-    <!-- Player 3 -->
-    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
-      <strong>Full Name:</strong> Ricardo Horta<br>
-      <strong>Age:</strong> 29<br>
-      <strong>Nationality:</strong> Portugal<br>
-      <strong>Current Team:</strong> SC Braga<br>
-      <strong>1st Position:</strong> Right Winger (RW)<br>
-      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
-      <strong>Height:</strong> 173 cm<br>
-      <strong>Weight:</strong> 66 kg<br>
-      <strong>Preferred Foot:</strong> Right<br>
-      <strong>Playing Style:</strong> Technical creator, quick link-up play<br>
-      <strong>League:</strong> Liga Portugal<br>
-      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
-      <small><em>Notes: Excellent match across all requested parameters. High goal involvement and creativity.</em></small>
-    </td>
+  <div style="border: 2px solid #16e592; border-radius: 5px; background-color: #f9f9f9; padding: 15px;">
+    <h2 style="color: #000; margin-top: 0;">Jonathan Bamba</h2>
+    <div><strong>Age:</strong> 28</div>
+    <div><strong>Nationality:</strong> France</div>
+    <div><strong>Current Team:</strong> Celta Vigo</div>
+    <div><strong>League:</strong> La Liga</div>
+    <div><strong>1st Position:</strong> Right-Winger</div>
+    <div><strong>Alternate Position:</strong> Left-Winger</div>
+    <div><strong>Height:</strong> 175 cm</div>
+    <div><strong>Weight:</strong> 72 kg</div>
+    <div><strong>Preferred Foot:</strong> Right</div>
+    <div><strong>Playing Style:</strong> Dribbler, Wide Playmaker</div>
+    <div><strong>VISA Eligibility:</strong> Eligible for EU/UK</div>
+    <div style="font-size: 0.85em; color: #555; margin-top: 10px;">
+      <em>Notes:</em> Fully matches all criteria. Although primary position is winger, has experience playing as inverted forward too.
+    </div>
+  </div>
 
-    <!-- Player 4 -->
-    <td style="width:50%; padding:10px; border:1px solid #ccc; vertical-align:top;">
-      <strong>Full Name:</strong> Jony Rodríguez<br>
-      <strong>Age:</strong> 30<br>
-      <strong>Nationality:</strong> Spain<br>
-      <strong>Current Team:</strong> Sporting Gijón<br>
-      <strong>1st Position:</strong> Right Winger (RW)<br>
-      <strong>Alternate Position:</strong> Striker / Centre Forward (ST/CF)<br>
-      <strong>Height:</strong> 179 cm<br>
-      <strong>Weight:</strong> 71 kg<br>
-      <strong>Preferred Foot:</strong> Left<br>
-      <strong>Playing Style:</strong> Wide dribbler, early crosser<br>
-      <strong>League:</strong> Segunda División (Spain)<br>
-      <strong>VISA Eligibility:</strong> EU (Eligible for UK/EU work permit)<br>
-      <small><em>Notes: Left-footed (no preference specified). Plays in second division but still a relevant profile.</em></small>
-    </td>
-  </tr>
-</table>
+  <div style="border: 2px solid #16e592; border-radius: 5px; background-color: #f9f9f9; padding: 15px;">
+    <h2 style="color: #000; margin-top: 0;">Andreas Skov Olsen</h2>
+    <div><strong>Age:</strong> 25</div>
+    <div><strong>Nationality:</strong> Denmark</div>
+    <div><strong>Current Team:</strong> Club Brugge</div>
+    <div><strong>League:</strong> Belgian Pro League</div>
+    <div><strong>1st Position:</strong> Right-Winger</div>
+    <div><strong>Alternate Position:</strong> Striker</div>
+    <div><strong>Height:</strong> 187 cm</div>
+    <div><strong>Weight:</strong> 79 kg</div>
+    <div><strong>Preferred Foot:</strong> Left</div>
+    <div><strong>Playing Style:</strong> Inverted Winger, Long-Range Shooter</div>
+    <div><strong>VISA Eligibility:</strong> Eligible for EU/UK</div>
+    <div style="font-size: 0.85em; color: #555; margin-top: 10px;">
+      <em>Notes:</em> Slight height and foot mismatch (187 cm, left-footed), but very effective in right-wing role with good goal output.
+    </div>
+  </div>
+
+  <div style="border: 2px solid #16e592; border-radius: 5px; background-color: #f9f9f9; padding: 15px;">
+    <h2 style="color: #000; margin-top: 0;">Samuel Chukwueze</h2>
+    <div><strong>Age:</strong> 25</div>
+    <div><strong>Nationality:</strong> Nigeria</div>
+    <div><strong>Current Team:</strong> AC Milan</div>
+    <div><strong>League:</strong> Serie A</div>
+    <div><strong>1st Position:</strong> Right-Winger</div>
+    <div><strong>Alternate Position:</strong> Left-Winger</div>
+    <div><strong>Height:</strong> 172 cm</div>
+    <div><strong>Weight:</strong> 70 kg</div>
+    <div><strong>Preferred Foot:</strong> Left</div>
+    <div><strong>Playing Style:</strong> Direct Dribbler, Counter-Attack</div>
+    <div><strong>VISA Eligibility:</strong> Likely eligible for UK via work permit</div>
+    <div style="font-size: 0.85em; color: #555; margin-top: 10px;">
+      <em>Notes:</em> Left-footed but excels as a traditional right-winger cutting inside. Within age and physical range.
+    </div>
+  </div>
+
+  <div style="border: 2px solid #16e592; border-radius: 5px; background-color: #f9f9f9; padding: 15px;">
+    <h2 style="color: #000; margin-top: 0;">Luis Sinisterra</h2>
+    <div><strong>Age:</strong> 25</div>
+    <div><strong>Nationality:</strong> Colombia</div>
+    <div><strong>Current Team:</strong> AFC Bournemouth</div>
+    <div><strong>League:</strong> English Premier League</div>
+    <div><strong>1st Position:</strong> Right-Winger</div>
+    <div><strong>Alternate Position:</strong> Striker</div>
+    <div><strong>Height:</strong> 177 cm</div>
+    <div><strong>Weight:</strong> 69 kg</div>
+    <div><strong>Preferred Foot:</strong> Right</div>
+    <div><strong>Playing Style:</strong> Agile Dribbler, Creative Forward</div>
+    <div><strong>VISA Eligibility:</strong> Eligible for UK</div>
+    <div style="font-size: 0.85em; color: #555; margin-top: 10px;">
+      <em>Notes:</em> Strong fit overall, right-footed and comfortable in both winger and forward roles. No significant mismatches.
+    </div>
+  </div>
+
+</div>
 `;
 export const headerHtml = `
   <head>
