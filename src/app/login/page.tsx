@@ -6,7 +6,6 @@ import styled from "styled-components";
 import colors from "../../../theme";
 import InputField from "@/components/inputField/page";
 import arrow from "../../../public/arrow.svg";
-import greenShapes from "../../../public/greenShapes.svg";
 
 const StyledLoginPage = styled.div`
   height: 100vh;
@@ -48,9 +47,9 @@ const StyledLoginButton = styled.button`
   background-color: ${colors.text};
   border-radius: 13px;
   height: 64px;
-  padding: 0px 50px;
+  width: 64px;
   border: none;
-  display: flex; /* So it lays out children like the image */
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
@@ -65,10 +64,10 @@ const StyledLoginButtonImage = styled.div`
   width: 22px;
   height: 43px;
   border: none;
-  background-repeat: no-repeat; // Prevents repeating
-  background-size: contain; // Ensures full image fits inside
-  background-position: center; // Centers the image
-  width: 40px; // or whatever size you need
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 40px;
   height: 40px;
 `;
 const StyledLoginForm = styled.form`
@@ -92,24 +91,11 @@ const StyledLoginHeader = styled.h1`
   font-size: 100px;
 `;
 
-const StyledBackgroundAccent = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-repeat: repeat;
-  background-position: top left;
-  background-size: cover;
-  z-index: 1;
-  pointer-events: none;
-`;
-
 const StyledCreateAccountButton = styled.button`
   position: fixed;
   bottom: 48px;
   border-radius: 13px;
-  background-color: ${colors.white};
+  background-color: ${colors.primary};
   color: ${colors.background};
   font-size: 24px;
   padding: 14px 24px 14px 24px;
@@ -237,9 +223,6 @@ const Login = () => {
 
   return (
     <StyledLoginPage>
-      <StyledBackgroundAccent
-        style={{ backgroundImage: `url(${greenShapes.src})` }}
-      ></StyledBackgroundAccent>
       <StyledLoginSection>
         <StyledLoginHeader>Login</StyledLoginHeader>
 

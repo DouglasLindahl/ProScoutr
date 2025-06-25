@@ -5,23 +5,8 @@ import styled from "styled-components";
 import InputField from "@/components/inputField/page";
 import colors from "../../../theme";
 import arrow from "../../../public/arrow.svg";
-import greenShapes from "../../../public/greenShapes.svg";
 import { useRouter } from "next/navigation";
-// Password criteria
-// Min 6 characters, min 1 number, min 1 special character, min 1 uppercase
-const StyledBackgroundAccent = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url(${greenShapes.src});
-  background-repeat: repeat;
-  background-position: top left;
-  background-size: cover;
-  z-index: 1;
-  pointer-events: none;
-`;
+
 const StyledRegisterPage = styled.div`
   display: flex;
   flex-direction: column;
@@ -129,13 +114,17 @@ const StrengthBox = styled.div<{ $active: boolean; $passed: boolean }>`
     $passed
       ? `${colors.primary}`
       : $active
-      ? `${colors.neutral}`
-      : `${colors.neutral}`};
+        ? `${colors.text}`
+        : `${colors.text}`};
   transition: background-color 0.3s ease;
 `;
 
 const StyledErrorContainer = styled.ul`
   color: ${colors.red};
+  font-weight: bold;
+  li {
+    margin-left: 24px;
+  }
 `;
 
 const StyledErrorText = styled.p`
@@ -284,12 +273,11 @@ const SignUp = () => {
 
   return (
     <StyledRegisterPage>
-      <StyledBackgroundAccent></StyledBackgroundAccent>
       <StyledRegisterContainerHeader>
         Create a <span>Free</span> Account
       </StyledRegisterContainerHeader>
       <StyledRegisterContainerText>
-        {/* Find the next talent for your team with our automated scouting agent. */}
+        Find the next talent for your team with our automated scouting agent.
       </StyledRegisterContainerText>
       <StyledRegisterContainer>
         <StyledRegisterContainerForm>
@@ -347,6 +335,7 @@ const SignUp = () => {
           <StyledErrorTextContainer>
             {password.length > 0 && passwordCriteriaErrors.length > 0 && (
               <StyledErrorContainer>
+                Invalid Password:
                 {passwordCriteriaErrors.map((err, i) => (
                   <li key={i}>{err}</li>
                 ))}

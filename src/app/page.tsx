@@ -2,8 +2,7 @@
 import styled from "styled-components";
 import colors from "./../../theme";
 import arrowDown from "../../public/arrowDown.svg";
-import greenShapes from "../../public/greenShapes.svg";
-import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.svg";
+import ProScoutrWebsiteReportDesign from "../../public/ProScoutrWebsiteReportDesign.png";
 import exit from "../../public/exit.svg";
 import { RefObject, useRef, useState } from "react";
 import InputField from "@/components/inputField/page";
@@ -114,9 +113,9 @@ const StyledHeroTestSectionTestDescription = styled.section`
 const StyledHeroTestSectionTestButton = styled.button`
   padding: 16px;
   font-size: 24px;
-  background-color: ${colors.secondary};
-  color: ${colors.text};
-  border: 2px solid ${colors.secondary};
+  background-color: ${colors.primary};
+  color: ${colors.background};
+  border: 2px solid ${colors.primary};
   border-radius: 13px;
   cursor: pointer;
 
@@ -140,11 +139,11 @@ const StyledNextButton = styled.button`
   align-items: center;
   width: 100px;
   height: 100px;
-  background-color: ${colors.text};
+  background-color: ${colors.background};
   border: none;
   border-radius: 13px;
   cursor: pointer;
-
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15);
   @media (max-width: 768px) {
     width: 70px;
     height: 70px;
@@ -160,6 +159,7 @@ const StyledNextButtonImage = styled.div`
 
 const StyledNextButtonText = styled.p`
   font-size: 32px;
+  font-weight: bold;
 
   @media (max-width: 768px) {
     font-size: 20px;
@@ -173,21 +173,6 @@ const StyledName = styled.span`
     0 0 1px rgba(255, 255, 255, 0.25),
     0 0 1px rgba(255, 255, 255, 0.25),
     0 0 20px rgba(255, 255, 255, 0.25);
-`;
-
-const StyledBackgroundAccent = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url(${greenShapes.src});
-  background-color: ${colors.background}; /* Add a fallback solid background */
-  background-repeat: repeat;
-  background-position: top left;
-  background-size: cover;
-  z-index: -1; /* Lower z-index so it goes beneath all other content */
-  pointer-events: none;
 `;
 
 const StyledHowDoesItWorkSection = styled.section`
@@ -317,13 +302,13 @@ const StyledWhatIsProScoutrInfoTextTwo = styled.p`
 `;
 const StyledWhatIsProScoutrViewPricingButton = styled.button`
   font-size: 20px;
-  background-color: ${colors.secondary};
+  background-color: ${colors.primary};
   border: none;
   width: 20%;
   padding: 12px;
   border-radius: 13px;
   font-weight: bold;
-  color: ${colors.text};
+  color: ${colors.background};
   &:hover {
     cursor: pointer;
   }
@@ -383,9 +368,9 @@ const StyledFAQHeader = styled.h1`
 const StyledFAQCtaButton = styled.button`
   font-size: 30px;
   padding: 24px 48px 24px 48px;
-  background-color: ${colors.secondary};
+  background-color: ${colors.primary};
   border: none;
-  color: ${colors.text};
+  color: ${colors.background};
   font-weight: bold;
   border-radius: 13px;
   &:hover {
@@ -437,7 +422,7 @@ const StyledTestAutomationPopupWindowForm = styled.div`
 
 const StyledTestAutomationPopupWindowButton = styled.div`
   width: 100%;
-  background-color: ${colors.secondary};
+  background-color: ${colors.primary};
   padding: 16px;
   text-align: center;
   font-size: 24px;
@@ -469,6 +454,8 @@ const StyledLoginButton = styled.button`
   border-radius: 8px;
   border: none;
   font-weight: bold;
+  background-color: ${colors.background};
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15);
   z-index: 5;
   &:hover {
     cursor: pointer;
@@ -568,7 +555,7 @@ export default function Home() {
           router.push("/login");
         }}
       >
-        Login
+        Login to your account
       </StyledLoginButton>
       {testAutomationPopup && (
         <StyledDarkBackground
@@ -617,7 +604,6 @@ export default function Home() {
           {sendStatus && <StyledErrorText>{sendStatus}</StyledErrorText>}
         </StyledTestAutomationPopupWindow>
       )}
-      <StyledBackgroundAccent></StyledBackgroundAccent>
       <StyledHero ref={heroRef}>
         <StyledHeroHeaderSection>
           <StyledHeroSubHeader>FOOTBALL AGENTS & CLUBS:</StyledHeroSubHeader>
@@ -737,24 +723,24 @@ export default function Home() {
         </StyledWhyProScoutrHeader>
         <StyledWhyProScoutrInfoSection>
           <StyledWhyProScoutrInfoText>
-            <StyledBoldText>✅ Saves You Hours </StyledBoldText> – No more
-            endless database searches.
+            <StyledBoldText>Saves You Hours </StyledBoldText> – No more endless
+            database searches.
           </StyledWhyProScoutrInfoText>
           <StyledWhyProScoutrInfoText>
-            <StyledBoldText>✅ AI-Powered Recommendations</StyledBoldText> – Get
+            <StyledBoldText>AI-Powered Recommendations</StyledBoldText> – Get
             insights tailored to your scouting needs.
           </StyledWhyProScoutrInfoText>
           <StyledWhyProScoutrInfoText>
-            <StyledBoldText>✅ Stay Ahead of Competitors</StyledBoldText> – Spot
+            <StyledBoldText>Stay Ahead of Competitors</StyledBoldText> – Spot
             rising stars before others do.
           </StyledWhyProScoutrInfoText>
           <StyledWhyProScoutrInfoText>
-            <StyledBoldText>✅ Simple &amp; Hassle-Free</StyledBoldText> – No
+            <StyledBoldText>Simple &amp; Hassle-Free</StyledBoldText> – No
             complex dashboards—just plug &amp; play.
           </StyledWhyProScoutrInfoText>
 
           <StyledWhyProScoutrSubHeader>
-            ⏱ Ready to win your time back?
+            Ready to win your time back?
           </StyledWhyProScoutrSubHeader>
         </StyledWhyProScoutrInfoSection>
         <StyledNextButtonContainer>
@@ -772,29 +758,28 @@ export default function Home() {
         <StyledFAQInfoSection>
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &ldquo;How do I know the data is reliable?&rdquo;
+              &ldquo;How do I know the data is reliable?&rdquo;
             </StyledBoldText>
             <br />
-            ✔️ We use trusted football data sources and real-time stats to
-            ensure accuracy.
+            We use trusted football data sources and real-time stats to ensure
+            accuracy.
           </StyledFAQInfoText>
 
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &ldquo;Will this replace my scouting team?&rdquo;
+              &ldquo;Will this replace my scouting team?&rdquo;
             </StyledBoldText>
             <br />
-            ✔️ No – ProScoutr enhances your scouting efforts, giving you a
-            faster way to spot talent.
+            No – ProScoutr enhances your scouting efforts, giving you a faster
+            way to spot talent.
           </StyledFAQInfoText>
 
           <StyledFAQInfoText>
             <StyledBoldText>
-              ❓ &ldquo;Do I need to set up anything?&rdquo;
+              &ldquo;Do I need to set up anything?&rdquo;
             </StyledBoldText>
             <br />
-            ✔️ Nope! Just sign up, set your preferences, and receive daily
-            updates.
+            Nope! Just sign up, set your preferences, and receive daily updates.
           </StyledFAQInfoText>
         </StyledFAQInfoSection>
         <StyledFAQCtaButton

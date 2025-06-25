@@ -135,30 +135,30 @@ const InputField: React.FC<InputFieldProps> = ({
           type === "tel"
             ? "tel"
             : type === "email"
-            ? "email"
-            : type === "number"
-            ? "numeric"
-            : type === "url"
-            ? "url"
-            : "text"
+              ? "email"
+              : type === "number"
+                ? "numeric"
+                : type === "url"
+                  ? "url"
+                  : "text"
         }
         pattern={
           type === "tel"
             ? "[0-9()+\\-\\s]*"
             : type === "email"
-            ? "[^@\\s]+@[^@\\s]+\\.[^@\\s]+"
-            : undefined
+              ? "[^@\\s]+@[^@\\s]+\\.[^@\\s]+"
+              : undefined
         }
         maxLength={
           type === "email"
             ? 100
             : type === "tel"
-            ? 15
-            : type === "password"
-            ? 64
-            : type === "url"
-            ? 100
-            : 50
+              ? 15
+              : type === "password"
+                ? 64
+                : type === "url"
+                  ? 100
+                  : 50
         }
       />
 
