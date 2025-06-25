@@ -15,10 +15,11 @@ const StyledInput = styled.input`
   width: 100%;
   height: 64px;
   padding: 20px 34px;
-  border: 2px solid ${colors.text};
+  border: none; 
   border-radius: 13px;
   font-size: 24px;
-  transition: border-color 0.3s ease, padding-top 0.3s ease;
+box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.15);
+
   background: transparent;
   color: ${colors.text};
 
@@ -41,15 +42,17 @@ const StyledInput = styled.input`
     background-color: ${colors.background};
   }
 
-    &:autofill {
-    background-color: transparent !important;  /* Keep background transparent */
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;  /* Remove autofill background shadow */
+  &:-webkit-autofill {
+    background-color: transparent !important;
+
+    -webkit-text-fill-color: black !important; /* or ${colors.text} if you're using a color variable */
+    transition: background-color 9999s ease-in-out 0s; /* Prevent yellow autofill flash */
   }
 
   /* For webkit browsers (like Chrome) specifically */
   input:-webkit-autofill {
     background-color: transparent !important;
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+
   }
 `;
 
